@@ -7,6 +7,7 @@
 ## 编程语言篇
 
 * [python](./language/python/beginning)
+* [go](./language/go/beginning.md)
 
 
 
@@ -24,11 +25,25 @@
 
 
 
+## 操作系统与内核篇
+
+
+
+
+
+## AI篇
+
+
+
 
 
 ## 云原生篇
 
 
+
+
+
+## 工具杂谈篇
 
 
 
