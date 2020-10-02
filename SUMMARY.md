@@ -21,9 +21,6 @@
 
 * [nginx](./middleware/nginx/beginning.md)
 
-https://blog.csdn.net/dyg7777/article/details/108334293
-https://blog.csdn.net/wgc0802402/article/details/82888323
-
 ## 操作系统与内核篇
 
 * [网络协议详解](./linux/network/beginning.md)
