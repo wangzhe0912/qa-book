@@ -32,8 +32,22 @@ netstat -atunlp
 5. -n : 不进行DNS解析
 6. -a : 显示所有连接的端口
 
+![ports1](./picture/ports1.png)
+
+当前，在上面的输出中，我们会直接得到所有的端口绑定信息，查询起来比较复杂，因此，我们常常会搭配 `grep` 命令来使用，查询对应的进程或指定的端口。
+
 ### lsof
 
+lsof的作用是列出当前系统打开文件(list open files)。
+通过-i参数也能查看端口的连接情况，-i后跟冒号端口可以查看指定端口信息，直接-i是系统当前所有打开的端口。
+
+最简单的使用方式如下：
+
+```
+lsof -i:${ports}
+```
+
+![lsof](./picture/lsof.png)
 
 ## 端口存活性验证
 
@@ -41,6 +55,47 @@ netstat -atunlp
 
 ### telnet
 
+telnet是一个用于验证TCP端口连接情况的命令行工具，常用使用方式如下：
+
+```bash
+telnet ${ip} ${port}
+```
+
+连接成功时，示例如下：
+
+![telnet1](./picture/telnet1.png)
+
+连接失败时，示例如下：
+
+![telnet2](./picture/telnet2.png)
+
 
 ### nc
 
+telnet命令仅适用于tcp协议的端口验证，对于udp协议的端口而言，则需要使用 `nc` 来进行验证。
+
+Ubuntu下的安装方式:
+
+```bash
+apt-get install netcat
+```
+
+UDP端口检测方式：
+
+```bash
+nc -vuz ${ip} ${port}
+```
+
+其中:
+
+1. -v 表示打印详细模式
+2. -u 表示UDP协议，默认为TCP协议
+3. -z 表示仅检测端口，不发送数据
+
+连接成功时，示例如下：
+
+![nc1](./picture/nc1.png)
+
+连接失败时，示例如下：
+
+![nc2](./picture/nc2.png)
