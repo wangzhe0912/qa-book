@@ -24,6 +24,7 @@
 ## 操作系统与内核篇
 
 * [网络协议详解](./linux/network/beginning.md)
+    * [端口存活查询与验证](./linux/network/ports.md)
     * [DHCP服务搭建](./linux/network/dhcp.md)
 
 ## AI篇
