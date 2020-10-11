@@ -60,7 +60,7 @@
 
 ## 测试服务篇
 
-* [分布式性能测试平台](./service/performance/beginning.md)
 * [一站式自动化测试平台](./service/function/beginning.md)
+* [分布式性能测试平台](./service/performance/beginning.md)
 * [通用Mock服务管理平台](./service/mock/beginning.md)
 * [混沌工程实践平台](./service/chaos/beginning.md)
