@@ -52,8 +52,15 @@
 
 ## 测试杂谈篇
 
-
+* [性能测试原理剖析](./test/performance/beginning.md)
+* [Jmeter](./test/jmeter/beginning.md)
+* [Locust](./test/locust/beginning.md)
+* [接口自动化测试](./test/interface/beginning.md)
+* [UI自动化测试](./test/ui/beginning.md)
 
 ## 测试服务篇
 
-
+* [分布式性能测试平台](./service/performance/beginning.md)
+* [一站式自动化测试平台](./service/function/beginning.md)
+* [通用Mock服务管理平台](./service/mock/beginning.md)
+* [混沌工程实践平台](./service/chaos/beginning.md)
