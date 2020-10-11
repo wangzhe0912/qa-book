@@ -8,12 +8,10 @@
 * [go](./language/go/beginning.md)
 
 
-
 ## 数据库篇
 
 * [mongodb](./databases/mongo/beginning.md)
-
-
+* [elasicsearch](./databases/elasicsearch/beginning.md)
 
 ## 中间件篇
 
@@ -30,8 +28,10 @@
     * [DHCP服务搭建](./linux/network/dhcp.md)
     * [NTP服务搭建](./linux/network/ntp.md)
 
-## AI篇
+* [git杂谈](./linux/git/beginning.md)
+    * [Git忽略已加入版本控制系统中的文件](./linux/git/gitignore.md)
 
+## AI篇
 
 
 
@@ -53,15 +53,6 @@
 
 
 
-
-
-
-
 ## 测试服务篇
-
-
-
-
-
 
 
