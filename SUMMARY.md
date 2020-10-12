@@ -22,6 +22,7 @@
 
 * [Linux基础](./linux/basic/beginning.md)
     * [Ubuntu系统开启远程ssh访问](./linux/basic/ssh.md)
+    * [Ubuntu系统下搭建FTP服务器](./linux/basic/ftp.md)
 
 * [网络协议相关](./linux/network/beginning.md)
     * [端口存活查询与验证](./linux/network/ports.md)
