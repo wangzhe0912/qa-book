@@ -1,4 +1,4 @@
-# Ubuntu系统下搭建FTP服务器
+# Ubuntu系统下搭建与使用FTP服务器
 
 ## 环境准备
 
@@ -100,4 +100,136 @@ wget ftp://${username}:${password}@{hostname}:${port}/{filepath}
 
 除了 *wget* 命令行工具外，一个更加强大的命令行工具就是telnet了。
 
-https://blog.csdn.net/nowhere_/article/details/44877439
+telnet是一个基于TCP协议的强大的命令行工具。使用telnet可以与FTP Server进行正常交互。
+下面，我们以一个示例来演示如何使用telnet命令行工具与FTP Server进行交互。
+
+Ps: 假设FTP Server的IP为192.168.1.22，端口为21。用户名和密码都是ftpuser。
+
+Step1: 连接FTP服务器：
+
+```bash
+telnet 192.168.1.22 21
+# 220 (vsFTPd 3.0.3)
+```
+
+Step2：输入用户名和密码：
+
+```bash
+USER ftpuser
+# 331 Please specify the password.
+PASS ftpuser
+# 230 Login successful.
+```
+
+Step3：切换目录 与 查询当前目录
+
+```bash
+# cd /
+CDUP
+# cd ./test
+CWD test
+# pwd
+PWD
+```
+
+Step4：删除文件
+
+```bash
+DELE hello.txt
+```
+
+Step5：上传文件
+
+上传文件时，相对过程比较复杂，我们需要开启两个终端来进行操作。
+
+首先，使用终端1 连接FTP服务器的21端口，并进行用户名和密码登录。
+
+```bash
+telnet 192.168.1.22 21
+# Trying 192.168.1.22...
+# Connected to 192.168.1.22.
+# Escape character is '^]'.
+# 220 (vsFTPd 3.0.3)
+USER ftpuser
+# 331 Please specify the password.
+PASS ftpuser
+# 230 Login successful
+```
+
+接下来，需要在终端1中 通过 *PASV* 命令请求FTP 服务器开启另外一个端口等待数据传输。
+
+```bash
+PASV
+# 227 Entering Passive Mode (192,168,1,22,165,92).
+```
+
+可以看到，PASV命令执行后会返回一个包含6个元素的元组。其中前四位表示FTP服务器的IP，后两位组成的时临时端口。
+
+临时端口的计算方式如下：
+
+```bash
+165 * 256 + 92 = 42332
+```
+
+然后，我们需要使用终端2中使用 `telnet` 命令连接FTP服务器临时申请的端口用于数据传输。
+
+```bash
+telnet 192.168.1.22 42332
+# Trying 192.168.1.22...
+# Connected to 192.168.1.22.
+# Escape character is '^]'.
+```
+
+在终端1中启动文件写入命令：
+
+```bash
+STOR test.txt
+# 150 Ok to send data.
+```
+
+此时，就可以在终端2中输入响应需要写入的数据了。
+
+```bash
+this is test data
+missshi
+```
+
+当数据写入完成后，在终端1中退出即可。
+
+
+附录：FTP常用命令
+
+|命令|描述|
+|---|----|
+| USER \<username\> | 系统登录的用户名 |
+| PASS \<password\> | 系统登录密码 | 
+| CDUP \<dir path\> | 改变服务器上的父目录 | 
+| CWD \<dir path\> | 改变服务器上的工作目录 | 
+| PWD | 显示当前工作目录 | 
+| HELP \<command\> | 返回指定命令信息 |
+| QUIT | 从 FTP 服务器上退出登录 |  
+| LIST \<name\> | 如果是文件名列出文件信息，如果是目录则列出文件列表 | 
+| DELE \<filename\> | 删除服务器上的指定文件 |
+| RMD \<directory\> | 在服务器上删除指定目录 |  
+| MKD \<directory\> | 在服务器上建立指定目录 | 
+| STOR \<filename\> | 储存（复制）文件到服务器上 | 
+| STOU \<filename\> | 储存文件到服务器名称上 | 
+| SYST | 返回服务器使用的操作系统 | 
+| PASV | 请求服务器等待数据连接 | 
+| ABOR | 中断数据连接程序 | 
+| ACCT \<account\> | 系统特权帐号 | 
+| ALLO \<bytes\> | 为服务器上的文件存储器分配字节 | 
+| APPE \<filename\> | 添加文件到服务器同名文件 | 
+| MODE \<mode\> | 传输模式（S=流模式，B=块模式，C=压缩模式） | 
+| NLST \<directory\> | 列出指定目录内容 | 
+| NOOP | 无动作，除了来自服务器上的承认 | 
+| REIN | 重新初始化登录状态连接 | 
+| REST \<offset\> | 由特定偏移量重启文件传递 | 
+| RETR \<filename\> | 从服务器上找回（复制）文件 | 
+| RNFR \<old path\> | 对旧路径重命名 | 
+| RNTO \<new path\> | 对新路径重命名 | 
+| SITE \<params\> | 由服务器提供的站点特殊参数 | 
+| SMNT \<pathname\> | 挂载指定文件结构 | 
+| STAT \<directory\> | 在当前程序或目录上返回信息 | 
+| STRU \<type\> | 数据结构（F=文件，R=记录，P=页面） | 
+| TYPE \<data type\> | 数据类型（A=ASCII，E=EBCDIC，I=binary） | 
