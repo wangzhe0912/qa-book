@@ -49,6 +49,37 @@ service vsftpd restart
 
 此时，FTP服务已经正常启动了，接下来我们就可以正常使用FTP服务了。
 
+## 其他配置说明
+
+关于 `vsftpd` 服务的相关配置都位于 `/etc/vsftpd.conf` 配置文件中。
+下面，我们来依次讲解一些常用的配置。
+
+### 自定义端口
+
+对于FTP服务器，其默认端口为21。
+有时，我们希望能够修改FTP服务监听的端口，此时，则使用到了如下配置：
+
+```bash
+listen_port=8021
+```
+
+除了修改 `/etc/vsftpd.conf` 配置文件外，我们还需要修改 `/etc/services` 文件，其中有系统Service相关的端口设置：
+
+```bash
+ftp             8021/tcp
+ftp             8021/udp          fsp fspd
+```
+
+### pasv_promiscuous参数
+
+```bash
+pasv_promiscuous=YES
+```
+
+该参数可以是YES / NO。默认值为NO。
+当该参数设置为NO时，会进行被动模式安全检查，这一检查可以保证数据连接源于同一个IP地址。
+当该参数设置为YES时，则会忽略该检查。
+
 ## FTP服务文件上传下载
 
 ### 客户端工具
@@ -66,3 +97,7 @@ wget ftp://${username}:${password}@{hostname}:${port}/{filepath}
 ```
 
 其中，FTP协议的默认端口是21，如果没有修改端口的话，可以不用传入端口信息。
+
+除了 *wget* 命令行工具外，一个更加强大的命令行工具就是telnet了。
+
+https://blog.csdn.net/nowhere_/article/details/44877439
