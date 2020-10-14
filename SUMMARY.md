@@ -11,6 +11,7 @@
 ## 数据库篇
 
 * [mongodb](./databases/mongo/beginning.md)
+    * [MongoDB的安装](./databases/mongo/install.md)
 * [elasicsearch](./databases/elasicsearch/beginning.md)
 
 ## 中间件篇
