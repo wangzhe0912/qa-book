@@ -12,6 +12,7 @@
 
 * [mongodb](./databases/mongo/beginning.md)
     * [MongoDB的安装](./databases/mongo/install.md)
+    * [MongoCharts的安装与使用](./databases/mongo/mongo_charts.md)
 * [elasicsearch](./databases/elasicsearch/beginning.md)
 
 ## 中间件篇
