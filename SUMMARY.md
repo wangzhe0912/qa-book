@@ -31,6 +31,8 @@
     * [DHCP服务搭建](./linux/network/dhcp.md)
     * [NTP服务搭建](./linux/network/ntp.md)
     * [rtsp协议与实战](./linux/network/rtsp.md)
+    * [DHCP服务搭建](./linux/network/dhcp.md)
+    * [Linux上如何扫描同一网段内的所有设备](./linux/network/snmp.md)
 
 * [git杂谈](./linux/git/beginning.md)
     * [Git忽略已加入版本控制系统中的文件](./linux/git/gitignore.md)
