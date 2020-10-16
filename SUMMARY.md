@@ -60,6 +60,7 @@
 * [Jmeter](./test/jmeter/beginning.md)
 * [Locust](./test/locust/beginning.md)
 * [接口自动化测试](./test/interface/beginning.md)
+    * [JSONSchema在接口测试中的应用](./test/interface/json_schema.md)
 * [UI自动化测试](./test/ui/beginning.md)
 
 ## 测试服务篇
