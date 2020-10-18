@@ -25,6 +25,7 @@
 * [Linux基础](./linux/basic/beginning.md)
     * [Ubuntu系统开启远程ssh访问](./linux/basic/ssh.md)
     * [Ubuntu系统下搭建FTP服务器](./linux/basic/ftp.md)
+    * [通过expect实现无交互式的远程命令执行与远程文件传输](./linux/basic/expect.md)
 
 * [网络协议相关](./linux/network/beginning.md)
     * [端口存活查询与验证](./linux/network/ports.md)
