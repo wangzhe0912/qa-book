@@ -14,6 +14,10 @@
     * [MongoDB的安装](./databases/mongo/install.md)
     * [MongoCharts的安装与使用](./databases/mongo/mongo_charts.md)
 * [elasicsearch](./databases/elasicsearch/beginning.md)
+* [etcd](./databases/etcd/beginning.md)
+    * [etcd的安装](./databases/etcd/install.md)
+    * [etcd的快速入门](./databases/etcd/quickstart.md)
+    * [在Python中使用ETCD](./databases/etcd/etcd_in_python.md)
 
 ## 中间件篇
 

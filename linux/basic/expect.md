@@ -92,4 +92,3 @@ expect eof
 # example
 # ./expect_scp 192.168.1.22 wangzhe 123456 mock.tar /home/wangzhe/桌面/mock.$tag.tar
 ```
-
