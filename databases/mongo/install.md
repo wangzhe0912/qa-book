@@ -21,3 +21,20 @@ sudo lsof -i:27017
 ```
 
 ![mongodb status](./picture/install1.png)
+
+默认情况下，mongoDB服务仅允许在127.0.0.1进行本地访问。
+因此，我们需要修改配置文件使得它运行外网访问。
+
+mongodb的配置文件位于: `/etc/mongodb.conf`。
+
+```
+bind_ip = 0.0.0.0
+```
+
+Ps：修改配置文件中bind_ip的值为0.0.0.0即可。
+
+配置文件修改完成后，需要重新启动mongodb服务使之生效：
+
+```bash
+service mongodb restart
+```
