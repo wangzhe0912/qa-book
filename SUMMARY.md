@@ -18,6 +18,9 @@
     * [etcd的安装](./databases/etcd/install.md)
     * [etcd的快速入门](./databases/etcd/quickstart.md)
     * [在Python中使用ETCD](./databases/etcd/etcd_in_python.md)
+* [redis](./databases/redis/beginning.md)
+    * [redis的安装](./databases/redis/install.md)
+
 
 ## 中间件篇
 
