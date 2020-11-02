@@ -49,3 +49,4 @@ sudo rabbitmq-plugins enable rabbitmq_management
 ```
 
 之后在浏览器访问 [http://server-ip:15672/]，账号与密码都是刚才设置的 admin。
+
