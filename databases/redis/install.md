@@ -38,4 +38,3 @@ Ps：修改配置文件中bind_ip的值为0.0.0.0即可。
 ```bash
 service redis-server restart
 ```
-

@@ -24,6 +24,8 @@
 
 ## 中间件篇
 
+* [RabbitMQ](./middleware/rabbitmq/beginning.md)
+    * [RabbitMQ的安装](./middleware/rabbitmq/install.md)
 * [nginx](./middleware/nginx/beginning.md)
 * [openresty](./middleware/openresty/beginning.md)
 
