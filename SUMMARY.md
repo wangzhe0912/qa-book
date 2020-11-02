@@ -27,6 +27,7 @@
 * [RabbitMQ](./middleware/rabbitmq/beginning.md)
     * [RabbitMQ的安装](./middleware/rabbitmq/install.md)
 * [nginx](./middleware/nginx/beginning.md)
+    * [nginx的安装](./middleware/nginx/install.md)
 * [openresty](./middleware/openresty/beginning.md)
 
 ## 操作系统与内核篇
