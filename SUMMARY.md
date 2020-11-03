@@ -25,9 +25,10 @@
 ## 中间件篇
 
 * [RabbitMQ](./middleware/rabbitmq/beginning.md)
-    * [RabbitMQ的安装](./middleware/rabbitmq/install.md)
+  * [RabbitMQ的安装](./middleware/rabbitmq/install.md)
 * [nginx](./middleware/nginx/beginning.md)
-    * [nginx的安装](./middleware/nginx/install.md)
+  * [nginx的安装](./middleware/nginx/install.md)
+  * [解决nginx中文乱码问题](./middleware/nginx/chinese.md)
 * [openresty](./middleware/openresty/beginning.md)
 
 ## 操作系统与内核篇
