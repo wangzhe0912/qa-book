@@ -5,6 +5,8 @@
 ## 编程语言篇
 
 * [python](./language/python/beginning)
+    * [常用Python第三方库](./language/thirdparty/beginning)
+        * [python-nmap进行端口扫描](./language/thirdparty/python-nmap)
 * [go](./language/go/beginning.md)
 
 
