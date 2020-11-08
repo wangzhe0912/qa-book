@@ -34,10 +34,10 @@
 ## 操作系统与内核篇
 
 * [Linux基础](./linux/basic/beginning.md)
-  1. [Ubuntu系统开启远程ssh访问](./linux/basic/ssh.md)
-  2. [Ubuntu系统下搭建FTP服务器](./linux/basic/ftp.md)
-  3. [通过expect实现无交互式的远程命令执行与远程文件传输](./linux/basic/expect.md)
-  4. [Supervisor实现程序管理与保活](./linux/basic/supervisor.md)
+  * [Ubuntu系统开启远程ssh访问](./linux/basic/ssh.md)
+  * [Ubuntu系统下搭建FTP服务器](./linux/basic/ftp.md)
+  * [通过expect实现无交互式的远程命令执行与远程文件传输](./linux/basic/expect.md)
+  * [Supervisor实现程序管理与保活](./linux/basic/supervisor.md)
 
 * [网络协议相关](./linux/network/beginning.md)
   * [端口存活查询与验证](./linux/network/ports.md)
