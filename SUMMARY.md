@@ -4,9 +4,9 @@
 
 ## 编程语言篇
 
-* [python基础](./language/python/beginning)
-* [常用Python第三方库](./language/python-thirdparty/beginning)
-    * [python-nmap进行端口扫描](./language/python-thirdparty/python-nmap)
+* [python基础](./language/python/beginning.md)
+* [常用Python第三方库](./language/python-thirdparty/beginning.md)
+    * [python-nmap进行端口扫描](./language/python-thirdparty/python-nmap.md)
 * [go](./language/go/beginning.md)
 
 
