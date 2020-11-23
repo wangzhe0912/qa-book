@@ -8,6 +8,7 @@
 * [常用Python第三方库](./language/python-thirdparty/beginning.md)
     * [python-nmap进行端口扫描](./language/python-thirdparty/python-nmap.md)
     * [使用ijson解析超大JSON文件](./language/python-thirdparty/ijson.md)
+    * [scikit-image快速入门](./language/python-thirdparty/scikit-image-1.md)
 * [Shell快速入门](./language/shell/beginning.md)
 * [go语言快速入门](./language/go/beginning.md)
     * [Go的工作区与GOPATH](./language/go/gopath.md)

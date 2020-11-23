@@ -170,3 +170,67 @@ Usage of ./demo2:
 ```
 
 ### 怎样自定义命令源码文件的参数使用说明？
+
+Golang支持多种方式自定义参数的使用说明，最简单的一种方式就是对变量flag.Usage重新赋值。
+
+flag.Usage的类型是func()，即一种无参数声明且无结果声明的函数类型。
+
+flag.Usage变量在声明时就已经被赋值了，所以我们才能够在运行命令`go run demo2.go --help`时看到正确的结果。
+
+Ps：对flag.Usage的赋值必须在调用flag.Parse函数之前。
+
+现在，我们把 demo2.go 另存为 demo3.go，然后在main函数体的开始处加入如下代码：
+
+```go
+package main
+
+import (
+  "flag"
+  "fmt"
+)
+
+var name string
+
+func init() {
+  flag.StringVar(&name, "name", "everyone", "The greeting object.")
+}
+
+func main() {
+  flag.Usage = func() {
+   _, _ = fmt.Fprintf(os.Stderr, "Usage of %s:\n", "question")
+   flag.PrintDefaults()
+  }
+  flag.Parse()
+  fmt.Printf("Hello, %s!\n", name)
+}
+```
+
+那么，再次运行如下命令时：
+
+```
+go run demo3.go --help
+```
+
+可以看到：
+
+```
+Usage of question:
+ -name string
+    The greeting object. (default "everyone")
+exit status 2
+```
+
+现在再深入一层，我们在调用flag包中的一些函数（比如StringVar、Parse等等）的时候，
+实际上是在调用flag.CommandLine变量的对应方法。
+
+flag.CommandLine相当于默认情况下的命令参数容器。
+所以，通过对flag.CommandLine重新赋值，我们可以更深层次地定制当前命令源码文件的参数使用说明。
+
+
+## 总结
+
+你现在已经走出了 Go 语言编程的第一步。
+你可以用 Go 编写命令，并可以让它们像众多操作系统命令那样被使用，甚至可以把它们嵌入到各种脚本中。
+
+另外，如果你想详细了解flag包的用法，可以到[这个网址](https://golang.google.cn/pkg/flag/)查看文档。
+或者直接使用godoc命令在本地启动一个 Go 语言文档服务器。怎样使用godoc命令？你可以参看[这里](https://github.com/hyper0x/go_command_tutorial/blob/master/0.5.md)。
