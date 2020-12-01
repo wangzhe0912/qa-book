@@ -27,9 +27,11 @@
 
 在主窗口中，包含着三部分面板，从上到下依次是：
 
-1. Packet List
-2. Packet Detail
-3. Packet Bytes
+1. 工具栏
+2. 显示过滤器
+3. Packet List
+4. Packet Detail
+5. Packet Bytes
 
 如果我们希望在Packet Detail面板中查看一个单独的数据包具体内容，那么首先需要在Packet List单击选择对应的数据包。
 在选中了数据包之后，你可以在Packet Details面板中选中数据包的某个字段，从而可以在Packet Bytes面板中查看相应的字节信息。
@@ -38,6 +40,10 @@ PS：在Packet List中，针对每个包请求都列出了对应的协议，但�
 所有的数据包都是按照其在链路上的接收顺序排列的。
 
 下面，我们依次来详细介绍每个面板的内容。
+
+### 工具栏
+
+![tutorial2](./picture/tutorial13.png)
 
 ### Packet List（数据包列表）
 
@@ -51,6 +57,10 @@ Packet Detail详细显示了一个数据包的内容，并且可以通过展开�
 ### Packet Bytes（数据包字节）
 
 Packet Bytes的内容可能是让人最难以理解的，因为它显示的是一个数据包未经过处理的原始数据格式，也就是在链接上传播时的内容。
+
+### 数据包列表面板的标记符号
+
+![tutorial2](./picture/tutorial14.png)
 
 ## Wireshark偏好设置
 
