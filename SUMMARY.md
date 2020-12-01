@@ -90,6 +90,7 @@
   * [PyCharm远程调试](./tools/pycharm/remote_debug.md)
 * [Wireshark](./tools/Wireshark/beginning.md)
   * [Wireshark快速入门](./tools/Wireshark/tutorial.md)
+  * [Wireshark上手使用](./tools/Wireshark/practice.md)
   * [Wireshark捕获过滤器](./tools/Wireshark/capture_filter.md)
   * [Wireshark显示过滤器](./tools/Wireshark/show_filter.md)
 
