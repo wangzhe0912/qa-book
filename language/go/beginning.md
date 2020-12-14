@@ -9,5 +9,3 @@
 参考文档：
 
 1. [Go语言规范文档](https://golang.google.cn/ref/spec)
-
-

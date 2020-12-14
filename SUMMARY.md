@@ -16,7 +16,7 @@
     * [Go的工作区与GOPATH](./language/go/gopath.md)
     * [命令源码文件](./language/go/command_source_file.md)
     * [库源码文件](./language/go/lib_source_file.md)
-    * [Go语言的变量、常量、函数、结构体与接口](./language/go/entity.md)
+    * [程序实体概述](./language/go/entity.md)
     * [Go语言的数组与切片](./language/go/array.md)
     * [Go语言的Container Package](./language/go/container.md)
     * [Go语言的字典](./language/go/dict.md)
