@@ -58,6 +58,7 @@
 * [Linux基础](./linux/basic/beginning.md)
   * [Ubuntu系统开启远程ssh访问](./linux/basic/ssh.md)
   * [Ubuntu系统下搭建FTP服务器](./linux/basic/ftp.md)
+  * [使用Python搭建简单的文件服务器](./linux/basic/file_server.md)
   * [通过expect实现无交互式的远程命令执行与远程文件传输](./linux/basic/expect.md)
   * [Supervisor实现程序管理与保活](./linux/basic/supervisor.md)
 
