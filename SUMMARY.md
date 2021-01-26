@@ -115,3 +115,8 @@
 * [分布式性能测试平台](./service/performance/beginning.md)
 * [通用Mock服务管理平台](./service/mock/beginning.md)
 * [混沌工程实践平台](./service/chaos/beginning.md)
+
+## 个人成长篇
+
+* [开源项目](./person/open_source/beginning.md)
+  * [如何高效的学习开源项目](./person/open_source/learn.md)
