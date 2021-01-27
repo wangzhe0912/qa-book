@@ -35,6 +35,7 @@
 
 * [mongodb](./databases/mongo/beginning.md)
   * [MongoDB的安装](./databases/mongo/install.md)
+  * [MongoDB安装包剖析](./databases/mongo/install_package.md)
   * [MongoCharts的安装与使用](./databases/mongo/mongo_charts.md)
 * [elasicsearch](./databases/elasicsearch/beginning.md)
 * [etcd](./databases/etcd/beginning.md)
