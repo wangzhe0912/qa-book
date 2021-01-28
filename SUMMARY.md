@@ -8,6 +8,7 @@
 * [python基础](./language/python/beginning.md)
   * [Python多线程中daemon属性的作用](./language/python/daemon.md)
   * [Python正则表达式详解](./language/python/re.md)
+  * [Python时间日期详解](./language/python/datetime.md)
 * [常用Python第三方库](./language/python-thirdparty/beginning.md)
   * [python-nmap进行端口扫描](./language/python-thirdparty/python-nmap.md)
   * [使用ijson解析超大JSON文件](./language/python-thirdparty/ijson.md)
