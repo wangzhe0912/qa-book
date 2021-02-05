@@ -11,6 +11,7 @@
   * [Python时间日期详解](./language/python/datetime.md)
   * [Python判断当前操作系统](./language/python/os_system.md)
   * [Python目录相关操作总结](./language/python/directory.md)
+  * [Python import详解](./language/python/import.md)
 * [常用Python第三方库](./language/python-thirdparty/beginning.md)
   * [python-nmap进行端口扫描](./language/python-thirdparty/python-nmap.md)
   * [使用ijson解析超大JSON文件](./language/python-thirdparty/ijson.md)
