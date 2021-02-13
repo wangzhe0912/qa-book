@@ -19,6 +19,7 @@
   * [Flask websocket协议实战](./language/python-thirdparty/flask_sockets.md)
   * [scikit-image快速入门](./language/python-thirdparty/scikit-image-1.md)
 * [Shell快速入门](./language/shell/beginning.md)
+* [Kotlin快速入门](./language/kotlin/beginning.md)
 * [go语言快速入门](./language/go/beginning.md)
   * [Go的工作区与GOPATH](./language/go/gopath.md)
   * [命令源码文件](./language/go/command_source_file.md)
@@ -87,13 +88,17 @@
 ## AI篇
 
 
+## 移动端开发
+
+* [android快速入门](./mobile/android/beginning.md)
+
 
 ## 云原生篇
 
 * [docker杂谈](./cloud-native/docker/beginning.md)
 * [Kubernetes](./cloud-native/kubernetes/beginning.md)
-  * [Kubernetes源码解析](./linux/kubernetes/source_code.md)
-  * [Kubernetes环境搭建](./linux/kubernetes/setup_env.md)
+  * [Kubernetes源码解析](./cloud-native/kubernetes/source_code.md)
+  * [Kubernetes环境搭建](./cloud-native/kubernetes/setup_env.md)
 * [Helm](./cloud-native/helm/beginning.md)
 
 
