@@ -105,6 +105,11 @@
 
 * [android快速入门](./mobile/android/beginning.md)
 
+## 嵌入式开发
+
+* [micro-python快速入门](./embedded-system/micro-python/beginning.md)
+  * [micro-python环境搭建](./embedded-system/micro-python/environment.md)
+  * [micro-python环境联网与HTTP请求](./embedded-system/micro-python/network.md)
 
 ## 云原生篇
 
