@@ -93,7 +93,7 @@ aplay test.wav
 退出程序使用 ALT + Q，或者按 Esc 键。
 
 ```shell
-alsamixer.png
+alsamixer
 ```
 
 ![alsamixer](./pictures/alsamixer.png)
