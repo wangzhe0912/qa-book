@@ -97,3 +97,5 @@ alsamixer.png
 ```
 
 ![alsamixer](./pictures/alsamixer.png)
+
+使用方式如上图所示。
