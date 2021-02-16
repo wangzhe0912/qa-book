@@ -71,6 +71,8 @@
 
 * [RabbitMQ](./middleware/rabbitmq/beginning.md)
   * [RabbitMQ的安装](./middleware/rabbitmq/install.md)
+* [MQTT](./middleware/mqtt/beginning.md)
+  * [MQTT的安装](./middleware/mqtt/install.md)
 * [nginx](./middleware/nginx/beginning.md)
   * [nginx的安装](./middleware/nginx/install.md)
   * [解决nginx中文乱码问题](./middleware/nginx/chinese.md)
@@ -110,6 +112,8 @@
 * [micro-python快速入门](./embedded-system/micro-python/beginning.md)
   * [micro-python环境搭建](./embedded-system/micro-python/environment.md)
   * [micro-python环境联网与HTTP请求](./embedded-system/micro-python/network.md)
+* [树莓派快速入门](./embedded-system/raspberry/beginning.md)
+  * [树莓派Gladys Assistant环境搭建](./embedded-system/raspberry/gladys_assistant.md)
 
 ## 云原生篇
 
