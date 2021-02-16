@@ -130,6 +130,8 @@
   * [Wireshark上手使用](./tools/Wireshark/practice.md)
   * [Wireshark捕获过滤器](./tools/Wireshark/capture_filter.md)
   * [Wireshark显示过滤器](./tools/Wireshark/show_filter.md)
+* [国内快速下载github等国外资源秘籍](./tools/proxy/beginning.md)
+
 
 ## 测试杂谈篇
 
