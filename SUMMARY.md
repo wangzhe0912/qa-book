@@ -87,7 +87,6 @@
   * [使用Python搭建简单的文件服务器](./linux/basic/file_server.md)
   * [通过expect实现无交互式的远程命令执行与远程文件传输](./linux/basic/expect.md)
   * [Supervisor实现程序管理与保活](./linux/basic/supervisor.md)
-
 * [网络协议相关](./linux/network/beginning.md)
   * [端口存活查询与验证](./linux/network/ports.md)
   * [DHCP服务搭建](./linux/network/dhcp.md)
@@ -96,7 +95,6 @@
   * [DHCP服务搭建](./linux/network/dhcp.md)
   * [Linux上如何扫描同一网段内的所有设备](./linux/network/snmp.md)
   * [Linux多网卡优先级配置](./linux/network/network_priority.md)
-
 * [git杂谈](./linux/git/beginning.md)
   * [Git忽略已加入版本控制系统中的文件](./linux/git/gitignore.md)
 
@@ -114,6 +112,7 @@
   * [micro-python环境联网与HTTP请求](./embedded-system/micro-python/network.md)
 * [树莓派快速入门](./embedded-system/raspberry/beginning.md)
   * [树莓派Gladys Assistant环境搭建](./embedded-system/raspberry/gladys_assistant.md)
+  * [树莓派语音处理实战](./embedded-system/raspberry/speech.md)
 
 ## 云原生篇
 
