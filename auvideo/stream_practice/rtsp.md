@@ -82,24 +82,25 @@ mp4是一种常见的视频格式，但是无法直接被live555MediaServer使�
 
 ### 环境准备
 
-除了上述通过 live555 搭建的rtsp server之外，我们还需要做如下准备：
-
 1. 准备一个mp4的视频文件用于验证
 2. 安装ffmpeg命令行工具。
+3. 安装VLC media player软件。
 
 其中，ffmpeg命令行工具可以去 [官方网站](https://ffmpeg.org/download.html) 下载。
 
 ![ffmpeg](./pictures/ffmpeg.png)
 
-### 启动live555MediaServer
+### 拉取rtsp服务镜像
 
 ```shell
-./live555MediaServer
+docker pull gemfield/zlmediakit:20.04-runtime-ubuntu18.04
 ```
 
-![live555](./pictures/live555.png)
+启动rtsp镜像容器：
 
-此时，我们可以看到rtsp中打印出服务启动的rstp的地址: rtsp://192.168.18.139/<filename>。
+```shell
+docker run -id -p 1935:1935  -p 554:554  -p 8080:80 gemfield/zlmediakit:20.04-runtime-ubuntu18.04
+```
 
 ### 使用 ffmpeg 推送rtsp视频流
 
@@ -118,5 +119,19 @@ mp4是一种常见的视频格式，但是无法直接被live555MediaServer使�
 例如：
 
 ```shell
-./ffmpeg -i SampleVideo_1280x720_20mb.mp4 -f flv rtmp://192.168.18.139/test1
+./ffmpeg -re -i SampleVideo_1280x720_20mb.mp4 -vcodec h264 -acodec aac -strict -2 -f rtsp -rtsp_transport tcp rtsp://127.0.0.1/live/test1
 ```
+
+其中:
+
+1. SampleVideo_1280x720_20mb.mp4 是我们提前准备好的mp4文件
+2. -re 表示以本地帧频读数据，主要用于模拟捕获设备
+3. -i SampleVideo_1280x720_20mb.mp4 表示指定本地文件
+4. -vcodec h264 设置视频编码为h264编码
+5. -acodec aac  设置音频编码为aac
+6. -strict -2   设置strictness跟标准的严格性
+7. -f rtsp  强制ffmpeg输出为rtsp流。
+8. -rtsp_transport tcp  设置rtsp底层协议为tcp协议
+9. rtsp://127.0.0.1/live/test1 是rtsp服务器推流的地址，其中 /live/test1 为自定义地址。
+
+最后，我们再次使用 VLC media player 播放rtsp视频流，同样还是Open Network，只需要在地址兰总输入刚才的推流地址即可。
