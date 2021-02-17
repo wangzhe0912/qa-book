@@ -65,3 +65,5 @@ mosquitto_pub -h localhost -t "test/message" -m "Hello, world"
 输入完成后，你回到mosquitto_sub的命令行终端，是不是已经收到的对应的消息了呢。
 
 通过上述验证，我们可以看到我们的mosquitto broker已经能够正常的工作了。
+
+rtsp://192.168.18.139/SampleVideo_1280x720_20mb.ts
