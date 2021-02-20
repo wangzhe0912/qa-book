@@ -21,6 +21,20 @@
 * [熟练掌握Django](./language/django/beginning.md)
   * [Django快速上手](./language/django/quickstart.md)
 * [Shell快速入门](./language/shell/beginning.md)
+* [Kotlin快速入门](./language/kotlin/beginning.md)
+  * [Kotlin基本语法](./language/kotlin/basic_grammer.md)
+  * [Kotlin基本数据类型](./language/kotlin/basic_data_type.md)
+  * [Kotlin条件控制](./language/kotlin/condition_control.md)
+  * [Kotlin循环语句](./language/kotlin/loop.md)
+  * [Kotlin类和对象](./language/kotlin/object.md)
+  * [Kotlin继承](./language/kotlin/inherit.md)
+  * [Kotlin接口](./language/kotlin/interface.md)
+  * [Kotlin扩展](./language/kotlin/extension.md)
+  * [Kotlin数据类与密封类](./language/kotlin/data_type.md)
+  * [Kotlin泛型](./language/kotlin/generic.md)
+  * [Kotlin枚举类](./language/kotlin/enum.md)
+  * [Kotlin对象表达式/声明](./language/kotlin/object_express.md)
+  * [Kotlin委托](./language/kotlin/commission.md)
 * [go语言快速入门](./language/go/beginning.md)
   * [Go的工作区与GOPATH](./language/go/gopath.md)
   * [命令源码文件](./language/go/command_source_file.md)
@@ -59,6 +73,8 @@
 
 * [RabbitMQ](./middleware/rabbitmq/beginning.md)
   * [RabbitMQ的安装](./middleware/rabbitmq/install.md)
+* [MQTT](./middleware/mqtt/beginning.md)
+  * [MQTT的安装](./middleware/mqtt/install.md)
 * [nginx](./middleware/nginx/beginning.md)
   * [nginx的安装](./middleware/nginx/install.md)
   * [解决nginx中文乱码问题](./middleware/nginx/chinese.md)
@@ -73,7 +89,6 @@
   * [使用Python搭建简单的文件服务器](./linux/basic/file_server.md)
   * [通过expect实现无交互式的远程命令执行与远程文件传输](./linux/basic/expect.md)
   * [Supervisor实现程序管理与保活](./linux/basic/supervisor.md)
-
 * [网络协议相关](./linux/network/beginning.md)
   * [端口存活查询与验证](./linux/network/ports.md)
   * [DHCP服务搭建](./linux/network/dhcp.md)
@@ -82,20 +97,37 @@
   * [DHCP服务搭建](./linux/network/dhcp.md)
   * [Linux上如何扫描同一网段内的所有设备](./linux/network/snmp.md)
   * [Linux多网卡优先级配置](./linux/network/network_priority.md)
-
 * [git杂谈](./linux/git/beginning.md)
   * [Git忽略已加入版本控制系统中的文件](./linux/git/gitignore.md)
 
 ## AI篇
 
 
+## 音视频技术篇
+
+* [流媒体协议实战](./auvideo/stream_practice/beginning.md)
+  * [rtsp协议杂谈与实战](./auvideo/stream_practice/rtsp.md)
+
+
+## 移动端开发
+
+* [android快速入门](./mobile/android/beginning.md)
+
+## 嵌入式开发
+
+* [micro-python快速入门](./embedded-system/micro-python/beginning.md)
+  * [micro-python环境搭建](./embedded-system/micro-python/environment.md)
+  * [micro-python环境联网与HTTP请求](./embedded-system/micro-python/network.md)
+* [树莓派快速入门](./embedded-system/raspberry/beginning.md)
+  * [树莓派Gladys Assistant环境搭建](./embedded-system/raspberry/gladys_assistant.md)
+  * [树莓派语音处理实战](./embedded-system/raspberry/speech.md)
 
 ## 云原生篇
 
 * [docker杂谈](./cloud-native/docker/beginning.md)
 * [Kubernetes](./cloud-native/kubernetes/beginning.md)
-  * [Kubernetes源码解析](./linux/kubernetes/source_code.md)
-  * [Kubernetes环境搭建](./linux/kubernetes/setup_env.md)
+  * [Kubernetes源码解析](./cloud-native/kubernetes/source_code.md)
+  * [Kubernetes环境搭建](./cloud-native/kubernetes/setup_env.md)
 * [Helm](./cloud-native/helm/beginning.md)
 
 
@@ -109,6 +141,8 @@
   * [Wireshark上手使用](./tools/Wireshark/practice.md)
   * [Wireshark捕获过滤器](./tools/Wireshark/capture_filter.md)
   * [Wireshark显示过滤器](./tools/Wireshark/show_filter.md)
+* [国内快速下载github等国外资源秘籍](./tools/proxy/beginning.md)
+
 
 ## 测试杂谈篇
 
