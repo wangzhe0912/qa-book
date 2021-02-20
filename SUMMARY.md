@@ -18,6 +18,8 @@
   * [Python实战websocket协议](./language/python-thirdparty/websockets.md)
   * [Flask websocket协议实战](./language/python-thirdparty/flask_sockets.md)
   * [scikit-image快速入门](./language/python-thirdparty/scikit-image-1.md)
+* [熟练掌握Django](./language/django/beginning.md)
+  * [Django快速上手](./language/django/quickstart.md)
 * [Shell快速入门](./language/shell/beginning.md)
 * [go语言快速入门](./language/go/beginning.md)
   * [Go的工作区与GOPATH](./language/go/gopath.md)
