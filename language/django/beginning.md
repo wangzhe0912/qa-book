@@ -14,7 +14,7 @@ Django 是一个高级的 Python 网络框架，可以快速开发安全和可�
 
 ## Django架构
 
-![archtecture](./pictures/archtecture.png)
+![architecture](./pictures/archtecture.png)
 
 
 ## 开发环境准备
