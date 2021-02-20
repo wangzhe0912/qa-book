@@ -99,6 +99,7 @@
   * [Linux多网卡优先级配置](./linux/network/network_priority.md)
 * [git杂谈](./linux/git/beginning.md)
   * [Git忽略已加入版本控制系统中的文件](./linux/git/gitignore.md)
+  * [Git mirror实现飞速上传/下载](./linux/git/mirror.md)
 
 ## AI篇
 
