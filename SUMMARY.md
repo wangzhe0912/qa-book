@@ -21,6 +21,7 @@
 * [熟练掌握Django](./language/django/beginning.md)
   * [Django快速上手](./language/django/quickstart.md)
   * [Django配置文件详解](./language/django/settings.md)
+  * [Django自定义页面编写](./language/django/frontend.md)
 * [Shell快速入门](./language/shell/beginning.md)
 * [Kotlin快速入门](./language/kotlin/beginning.md)
   * [Kotlin基本语法](./language/kotlin/basic_grammer.md)
