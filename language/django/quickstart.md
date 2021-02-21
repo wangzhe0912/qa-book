@@ -191,7 +191,8 @@ class Job(models.Model):
 3. verbose_name表示其别名，可以在admin管理后台中可见。
 4. max_length表示字符串最大的长度。
 5. on_delete参数主要用户外键引用，表示当引用的对象被删除后，相关的记录应该如何处理，SET_NULL表示关联数据被删除后，设置该字段为null。另外，当on_delete为SET_NULL时，需要设置该字段允许为空，即null=True
-6. 
+6. auto_now_add表示首次添加记录时设置为当前时间。
+7. auto_now表示每次记录更新时，设置为当前时间。
 
 ### 将Model注册当管理后台
 
@@ -235,3 +236,71 @@ python3 ./manage.py migrate
 ### 体验一下吧
 
 下面，我们再次打开admin后台页面，我们就已经可以直接用后台管理页面进行Job相关的管理了。
+
+## 管理后台体验优化
+
+在上面的内容中，我们已经能够实现可以通过后台管理页面进行职位的增、删、改、查操作了，但是整体来说，用户体验并不好，
+接下来，我们将会了解如何一步步的优化管理后台，从而使得整个后台的管理页面一步步优化。
+
+### 默认值设置
+
+在刚才新增Job时，其中有一些字段我们希望能够显示一些默认值，例如创建日期我们期望能够默认显示当前时间等。
+
+默认值的设置非常简单，我们只需要在Model字段的定义中增加default属性即可，例如。
+
+```python
+import datetime
+created_date = models.DateTimeField(verbose_name="创建日期", default=datetime.now)
+```
+
+### 职位列表页中显示指定字段
+
+创建对应的Job后，此时访问Job列表页，你看到的记录目前仅仅是Job object，这种显示方式非常不友好，我们希望能够在列表页中显示出Job的一些核心属性。
+
+这些，我们需要在`admin.py`中进行定制，即创建JobAdmin类并赋值`list_display`属性对应的字段名称。
+
+```python
+class JobAdmin(admin.ModelAdmin):
+    list_display = ('job_name', 'job_type', 'job_city', 'creator', 'created_date', 'modified_date')
+
+# admin.site.register(Job)
+admin.site.register(Job, JobAdmin)  # 注册时需要将JobAdmin一起进行注册
+```
+
+此时，再次访问列表详情页面时，我们应该就已经可以看到字段的信息了。
+
+![job_list](./pictures/job_list.png)
+
+
+### 表单中隐藏默写字段
+
+在新增Job时，有些字段我们希望直接设置为默认值，并不需要在表单中显示，例如创建人字段。
+
+针对这种场景，我们同样需要在`admin.py`中进行定制，这次需要用到的是`exclude`属性:
+
+```python
+class JobAdmin(admin.ModelAdmin):
+    exclude = ('creator','created_date','modified_date')
+```
+
+此时，再次进入新增、编辑等页面时，我们将会无法看到这些字段信息，也无法修改这些字段内容。
+
+那么，就有一个问题，这些字段应该如何进行赋值呢？`default`属性设置默认值是一种方式，下面，我们来介绍另外一种方式:
+
+`default`属性设置默认值仅限于默认值固定的场景，但是对于默认值可能会发现变化的场景，此时，我们需要用到Admin类的`save_model`方法。
+
+例如，我们希望`creator`字段值为当前登录用户时：
+
+```python
+class JobAdmin(admin.ModelAdmin):
+    def save_model(self, request, obj, form, change):
+        if obj.creator is None:
+            obj.creator = request.user
+        super().save_model(request, obj, form, change)
+```
+
+在上面的方法中，我们接收了`request`,`obj`,`form`,`change`四个参数。
+
+其中，`request`表示当前请求的对象，`obj`表示当前记录对象。
+
+我们将当前请求用户设置为当前job记录的`creator`属性值，然后再次调用`save_model`父类方法即可实现动态默认值的功能。

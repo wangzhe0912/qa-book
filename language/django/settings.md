@@ -132,7 +132,6 @@ DATABASES = {
 }
 ```
 
-
 ### LANGUAGE_CODE
 
 表示当前项目的语言，默认为`en-us`，表示美国英语。
@@ -140,6 +139,13 @@ DATABASES = {
 如果想改为中文，可以设置为`zh-hans`。
 
 Ps: USE_I18N 必须是激活状态，该配置才会有效果。
+
+
+### TIME_ZONE
+
+表示当前项目的时区，默认为`UTC`时间。
+
+为了能使得项目时间本土化，我们可以把TIME_ZONE的值设置为`Asia/Shanghai`。
 
 
 ## 指定配置文件
