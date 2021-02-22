@@ -54,40 +54,17 @@ mkdir jobs/templates
 
 第二步：定义一个匿名访问的基础页面`base.html`，并在基础页面中定义页头：
 
-```html
-<h1>开放职位</h1>
-
-<p></p>
-
-{% block content %}
-{% endblock %}
-```
+![code1](./pictures/code1.png)
 
 Ps: 在上述base页面中，我们定义了页面的标题和一个block块，此外，对于每个block块都需要一个endblock来表示结束。
 
 第三步：下面，我们就可以正式开始编写我们的职位列表页面的内容了: `joblist.html`。
 
-```html
-{% extends 'base.html' %}
-
-{% block content %}
-
-{% if job_list %}
-    <ul>
-    {% for job in job_list %}
-        <li>{{job.type_name}}  <a href="/job/{{ job.id }}/" style="color:blue">{{ job.job_name }}</a>   {{job.city_name}}  </li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No jobs are available.</p>
-{% endif %}
-
-{% endblock %}
-```
+![code2](./pictures/code2.png)
 
 下面，我们来了解一下上述代码的含义:
 
-1. `{% extends 'base.html' %}` 表示当前文件继承自`base.html`文件。
+1. `extends 'base.html'` 表示当前文件继承自`base.html`文件。
 2. 下面的所有内容都是对 `block content` 块进行的重写。
 3. 在Django的template渲染中大括号百分号内部可以包含python表达式，Template渲染时会自动解析。
 
@@ -152,44 +129,7 @@ urlpatterns = [
 
 第一步：创建`job.html`详情页模板：
 
-```html
-{% extends 'base.html' %}
-
-{% block content %}
-
-<div style="margin:auto; width:50%;">
-
-{% if job %}
-    <div class="position_name">
-        <h2>岗位名称：{{job.job_name}} </h2>
-
-        城市：
-        {{job.city_name}} <p></p>
-    </div>
-    <hr>
-    <div class="position_responsibility" style="width:600px;">
-        <h3>岗位职责：</h3>
-        <pre style="font-size:16px">{{job.job_responsibility}}
-        </pre>
-    </div>
-    
-    <hr>
-    <div class="position_requirement" style="width:600px; ">
-        <h3>任职要求：</h3>
-        <pre style="font-size:16px">{{job.job_requirement}}
-        </pre>
-    </div>
-
-    <div class="apply_position">
-        <input type="button" class="btn btn-primary" style="width:120px;" value="申请" onclick="location.href='/resume/add/?apply_position={{job.job_name}}&city={{job.city_name}}'"/>
-    </div>
-{% else %}
-    <p>职位不存在</p>
-{% endif %}
-
-{% endblock %}
-</div>
-```
+![code3](./pictures/code3.png)
 
 模板渲染原理基本与之前的职位列表页面相同，此处不再赘述。
 
