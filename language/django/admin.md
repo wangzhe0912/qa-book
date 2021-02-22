@@ -193,13 +193,73 @@ Ps: 我们只需要将"username", "email"再次用一个元组进行包围即可
 
 ## 扩展命令行支持批量导入数据
 
+虽然我们对管理页面进行了各种优化，但是仍然存在着大量的输入字段，因此从Web页面逐个添加用户仍然有着较大的成本。
+
+因此，我们需要能够支持通过excel进行大量的数据导入，接下来，我们需要扩展admin工具来支持批量的excel数据导入。
+
+在Django框架中，有一个management commands的机制，它可以扩展命令行功能来满足个性化的需求。
+
+首先，我们首先需要创建`management/commands`目录，并在该目录下创建`import_candidates.py`文件：
+
+```python
+import csv
+from django.core.management import BaseCommand   # 命令行扩展的基类
+from interview.models import Candidate
 
 
+class Command(BaseCommand):
+    help = '从一个CSV文件的内容中读取候选人列表，导入到数据库中'  # 帮助信息
+    def add_arguments(self, parser):
+        # 接收一个--path的参数
+        parser.add_argument('--path', type=str)
+
+    def handle(self, *args, **kwargs):   # handle函数编写具体的处理逻辑
+        path = kwargs['path']
+        with open(path, 'rt', encoding="gbk") as f:
+            reader = csv.reader(f, dialect='excel', delimiter=';')
+            for row in reader:
+                candidate = Candidate.objects.create(
+                    username=row[0],
+                    city=row[1],
+                    phone=row[2],
+                    bachelor_school=row[3],
+                    major=row[4],
+                    degree=row[5],
+                    test_score_of_general_ability=row[6],
+                    paper_score=row[7]
+                )
+                print(candidate)
+```
+
+此时，我们只需要执行如下命令即可实现批量上传数据：
+
+```shell
+python manage.py import_candidates --path /path/to/your/file.csv
+```
 
 
-## 其他
+## 列表支持筛选和查询
 
+当我们导入大量的候选人后，我们会发现从候选人列表中查询指定特征的候选人变的非常难，因此，我们需要对候选人列表支持**搜索、过滤和排序**。
 
+这些功能都可以借助Django的Admin的相关配置来快速实现，下面我们来看看应该怎么做把！
 
+依旧是修改`admin.py`文件中的`CandidateAdmin`类，增加如下属性：
 
+```python
+class CandidateAdmin(admin.ModelAdmin):
+    # 右侧筛选条件
+    list_filter = ('city','first_result','second_result','hr_result','first_interviewer_user','second_interviewer_user','hr_interviewer_user')
 
+    # 支持通用查询字段
+    search_fields = ('username', 'phone', 'email', 'bachelor_school')
+
+    ### 列表页默认排序字段
+    ordering = ('hr_result','second_result','first_result')
+```
+
+可以看到，我们可以：
+
+1. list_filter增加筛选条件
+2. search_fields增加可搜索条件
+3. ordering添加字段默认排序规则
