@@ -89,7 +89,7 @@ Ps: 在上述base页面中，我们定义了页面的标题和一个block块，�
 
 1. `{% extends 'base.html' %}` 表示当前文件继承自`base.html`文件。
 2. 下面的所有内容都是对 `block content` 块进行的重写。
-3. 在Django的template渲染中 `{% xxx %}` 内部可以包含python表达式，Template渲染时会自动解析。
+3. 在Django的template渲染中大括号百分号内部可以包含python表达式，Template渲染时会自动解析。
 
 第四步：view层中添加url对应页面。
 
