@@ -154,10 +154,47 @@ python3 ./manage.py migrate
 
 在添加应聘者页面中，你应该会看到有一个巨大无比的表单，这个表单看起来就非常的令人头痛，我们需要对这个表单进行分组和优化管理来使得大家在使用过程中没有那么痛苦。
 
+我们需要扩展`admin.py`文件，在`CandidateAdmin`类中增加`fieldsets`属性，示例如下：
+
+```python
+from django.contrib import admin
+class CandidateAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (None, {"fields": ("userid", "username", "email")}),
+        ("第一轮面试", {"fields": ("first_score", "first_advantage")}),
+        ("第二轮面试", {"fields": ("second_score", "second_advantage")}),
+        ("第三轮面试", {"fields": ("hr_score", "hr_advantage")}),
+    )
+```
+
+其中，`fieldsets`是表示字段分组的方式，本身是一个元组，元组中的每一个元素表示一个字段块。
+
+每个`fieldset`又是由一个元组组成，元组的第一个元素表示分组名称，第二个元素是一个字典信息，包含一个fields字段，里面是属于当前块的字段。
+
+此时，我们已经将所有字段都进行了分组显示，但是查看表单，我们会发现像用户名这种输入内容很短的字段，也需要占用一行，导致整体页面过长，这种显示方法并不合适。
+
+因此，我们需要再次进行优化，将多个字段合并至同一行。
+
+例如，我们希望将`username`和`email`合并成为一行：
+
+```python
+from django.contrib import admin
+class CandidateAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (None, {"fields": ("userid", ("username", "email"))}),
+        ("第一轮面试", {"fields": ("first_score", "first_advantage")}),
+        ("第二轮面试", {"fields": ("second_score", "second_advantage")}),
+        ("第三轮面试", {"fields": ("hr_score", "hr_advantage")}),
+    )
+```
+
+Ps: 我们只需要将"username", "email"再次用一个元组进行包围即可。
+
+
+## 扩展命令行支持批量导入数据
 
 
 
-## 批量导入数据
 
 
 ## 其他
