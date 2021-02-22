@@ -160,7 +160,7 @@ urlpatterns = [
 <div style="margin:auto; width:50%;">
 
 {% if job %}
-    <div class="position_name" z>
+    <div class="position_name">
         <h2>岗位名称：{{job.job_name}} </h2>
 
         城市：
