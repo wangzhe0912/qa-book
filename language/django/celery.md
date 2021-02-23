@@ -149,6 +149,7 @@ app = Celery('project_name')
 #   should have a `CELERY_` prefix.
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
+
 # Load task modules from all registered Django app configs.
 app.autodiscover_tasks()   # 自动收集各个应用下的tasks.py文件
 
