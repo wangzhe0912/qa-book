@@ -54,7 +54,7 @@ REST_FRAMEWORK = {
 
 到此为止，我们的Django REST Framework就已经开发完成了。
 
-## Demo实验
+## Django REST Framework快速上手
 
 下面，我们来通过一个实例演示如何通过Django REST Framework来提供对应的接口。
 
@@ -106,6 +106,49 @@ urlpatterns = [
 可以看到，我们在上述代码中，分别创建了User和Job的Serializer和ViewSet，并将其注册到路由。
 
 此时，直接访问`http://127.0.0.1:8080/api/` 地址，你就已经可以看到REST Framework相关的API页面并进行操作了。
+
+## Django REST Framework自定义接口
+
+可以看到，在上面的例子中，我们会非常少的代码就实现了将模型映射到接口中，并对外提供。
+
+但你应该会发现，上面的例子中仅仅是将模型映射到接口并直接对外暴露，这会导致我们无法加入自定义的业务逻辑。
+
+例如，有时我们一个业务操作可能会涉及到多张表的增、删、改、查操作等，这时应该怎么处理呢？
+
+Django REST Framework其实也提供了一种自定义接口逻辑的方法，我们以下面的例子进行说明：
+
+```python
+from django.urls import path
+from rest_framework.decorators import api_view
+from rest_framework.decorators import permission_classes
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+
+
+@api_view(["GET", "POST"])
+@permission_classes([IsAuthenticated])
+def get_self_task(request):
+    """
+    # 获取当前的设备的Task任务
+    """
+    if request.method == "GET":
+        host_ip = request.GET["host_ip"]
+    else:
+        host_ip = request.data["host_ip"]
+    return Response({"code": 200, "host_ip": host_ip})
+
+
+urlpatterns = [
+    path('api/get_self_task', get_self_task)
+]
+```
+
+可以看到，在上面的例子中，我们定义了一个`get_self_task`函数，这个函数可以接收GET和POST请求。
+
+对于GET请求，从url中获取host_ip信息，对于POST请求，从body中获取host_ip信息，并将相关结果进行返回。
+
+其中，`@permission_classes([IsAuthenticated])`是必不可少的，因为我们之前的`settings.py` 中设置的相关权限的配置，因此需要在所有自定义的api_view函数中都需要增加该装饰器。
+
 
 ## 参考资源
 
