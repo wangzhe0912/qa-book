@@ -69,8 +69,8 @@ from rest_framework import routers, serializers, viewsets
 # Serializers define the API representation.
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = User
-        fields = ['url', 'username', 'email', 'is_staff']
+        model = User                                        # 对应哪个模型
+        fields = ['url', 'username', 'email', 'is_staff']   # 返回哪些字段
 
 # ViewSets define the view behavior.
 class UserViewSet(viewsets.ModelViewSet):
