@@ -172,6 +172,7 @@ class Job(models.Model):
     """
     # 职位建模 
     """
+    job_id = models.CharField(blank=False, primary_key=True, unique=True, max_length=255, verbose_name="职位ID")
     job_type = models.SmallIntegerField(blank=False, choices=JobTypes, verbose_name="职位类别")
     job_name = models.CharField(max_length=250, blank=False, verbose_name="职位名称")
     job_city = models.SmallIntegerField(choices=Cities, blank=False, verbose_name="工作地点")
@@ -193,6 +194,8 @@ class Job(models.Model):
 5. on_delete参数主要用户外键引用，表示当引用的对象被删除后，相关的记录应该如何处理，SET_NULL表示关联数据被删除后，设置该字段为null。另外，当on_delete为SET_NULL时，需要设置该字段允许为空，即null=True
 6. auto_now_add表示首次添加记录时设置为当前时间。
 7. auto_now表示每次记录更新时，设置为当前时间。
+8. primary_key表示主动设置主键，如果没有主动设置主键，默认则会创建一个_id字段作为主键。
+9. unique表示该字段是否有唯一性限制。
 
 ### 将Model注册当管理后台
 

@@ -107,6 +107,62 @@ urlpatterns = [
 
 此时，直接访问`http://127.0.0.1:8080/api/` 地址，你就已经可以看到REST Framework相关的API页面并进行操作了。
 
+## Django REST Framework接口扩展
+
+有时，我们需要在接口请求中增加某些字段的逻辑校验，或者是我们的一个表中包含了一些外键，这时，我们需要对Serializer进行扩展满足业务需求：
+
+```python
+class TaskSerializer(serializers.HyperlinkedModelSerializer):
+    """
+    # Serializer类
+    """
+    class Meta:
+        """
+        # 元数据
+        """
+        model = Task
+        fields = (
+            "name", "status", "device_id", "action", "url"
+        )
+
+    def validate(self, attrs):
+        """
+        # 数据验证
+        """
+        if "device_id" not in self.context["request"].data:
+            raise Exception("device_id is required")
+        device_id = self.context["request"].data["device_id"]
+        try:
+            Device.objects.get(pk=device_id)
+        except ObjectDoesNotExist:
+            raise Exception("device_id %s not exists" % device_id)
+        attrs["device_id"] = self.context["request"].data["device_id"]
+        return attrs
+
+    def create(self, validated_data):
+        """
+        # 处理内置逻辑
+        """
+        device = Device.objects.get(pk=validated_data["device_id"])
+        return Task.objects.create(device=device, **validated_data)
+```
+
+以上述代码为例，我们在Serializer类中增加了`validate`和`create`两个函数。
+
+这两个函数都是Django REST Framework中有特殊函数的含义名称。
+
+先来看validate：
+
+validate函数是指可以在接口被真正处理前，对传入的参数进行校验和补充。
+
+validate函数接收一个self和attrs属性，我们可以通过`self.context["request"].data`来读取HTTP原始请求数据进行参数校验，同时可以通过给attr属性赋值使得其可以在create函数中直接使用。
+
+再看来create函数：
+
+create函数会在validate函数调用返回后再次进行调用，本质上是用于重写数据库写入逻辑，例如对于外键这种场景，我们就需要重写数据库写入逻辑。
+
+其中，create函数同样接收两个参数，分别是self和validated_data，而validated_data其实就是在validate函数中返回的attrs属性值。
+
 ## Django REST Framework自定义接口
 
 可以看到，在上面的例子中，我们会非常少的代码就实现了将模型映射到接口中，并对外提供。
