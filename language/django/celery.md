@@ -131,10 +131,198 @@ celery -A tasks flower --broker=redis://localhost:6379/0
 
 在上面的例子中，我们主要在讲解Celery自身的功能和用法，接下来，我们将会结合Django来讲解如何在Django中使用Celery。
 
+第一步: 在Django主应用的目录下，创建一个`celery.py`文件：
+
+```python
+from __future__ import absolute_import, unicode_literals
+import os
+from celery import Celery
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project_name.settings')
 
 
+app = Celery('project_name')
+
+# Using a string here means the worker doesn't have to serialize
+# the configuration object to child processes.
+# - namespace='CELERY' means all celery-related configuration keys
+#   should have a `CELERY_` prefix.
+app.config_from_object('django.conf:settings', namespace='CELERY')
+
+# Load task modules from all registered Django app configs.
+app.autodiscover_tasks()   # 自动收集各个应用下的tasks.py文件
 
 
+@app.task(bind=True)
+def debug_task(self):
+    print('Request: {0!r}'.format(self.request))
+```
+
+第二步: 在Django主应用目录下修改`__init__.py`文件如下：
+
+```python
+from __future__ import absolute_import, unicode_literals
+
+# This will make sure the app is always imported when
+# Django starts so that shared_task will use this app.
+from .celery import app as celery_app
+
+__all__ = ('celery_app',)
+```
+
+它的作用是在项目启动的时候初始化Celery APP对象。
+
+第三步: 修改`settings.py`文件，增加Celery的相关配置。
+
+```python
+CELERY_BROKER_URL = 'redis://redis:6379/0'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/1'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Shanghai'
+CELERYD_MAX_TASKS_PER_CHILD = 10
+CELERYD_LOG_FILE = os.path.join(BASE_DIR, "logs", "celery_work.log")
+CELERYBEAT_LOG_FILE = os.path.join(BASE_DIR, "logs", "celery_beat.log")
+```
+
+第四步：在对应的APP目录下，创建`tasks.py`文件：
+
+```python
+from __future__ import absolute_import, unicode_literals
+
+from celery import shared_task 
+from .dingtalk import send
+
+@shared_task
+def send_dingtalk_message(message):
+    send(message)
+```
+
+此时，只需要在将之前调用`send`的方法改成`send_dingtalk_message.delay`的方式调用，即可实现异步任务执行的逻辑。
+
+第五步: 启动相关服务
+
+1. 启动Celery
+
+```shell
+celery --app ${project_name} worker -l info
+```
+
+2. 启动Django
+
+```shell
+python3 ./manage.py runserver 0.0.0.0:8000
+```
+
+3. 启动flower监控
+
+```shell
+celery -A ${project_name} flower
+```
+
+## Django支持定时任务
+
+上面的内容中，我们使用Django + Celery结合实现了异步任务的执行，接下来，我们将会利用Celery + Django实现定时任务。
+
+### 准备工作
+
+Step1: 安装第三方依赖
+
+```shell
+pip3 install django-celery-beat
+```
+
+Step2: 在项目配置的INSTALL_APPS中添加`django_celery_beat`。
+
+Step3: 同步数据库表结构。
+
+```shell
+python3 ./manage.py migrate
+```
+
+Step4: 启动Beat进程
+
+```shell
+celery -A ${project_name} beat --scheduler django_celery_beat.schedulers:DatabaseScheduler
+```
+
+### 管理定时任务的方法
+
+在django-celery-beat中，有如下几种管理定时任务的方式：
+
+1. 在Admin后台添加管理定时任务。
+2. 系统启动时自动注册定时任务。
+3. 直接设置应用的beat_scheduler。
+4. 运行时添加定时任务。
+
+### django-celery-beat管理后台管理定时任务
+
+打开django-celery-beat管理后台，你会看到Periodic Task的项目下存在Intervals 、 Crontabs 、 Periodic task。
+
+其中：
+
+1. Intervals 定义了定时任务的间隔时间。
+2. Crontabs 支持通过 Linux Crontabs 的格式来定义任务的运行时机的。
+3. Periodic task 中定义了具体有哪些定时任务。
+
+
+最终，我们可以通过在Admin管理后台创建 Periodic task 来实现定时任务的管理。
+
+### 系统启动时自动注册定时任务
+
+除了Admin管理后台外，我们还可以在系统启动时启动注册定时任务，注册的方式如下，修改`project_name/celery.py`文件，增加如下内容：
+
+```python
+from celery.schedules import crontab
+
+@app.task
+def test(arg):
+    print(arg)
+
+@app.on_after_configure.connect
+def setup_periodic_tasks(sender, **kwargs):
+    # Calls test('hello') every 10 seconds.
+    sender.add_periodic_task(10.0, test.s('hello'), name='hello every 10')
+
+    # Calls test('world') every 30 seconds
+    sender.add_periodic_task(30.0, test.s('world'), expires=10)
+
+    # Executes every Monday morning at 7:30 a.m.
+    sender.add_periodic_task(
+        crontab(hour=7, minute=30, day_of_week=1),
+        test.s('Happy Mondays!'),
+    )
+```
+
+### 直接设置应用的beat_scheduler
+
+```python
+app.conf.beat_schedule = {
+    'add-every-10-seconds': {
+        'task': 'app_name.tasks.function_name',
+        'schedule': 10.0,
+        'args': (16, 4, )
+    },
+}
+```
+
+直接对Celery对象设置 `conf.beat_schedule` 即可。
+
+### 运行时添加定时任务
+
+```python
+from django_celery_beat.models import PeriodicTask, IntervalSchedule
+
+# 创建定时策略
+scheduler, created = IntervalSchedule.object.get_or_create(every=10, period=IntervalSchedule.SECONDS)
+
+# 创建任务
+task = PeriodicTask.objects.create(
+    interval=scheduler, name="say welcome", task='project_name.celery.function', args=json.dumps(data)
+)
+```
+ 
 
 ## 参考资源
 
