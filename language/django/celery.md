@@ -323,7 +323,7 @@ task = PeriodicTask.objects.create(
     interval=scheduler, name="say welcome", task='project_name.celery.function', args=json.dumps(data)
 )
 ```
- 
+
 
 ## 参考资源
 
