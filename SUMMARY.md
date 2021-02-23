@@ -24,6 +24,7 @@
   * [Django自定义页面编写](./language/django/frontend.md)
   * [DjangoAdmin高级用法](./language/django/admin.md)
   * [DjangoRestFramework快速入门](./language/django/rest.md)
+  * [DjangoCelery快速入门](./language/django/celery.md)
 * [Shell快速入门](./language/shell/beginning.md)
 * [Kotlin快速入门](./language/kotlin/beginning.md)
   * [Kotlin基本语法](./language/kotlin/basic_grammer.md)
