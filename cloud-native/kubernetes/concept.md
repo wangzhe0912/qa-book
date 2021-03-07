@@ -978,31 +978,308 @@ Ps: 来自 matchLabels 和 matchExpressions 的所有要求都按逻辑与的关
 
 ### 注解
 
+你可以使用 Kubernetes 注解为对象附加任意的非标识的元数据。客户端程序（例如工具和库）能够获取这些元数据信息。
+
+#### 为对象附加元数据
+
+你可以使用标签或注解将元数据附加到 Kubernetes 对象。
+
+标签可以用来选择对象和查找满足某些条件的对象集合。
+相反，注解不用于标识和选择对象。
+注解中的元数据，可以很小，也可以很大，可以是结构化的，也可以是非结构化的，能够包含标签不允许的字符。
+
+注解和标签一样，是键/值对:
+
+```
+"metadata": {
+  "annotations": {
+    "key1" : "value1",
+    "key2" : "value2"
+  }
+}
+```
+
+以下是一些例子，用来说明哪些信息可以使用注解来记录:
+
+ - 由声明性配置所管理的字段。将这些字段附加为注解，能够将它们与客户端或服务端设置的默认值、
+   自动生成的字段以及通过自动调整大小或自动伸缩系统设置的字段区分开来。
+ - 构建、发布或镜像信息（如时间戳、发布 ID、Git 分支、PR 数量、镜像哈希、仓库地址）。
+ - 指向日志记录、监控、分析或审计仓库的指针。
+ - 可用于调试目的的客户端库或工具信息：例如，名称、版本和构建信息。
+ - 用户或者工具/系统的来源信息，例如来自其他生态系统组件的相关对象的 URL。
+ - 轻量级上线工具的元数据信息：例如，配置或检查点。
+ - 负责人员的电话或呼机号码，或指定在何处可以找到该信息的目录条目，如团队网站。
+ - 从用户到最终运行的指令，以修改行为或使用非标准功能。
 
 
+你可以将这类信息存储在外部数据库或目录中而不使用注解，但这样做就使得开发人员很难生成用于部署、管理、自检的客户端共享库和工具。
 
 
+#### 语法和字符集
 
+注解（Annotations） 存储的形式是键/值对。
 
+有效的注解键分为两部分： 可选的前缀和名称，以斜杠（/）分隔。
 
+**名称** 段是必需项，并且必须在63个字符以内，以字母数字字符（[a-z0-9A-Z]）开头和结尾， 并允许使用破折号（-），下划线（_），点（.）和字母数字。
+**前缀** 是可选的。如果指定，则前缀必须是DNS子域：一系列由点（.）分隔的DNS标签， 总计不超过253个字符，后跟斜杠（/）。
+
+如果省略前缀，则假定注解键对用户是私有的。
+
+由系统组件添加的注解 （例如，kube-scheduler，kube-controller-manager，kube-apiserver，kubectl 或其他第三方组件），
+必须为终端用户添加注解前缀。
+
+kubernetes.io/ 和 k8s.io/ 前缀是为Kubernetes核心组件保留的。
+
+例如，下面是一个 Pod 的配置文件，其注解中包含 imageregistry: https://hub.docker.com/：
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: annotations-demo
+  annotations:
+    imageregistry: "https://hub.docker.com/"
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.7.9
+    ports:
+    - containerPort: 80
+```
 
 
 ### 字段选择器
 
+字段选择器（Field selectors）允许你根据一个或多个资源字段的值 筛选 Kubernetes 资源。
+
+下面是一些使用字段选择器查询的例子：
+
+ - metadata.name=my-service
+ - metadata.namespace!=default
+ - status.phase=Pending
 
 
+下面这个 kubectl 命令将筛选出 status.phase 字段值为 Running 的所有 Pod：
+
+```shell
+kubectl get pods --field-selector status.phase=Running
+```
+
+字段选择器本质上是资源过滤器（Filters）。默认情况下，字段选择器/过滤器是未被应用的，这意味着指定类型的所有资源都会被筛选出来。
+这使得以下的两个 kubectl 查询是等价的：
+
+```shell
+kubectl get pods
+kubectl get pods --field-selector ""
+```
+
+#### 支持的字段
+
+不同的 Kubernetes 资源类型支持不同的字段选择器。
+所有资源类型都支持 metadata.name 和 metadata.namespace 字段。
+
+使用不被支持的字段选择器会产生错误。例如：
+
+```shell
+kubectl get ingress --field-selector foo.bar=baz
+```
+
+错误输出如下：
+
+```
+Error from server (BadRequest): Unable to find "ingresses" that match label selector "", field selector "foo.bar=baz": "foo.bar" is not a known field selector: only "metadata.name", "metadata.namespace"
+```
 
 
+#### 支持的操作符
 
+你可在字段选择器中使用 =、==和 != （= 和 == 的意义是相同的）操作符。
+
+例如，下面这个 kubectl 命令将筛选所有不属于 default 命名空间的 Kubernetes 服务：
+
+```shell
+kubectl get services  --all-namespaces --field-selector metadata.namespace!=default
+```
+
+
+#### 链式选择器
+
+同标签和其他选择器一样， 字段选择器可以通过使用逗号分隔的列表组成一个选择链。
+
+下面这个 kubectl 命令将筛选 status.phase 字段不等于 Running 同时 spec.restartPolicy 字段等于 Always 的所有 Pod：
+
+```shell
+kubectl get pods --field-selector=status.phase!=Running,spec.restartPolicy=Always
+```
+
+
+#### 多种资源类型
+
+你能够跨多种资源类型来使用字段选择器。
+
+下面这个 kubectl 命令将筛选出所有不在 default 命名空间中的 StatefulSet 和 Service：
+
+```shell
+kubectl get statefulsets,services --all-namespaces --field-selector metadata.namespace!=default
+```
 
 
 ### 推荐使用的标签
 
+除了 kubectl 和 dashboard 之外，您可以使用其他工具来可视化和管理 Kubernetes 对象。
+一组通用的标签可以让多个工具之间相互操作，用所有工具都能理解的通用方式描述对象。
+
+除了支持工具外，推荐的标签还以一种可以查询的方式描述了应用程序。
+
+元数据围绕 应用（application） 的概念进行组织。Kubernetes 不是 平台即服务（PaaS），没有或强制执行正式的应用程序概念。
+
+相反，应用程序是非正式的，并使用元数据进行描述。应用程序包含的定义是宽松的。
+
+下文中，我们将会讲解一些推荐的标签。它们使管理应用程序变得更容易但不是任何核心工具所必需的。
+
+共享标签和注解都使用同一个前缀：app.kubernetes.io。没有前缀的标签是用户私有的。共享前缀可以确保共享标签不会干扰用户自定义的标签。
+
+#### 标签
+
+为了充分利用这些标签，应该在每个资源对象上都使用它们。
+
+|键|描述|示例|
+|---|---|---|
+|app.kubernetes.io/name|应用程序的名称|mysql|
+|app.kubernetes.io/instance|用于唯一确定应用实例的名称|mysql-abcxzy|
+|app.kubernetes.io/version|应用程序的当前版本（例如，语义版本，修订版哈希等）|5.7.21|
+|app.kubernetes.io/component|架构中的组件|database|
+|app.kubernetes.io/part-of|此级别的更高级别应用程序的名称|wordpress|
+|app.kubernetes.io/managed-by|用于管理应用程序的工具|helm|
 
 
+为说明这些标签的实际使用情况，请看下面的 StatefulSet 对象：
+
+```yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app.kubernetes.io/name: mysql
+    app.kubernetes.io/instance: mysql-abcxzy
+    app.kubernetes.io/version: "5.7.21"
+    app.kubernetes.io/component: database
+    app.kubernetes.io/part-of: wordpress
+    app.kubernetes.io/managed-by: helm
+```
 
 
+#### 应用和应用实例
+
+应用可以在 Kubernetes 集群中安装一次或多次。 在某些情况下，可以安装在同一命名空间中。
+例如，可以不止一次地为不同的站点安装不同的 WordPress。
+
+应用的名称和实例的名称是分别记录的。
+
+例如，某 WordPress 实例的 app.kubernetes.io/name 为 wordpress，
+而其实例名称表现为 app.kubernetes.io/instance 的属性值 wordpress-abcxzy。
+
+这使应用程序和应用程序的实例成为可能是可识别的。
+应用程序的每个实例都必须具有唯一的名称。
+
+#### 示例
+
+为了说明使用这些标签的不同方式，以下示例具有不同的复杂性。
+
+**一个简单的无状态服务**
+
+考虑使用 Deployment 和 Service 对象部署的简单无状态服务的情况。 以下两个代码段表示如何以最简单的形式使用标签。
+
+下面的 Deployment 用于监督运行应用本身的 pods:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: myservice
+    app.kubernetes.io/instance: myservice-abcxzy
+```
+
+下面的 Service 用于暴露应用:
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: myservice
+    app.kubernetes.io/instance: myservice-abcxzy
+```
 
 
+**带有一个数据库的 Web 应用程序**
 
+考虑一个稍微复杂的应用：一个使用 Helm 安装的 Web 应用（WordPress），其中 使用了数据库（MySQL）。
 
+以下代码片段说明用于部署此应用程序的对象的开始。
+
+以下 Deployment 的开头用于 WordPress：
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: wordpress
+    app.kubernetes.io/instance: wordpress-abcxzy
+    app.kubernetes.io/version: "4.9.4"
+    app.kubernetes.io/managed-by: helm
+    app.kubernetes.io/component: server
+    app.kubernetes.io/part-of: wordpress
+...
+```
+
+这个 Service 用于暴露 WordPress：
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: wordpress
+    app.kubernetes.io/instance: wordpress-abcxzy
+    app.kubernetes.io/version: "4.9.4"
+    app.kubernetes.io/managed-by: helm
+    app.kubernetes.io/component: server
+    app.kubernetes.io/part-of: wordpress
+```
+
+MySQL 作为一个 StatefulSet 暴露，包含它和它所属的较大应用程序的元数据：
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: mysql
+    app.kubernetes.io/instance: mysql-abcxzy
+    app.kubernetes.io/version: "5.7.21"
+    app.kubernetes.io/managed-by: helm
+    app.kubernetes.io/component: database
+    app.kubernetes.io/part-of: wordpress
+```
+
+Service 用于将 MySQL 作为 WordPress 的一部分暴露：
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: mysql
+    app.kubernetes.io/instance: mysql-abcxzy
+    app.kubernetes.io/version: "5.7.21"
+    app.kubernetes.io/managed-by: helm
+    app.kubernetes.io/component: database
+    app.kubernetes.io/part-of: wordpress
+...
+```
+
+使用 MySQL StatefulSet 和 Service，您会注意到有关 MySQL 和 Wordpress 的信息，包括更广泛的应用程序。
