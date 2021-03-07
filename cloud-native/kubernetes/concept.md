@@ -893,11 +893,87 @@ partition
 
 #### API
 
+**LIST 和 WATCH 过滤**
+
+LIST 和 WATCH 操作可以使用查询参数指定标签选择算符过滤一组对象。 两种需求都是允许的。（这里显示的是它们出现在 URL 查询字符串中）:
+
+ - 基于等值 的需求: ?labelSelector=environment%3Dproduction,tier%3Dfrontend
+ - 基于集合 的需求: ?labelSelector=environment+in+%28production%2Cqa%29%2Ctier+in+%28frontend%29
 
 
+两种标签选择算符都可以通过 REST 客户端用于 list 或者 watch 资源。
+
+例如，使用 kubectl 定位 apiserver，可以使用 基于等值 的标签选择算符可以这么写：
+
+```shell
+kubectl get pods -l environment=production,tier=frontend
+```
+
+或者使用 基于集合的 需求：
+
+```shell
+kubectl get pods -l 'environment in (production),tier in (frontend)'
+```
+
+正如刚才提到的，基于集合 的需求更具有表达力。例如，它们可以实现值的 或 操作：
+
+```shell
+kubectl get pods -l 'environment in (production, qa)'
+```
+
+或者通过 exists 运算符限制不匹配：
+
+```shell
+kubectl get pods -l 'environment,environment notin (frontend)'
+```
 
 
+**在 API 对象中设置引用**
 
+一些 Kubernetes 对象，例如 services 和 replicationcontrollers ， 也使用了标签选择算符去指定了其他资源的集合，例如 pods。
+
+一个 Service 指向的一组 Pods 是由标签选择算符定义的。同样，一个 ReplicationController 应该管理的 pods 的数量也是由标签选择算符定义的。
+
+两个对象的标签选择算符都是在 json 或者 yaml 文件中使用映射定义的，并且只支持 基于等值 需求的选择算符：
+
+```
+"selector": {
+    "component" : "redis",
+}
+```
+
+或者：
+
+```yaml
+selector:
+    component: redis
+```
+
+这个选择算符(分别在 json 或者 yaml 格式中) 等价于 component=redis 或 component in (redis) 。
+
+此外，对于比较新的资源，例如 Job、 Deployment、 Replica Set 和 DaemonSet ， 也支持基于集合的需求。
+
+```yaml
+selector:
+  matchLabels:
+    component: redis
+  matchExpressions:
+    - {key: tier, operator: In, values: [cache]}
+    - {key: environment, operator: NotIn, values: [dev]}
+```
+
+matchLabels 是由 {key,value} 对组成的映射。
+matchLabels 映射中的单个 {key,value} 等同于 matchExpressions 的元素，
+其 key 字段为 "key"，operator 为 "In"，而 values 数组仅包含 "value"。
+
+matchExpressions 是 Pod 选择算符需求的列表。
+有效的运算符包括 In、NotIn、Exists 和 DoesNotExist。
+在 In 和 NotIn 的情况下，设置的值必须是非空的。
+
+Ps: 来自 matchLabels 和 matchExpressions 的所有要求都按逻辑与的关系组合到一起，它们必须都满足才能匹配。
+
+此外，通过标签进行选择的一个用例是确定节点集，方便 Pod 调度。 有关更多信息，请参阅选择
+[节点文档](https://kubernetes.io/zh/docs/concepts/scheduling-eviction/assign-pod-node/) 。
 
 
 ### 注解
