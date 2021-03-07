@@ -327,6 +327,605 @@ API 服务器可能通过多个 API 版本来向外提供相同的下层数据�
 
 ## 使用 Kubernetes 对象
 
+### Kubernetes 对象概述
+
+在 Kubernetes 系统中，Kubernetes对象 是持久化的实体。 Kubernetes 使用这些实体去表示整个集群的状态。
+
+具体来说，Kubernetes对象描述了如下信息：
+
+1. 哪些容器化应用在运行（以及在哪些节点上）
+2. 可以被应用使用的资源
+3. 关于应用运行时表现的策略，比如重启策略、升级策略，以及容错策略
+
+
+Kubernetes 对象是 “目标性记录” —— 一旦创建对象，Kubernetes 系统将持续工作以确保对象存在。
+通过创建对象，本质上是在告知 Kubernetes 系统，所需要的集群工作负载看起来是什么样子的，这就是 Kubernetes 集群的 期望状态（Desired State）。
+
+操作 Kubernetes 对象(无论是创建、修改，或者删除)都需要使用
+[Kubernetes API](https://kubernetes.io/zh/docs/concepts/overview/kubernetes-api) 。
+比如，当使用 kubectl 命令行接口时，CLI 会执行必要的 Kubernetes API 调用， 也可以在程序中使用 客户端库直接调用 Kubernetes API。
+
+
+#### 对象规约（Spec）与状态（Status）
+
+几乎每个 Kubernetes 对象包含两个嵌套的对象字段，它们负责管理对象的配置： 对象 spec（规约） 和 对象 status（状态） 。
+对于具有 spec 的对象，你必须在创建对象时设置其内容，描述你希望对象所具有的特征： 期望状态（Desired State） 。
+
+status 描述了对象的 当前状态（Current State），它是由 Kubernetes 系统和组件 设置并更新的。
+在任何时刻，Kubernetes 控制平面 都一直积极地管理着对象的实际状态，以使之与期望状态相匹配。
+
+例如，Kubernetes 中的 Deployment 对象能够表示运行在集群中的应用。 
+当创建 Deployment 时，可能需要设置 Deployment 的 spec，以指定该应用需要有 3 个副本运行。
+Kubernetes 系统读取 Deployment 规约，并启动我们所期望的应用的 3 个实例 —— 更新状态以与规约相匹配。
+如果这些实例中有的失败了（一种状态变更），Kubernetes 系统通过执行修正操作来响应规约和状态间的不一致，在这里意味着它会启动一个新的实例来替换。
+
+关于对象 spec、status 和 metadata 的更多信息，可参阅
+[Kubernetes API 约定](https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md) 。
+
+
+#### 描述 Kubernetes 对象
+
+创建 Kubernetes 对象时，必须提供对象的规约，用来描述该对象的期望状态以及关于对象的一些基本信息（例如名称）。
+当使用 Kubernetes API 创建对象时（或者直接创建，或者基于kubectl）， API 请求必须在请求体中包含 JSON 格式的信息。
+大多数情况下，需要在 .yaml 文件中为 kubectl 提供这些信息。kubectl 在发起 API 请求时，将这些信息转换成 JSON 格式。
+
+这里有一个 .yaml 示例文件，展示了 Kubernetes Deployment 的必需字段和对象规约：
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 2 # tells deployment to run 2 pods matching the template
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
+```
+
+使用类似于上面的 .yaml 文件来创建 Deployment的一种方式是使用 kubectl 命令行接口（CLI）中的 kubectl apply 命令， 将 .yaml 文件作为参数。
+下面是一个示例：
+
+```shell
+kubectl apply -f https://k8s.io/examples/application/deployment.yaml --record
+```
+
+输出类似如下这样：
+
+```
+deployment.apps/nginx-deployment created
+```
+
+#### 必需字段
+
+在想要创建的 Kubernetes 对象对应的 .yaml 文件中，需要配置如下的字段：
+
+ - apiVersion - 创建该对象所使用的 Kubernetes API 的版本。
+ - kind - 想要创建的对象的类别。
+ - metadata - 帮助唯一性标识对象的一些数据，包括一个 name 字符串、UID 和可选的 namespace。
+
+
+你也需要提供对象的 spec 字段。
+对象 spec 的精确格式对每个 Kubernetes 对象来说是不同的，包含了特定于该对象的嵌套字段。
+[Kubernetes API 参考](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/) 
+能够帮助我们找到任何我们想创建的对象的 spec 格式。
+例如，可以从
+[core/v1 PodSpec](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#podspec-v1-core)
+查看 Pod 的 spec 格式， 并且可以从
+[apps/v1 DeploymentSpec](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#deploymentspec-v1-apps)
+查看 Deployment 的 spec 格式。
+
+
+### Kubernetes 对象管理
+
+kubectl 命令行工具支持多种不同的方式来创建和管理 Kubernetes 对象。
+
+本文档概述了不同的方法。阅读 [Kubectl book](https://kubectl.docs.kubernetes.io/) 来了解 kubectl 管理对象的详细信息。
+
+#### 管理技巧
+
+|管理方式|操作对象|推荐场景|支持写入来源数量|学习难道|
+|---|---------|------|--------------|-------|
+|命令式命令|活动对象|开发环境下|1+|简单|
+|命令式对象配置|独立文件|生产环境下|1|中等|
+|声明式对象配置|一组文件/目录|开发环境下|1+|难|
+
+
+Ps: 应该只使用一种技术来管理 Kubernetes 对象。混合和匹配技术作用在同一对象上将导致未定义行为。
+
+#### 命令式命令
+
+使用命令式命令时，用户可以在集群中的活动对象上进行操作。用户将操作传给 kubectl 命令作为参数或标志。
+
+这是开始或者在集群中运行一次性任务的最简单方法。
+因为这个技术直接在活动对象上操作，所以它不提供以前配置的历史记录。
+
+示例如下：
+
+通过创建 Deployment 对象来运行 nginx 容器的实例：
+
+```shell
+kubectl run nginx --image nginx
+```
+
+使用不同的语法来达到同样的上面的效果：
+
+```shell
+kubectl create deployment nginx --image nginx
+```
+
+与对象配置相比的优点：
+
+ - 命令简单，易学且易于记忆。
+ - 命令仅需一步即可对集群进行更改。
+
+
+与对象配置相比的缺点：
+
+ - 命令不与变更审查流程集成。
+ - 命令不提供与更改关联的审核跟踪。
+ - 除了实时内容外，命令不提供记录源。
+ - 命令不提供用于创建新对象的模板。
+
+
+#### 命令式对象配置
+
+在命令式对象配置中，kubectl 命令指定操作（创建，替换等），可选标志和至少一个文件名。
+指定的文件必须包含 YAML 或 JSON 格式的对象的完整定义。
+
+有关对象定义的详细信息，请查看 [API 参考](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/) 。
+
+Ps: replace 命令式命令将现有规范替换为新提供的规范，并删除对配置文件中缺少的对象的所有更改。
+此方法不应与规范独立于配置文件进行更新的资源类型一起使用。
+比如类型为 LoadBalancer 的服务，它的 externalIPs 字段就是独立于集群配置进行更新。
+
+示例如下：
+
+创建配置文件中定义的对象：
+
+```shell
+kubectl create -f nginx.yaml
+```
+
+删除两个配置文件中定义的对象：
+
+```shell
+kubectl delete -f nginx.yaml -f redis.yaml
+```
+
+通过覆盖活动配置来更新配置文件中定义的对象：
+
+```shell
+kubectl replace -f nginx.yaml
+```
+
+与命令式命令相比的优点：
+
+ - 对象配置可以存储在源控制系统中，比如 Git。
+ - 对象配置可以与流程集成，例如在推送和审计之前检查更新。
+ - 对象配置提供了用于创建新对象的模板。
+
+
+与命令式命令相比的缺点：
+
+ - 对象配置需要对对象架构有基本的了解。
+ - 对象配置需要额外的步骤来编写 YAML 文件。
+
+
+与声明式对象配置相比的优点：
+
+ - 命令式对象配置行为更加简单易懂。
+ - 从 Kubernetes 1.5 版本开始，命令式对象配置更加成熟。
+
+
+与声明式对象配置相比的缺点：
+
+ - 命令式对象配置更适合文件，而非目录。
+ - 对活动对象的更新必须反映在配置文件中，否则会在下一次替换时丢失。
+
+
+#### 声明式对象配置
+
+使用声明式对象配置时，用户对本地存储的对象配置文件进行操作，但是用户未定义要对该文件执行的操作。
+
+kubectl 会自动检测每个文件的创建、更新和删除操作。这使得配置可以在目录上工作，根据目录中配置文件对不同的对象执行不同的操作。
+
+Ps: 声明式对象配置保留其他编写者所做的修改，即使这些更改并未合并到对象配置文件中。
+可以通过使用 patch API 操作仅写入观察到的差异，而不是使用 replace API 操作来替换整个对象配置来实现。
+
+示例如下：
+
+处理 configs 目录中的所有对象配置文件，创建并更新活动对象。
+
+可以首先使用 diff 子命令查看将要进行的更改，然后在进行应用：
+
+```shell
+kubectl diff -f configs/
+kubectl apply -f configs/
+```
+
+递归处理目录：
+
+```shell
+kubectl diff -R -f configs/
+kubectl apply -R -f configs/
+```
+
+与命令式对象配置相比的优点：
+
+ - 对活动对象所做的更改即使未合并到配置文件中，也会被保留下来。
+ - 声明性对象配置更好地支持对目录进行操作并自动检测每个文件的操作类型（创建，修补，删除）。
+
+
+与命令式对象配置相比的缺点：
+
+ - 声明式对象配置难于调试并且出现异常时结果难以理解。
+ - 使用 diff 产生的部分更新会创建复杂的合并和补丁操作。
+
+
+### 对象名称和 IDs
+
+集群中的每一个对象都有一个**名称**来标识在**同类资源中的唯一性**。
+
+每个 Kubernetes 对象也有一个 **UID** 来标识在**整个集群中的唯一性**。
+
+比如，在同一个名字空间中有一个名为 myapp-1234 的 Pod, 但是可以命名一个 Pod 和一个 Deployment 同为 myapp-1234.
+
+对于用户提供的非唯一性的属性，Kubernetes 提供了 
+
+**[标签（Labels）](https://kubernetes.io/zh/docs/concepts/working-with-objects/labels)** 和 
+
+**[注解（Annotation）](https://kubernetes.io/zh/docs/concepts/overview/working-with-objects/annotations/)** 机制。
+
+
+#### 名称
+
+客户端提供的字符串，引用资源 url 中的对象，如 /api/v1/pods/some name。
+
+某一时刻，只能有一个给定类型的对象具有给定的名称。但是，如果删除该对象，则可以创建同名的新对象。
+
+以下是比较常见的三种资源命名约束。
+
+**DNS 子域名**
+
+很多资源类型需要可以用作 DNS 子域名的名称。 DNS 子域名的定义可参见 [RFC 1123](https://tools.ietf.org/html/rfc1123) 。 
+这一要求意味着名称必须满足如下规则：
+
+ - 不能超过253个字符
+ - 只能包含字母数字，以及'-' 和 '.'
+ - 须以字母数字开头
+ - 须以字母数字结尾
+
+
+**DNS 标签名**
+
+某些资源类型需要其名称遵循 [RFC 1123](https://tools.ietf.org/html/rfc1123) 所定义的 DNS 标签标准。也就是命名必须满足如下规则：
+
+ - 最多63个字符
+ - 只能包含字母数字，以及'-'
+ - 须以字母数字开头
+ - 须以字母数字结尾
+
+
+**路径分段名称**
+
+某些资源类型要求名称能被安全地用作路径中的片段。
+换句话说，其名称不能是 .、..，也不可以包含 / 或 % 这些字符。
+
+下面是一个名为nginx-demo的 Pod 的配置清单：
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-demo
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.14.2
+    ports:
+    - containerPort: 80
+```
+
+Ps: 某些资源类型可能具有额外的命名约束。
+
+#### UIDs
+
+UIDs 是 Kubernetes 系统生成的字符串，唯一标识对象。
+
+在 Kubernetes 集群的整个生命周期中创建的每个对象都有一个不同的 uid，它旨在区分类似实体的历史事件。
+
+Kubernetes UIDs 是全局唯一标识符（也叫 UUIDs）。 UUIDs 是标准化的，见 ISO/IEC 9834-8 和 ITU-T X.667.
+
+
+### 名字空间
+
+Kubernetes 支持多个虚拟集群，它们底层依赖于同一个物理集群。 这些虚拟集群被称为名字空间。
+
+#### 何时使用多个名字空间
+
+名字空间适用于存在很多跨多个团队或项目的用户的场景。
+对于只有几到几十个用户的集群，根本不需要创建或考虑名字空间。当需要名称空间提供的功能时，请开始使用它们。
+
+名字空间为名称提供了一个范围。资源的名称需要在名字空间内是唯一的，但不能跨名字空间。
+名字空间不能相互嵌套，每个 Kubernetes 资源只能在一个名字空间中。
+
+名字空间是在多个用户之间划分集群资源的一种方法（通过
+[资源配额](https://kubernetes.io/zh/docs/concepts/policy/resource-quotas/) ）。
+
+不需要使用多个名字空间来分隔轻微不同的资源，例如同一软件的不同版本，使用标签来区分同一名字空间中的不同资源即可。
+
+#### 使用名字空间
+
+名字空间的创建和删除在 [名字空间的管理指南文档](https://kubernetes.io/zh/docs/tasks/administer-cluster/namespaces/) 描述。
+
+Ps: 避免使用前缀 **kube-** 创建名字空间，因为它是为 Kubernetes 系统名字空间保留的。
+
+**查看名字空间**
+
+你可以使用以下命令列出集群中现存的名字空间：
+
+```shell
+kubectl get namespace
+```
+
+输出如下:
+
+```
+NAME          STATUS    AGE
+default       Active    1d
+kube-node-lease   Active   1d
+kube-system   Active    1d
+kube-public   Active    1d
+```
+
+Kubernetes 会创建四个初始名字空间：
+
+ - default 没有指明使用其它名字空间的对象所使用的默认名字空间。
+ - kube-system Kubernetes 系统创建对象所使用的名字空间。
+ - kube-public 这个名字空间是自动创建的，所有用户（包括未经过身份验证的用户）都可以读取它。
+   这个名字空间主要用于集群使用，以防某些资源在整个集群中应该是可见和可读的。
+   这个名字空间的公共方面只是一种约定，而不是要求。
+ - kube-node-lease 此名字空间用于与各个节点相关的租期（Lease）对象；此对象的设计使得集群规模很大时节点心跳检测性能得到提升。
+
+
+**为请求设置名字空间**
+
+要为当前请求设置名字空间，请使用 --namespace 参数。
+
+例如:
+
+```shell
+kubectl run nginx --image=nginx --namespace=<名字空间名称>
+kubectl get pods --namespace=<名字空间名称>
+```
+
+
+**设置名字空间偏好**
+
+你可以永久保存名字空间，以用于对应上下文中所有后续 kubectl 命令。
+
+```shell
+kubectl config set-context --current --namespace=<名字空间名称>
+# 验证之
+kubectl config view | grep namespace:
+```
+
+
+#### 名字空间和 DNS
+
+当你创建一个
+[服务](https://kubernetes.io/zh/docs/concepts/services-networking/service/)
+时， Kubernetes 会创建一个相应的 
+[DNS 条目](https://kubernetes.io/zh/docs/concepts/services-networking/dns-pod-service/) 。
+
+该条目的形式是 <服务名称>.<名字空间名称>.svc.cluster.local，这意味着如果容器只使用 <服务名称>，它将被解析到本地名字空间的服务。
+
+这对于跨多个名字空间（如开发、分级和生产） 使用相同的配置非常有用。
+
+如果你希望跨名字空间访问，则需要使用完全限定域名（FQDN）。
+
+
+#### 并非所有对象都在名字空间中
+
+大多数 kubernetes 资源（例如 Pod、Service、副本控制器等）都位于某些名字空间中。
+
+但是名字空间资源本身并不在名字空间中。而且底层资源，例如 节点 和持久化卷不属于任何名字空间。
+
+查看哪些 Kubernetes 资源在名字空间中，哪些不在名字空间中：
+
+```shell
+# 位于名字空间中的资源
+kubectl api-resources --namespaced=true
+
+# 不在名字空间中的资源
+kubectl api-resources --namespaced=false
+```
+
+### 标签和选择算符
+
+标签（Labels） 是附加到 Kubernetes 对象（比如 Pods）上的键值对。
+标签旨在用于指定对用户有意义且相关的对象的标识属性，但不直接对核心系统有语义含义。
+标签可以用于组织和选择对象的子集。标签可以在创建时附加到对象，随后可以随时添加和修改。 
+每个对象都可以定义一组键/值标签。每个键对于给定对象必须是唯一的。
+
+```
+"metadata": {
+  "labels": {
+    "key1" : "value1",
+    "key2" : "value2"
+  }
+}
+```
+
+标签能够支持高效的查询和监听操作，对于用户界面和命令行是很理想的。 应使用
+[注解](https://kubernetes.io/zh/docs/concepts/overview/working-with-objects/annotations/)
+记录非识别信息。
+
+#### 动机
+
+标签使用户能够以松耦合的方式将他们自己的组织结构映射到系统对象，而无需客户端存储这些映射。
+
+服务部署和批处理流水线通常是多维实体（例如，多个分区或部署、多个发行序列、多个层，每层多个微服务）。
+管理通常需要交叉操作，这打破了严格的层次表示的封装，特别是由基础设施而不是用户确定的严格的层次结构。
+
+示例标签：
+
+ - "release" : "stable", "release" : "canary"
+ - "environment" : "dev", "environment" : "qa", "environment" : "production"
+ - "tier" : "frontend", "tier" : "backend", "tier" : "cache"
+ - "partition" : "customerA", "partition" : "customerB"
+ - "track" : "daily", "track" : "weekly"
+
+
+这些只是常用标签的例子; 你可以任意制定自己的约定。请记住，对于给定对象标签的键必须是唯一的。
+
+
+#### 语法和字符集
+
+标签 是键值对。
+
+有效的标签键有两个段：可选的前缀和名称，用斜杠（/）分隔。 
+
+**名称** 段是必需的，必须小于等于63个字符，以字母数字字符（[a-z0-9A-Z]）开头和结尾， 带有破折号（-），下划线（_），点（ .）和之间的字母数字。
+
+**前缀**是可选的，如果指定，前缀必须是 DNS 子域：由点（.）分隔的一系列 DNS 标签，总共不超过 253 个字符， 后跟斜杠（/）。
+
+如果省略前缀，则假定标签键对用户是私有的。
+向最终用户对象添加标签的自动系统组件
+（例如 kube-scheduler、kube-controller-manager、 kube-apiserver、kubectl 或其他第三方自动化工具）必须指定前缀。
+
+kubernetes.io/ 前缀是为 Kubernetes 核心组件保留的。
+
+有效标签值必须为 63 个字符或更少，并且必须为空或以字母数字字符（[a-z0-9A-Z]）开头和结尾，
+中间可以包含破折号（-）、下划线（_）、点（.）和字母或数字。
+
+
+#### 标签选择算符
+
+与名称和 UID 不同， 标签不支持唯一性。通常，我们希望许多对象携带相同的标签。
+
+通过 标签选择算符，客户端/用户可以识别一组对象。标签选择算符是 Kubernetes 中的核心分组原语。
+
+API 目前支持两种类型的选择算符：**基于等值的** 和 **基于集合的** 。
+
+标签选择算符可以由 **逗号分隔** 的多个需求组成。在多个需求的情况下，必须满足所有要求，因此逗号分隔符充当 **逻辑与（&&）** 运算符。
+
+空标签选择算符或者未指定的选择算符的语义取决于上下文，支持使用选择算符的 API 类别应该将算符的合法性和含义用文档记录下来。
+
+Ps:
+
+1. 对于某些 API 类别（例如 ReplicaSet）而言，两个实例的标签选择算符不得在命名空间内重叠，
+   否则它们的控制器将互相冲突，无法确定应该存在的副本个数。
+2. 对于基于等值的和基于集合的条件而言，不存在逻辑或（||）操作符。你要确保你的过滤语句按合适的方式组织。
+
+
+**基于等值的需求**
+
+基于等值 或 基于不等值 的需求允许按标签键和值进行过滤。 匹配对象必须满足所有指定的标签约束，尽管它们也可能具有其他标签。
+
+可接受的运算符有=、== 和 != 三种。 前两个表示 相等（并且只是同义词），而后者表示 不相等。例如：
+
+```shell
+environment = production
+tier != frontend
+```
+
+前者表示其键名等于 environment，值等于 production 的所有资源。
+后者表示其键名等于 tier，值不同于 frontend 的所有资源 以及 所有都没有带有 tier 键标签的资源。
+
+可以使用逗号运算符来过滤 production 环境中的非 frontend 层资源：environment=production,tier!=frontend。
+
+基于等值的标签要求的一种使用场景是 Pod 要指定节点选择标准。
+例如，下面的示例 Pod 选择带有标签 "accelerator=nvidia-tesla-p100"。
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cuda-test
+spec:
+  containers:
+    - name: cuda-test
+      image: "k8s.gcr.io/cuda-vector-add:v0.1"
+      resources:
+        limits:
+          nvidia.com/gpu: 1
+  nodeSelector:
+    accelerator: nvidia-tesla-p100
+```
+
+**基于集合的需求**
+
+基于集合的标签需求允许你通过一组值来过滤键。
+支持三种操作符：in、notin 和 exists (只可以用在键标识符上)。例如：
+
+```shell
+environment in (production, qa)
+tier notin (frontend, backend)
+partition
+!partition
+```
+
+ - 第一个示例选择了所有键等于 environment 并且值等于 production 或者 qa 的资源。
+ - 第二个示例选择了所有键等于 tier 并且值不等于 frontend 或者 backend 的资源，以及所有没有 tier 键标签的资源。
+ - 第三个示例选择了所有包含了有 partition 标签的资源；没有校验它的值。
+ - 第四个示例选择了所有没有 partition 标签的资源；没有校验它的值。 
+   
+
+类似地，逗号分隔符充当 与 运算符。
+因此，使用 partition 键（无论为何值）和 environment 不同于 qa 来过滤资源可以使用 `partition, environment notin（qa)` 来实现。
+
+基于集合的标签选择算符是相等标签选择算符的一般形式，
+因为 `environment=production` 等同于 `environment in（production）`；!= 和 notin 也是类似的。
+
+基于集合 的要求可以与基于 相等 的要求混合使用。例如：`partition in (customerA, customerB),environment!=qa` 。
+
+#### API
+
+
+
+
+
+
+
+
+### 注解
+
+
+
+
+
+
+
+
+
+
+### 字段选择器
+
+
+
+
+
+
+
+
+### 推荐使用的标签
+
+
+
+
+
 
 
 
