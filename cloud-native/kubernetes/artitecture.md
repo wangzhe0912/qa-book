@@ -188,17 +188,119 @@ Docker 版本（如果使用了）和操作系统名称。这些信息由 kubele
 
 #### 节点控制器
 
+节点控制器是 Kubernetes 控制面组件，管理节点的方方面面。
+
+节点控制器在节点的生命周期中扮演多个角色。
+
+第一个是当节点注册时为它 **分配一个 CIDR 区段** （如果启用了 CIDR 分配）。
+
+第二个是保持节点控制器内的节点列表与云服务商所提供的可用机器列表同步。
+如果在云环境下运行，只要某节点不健康，节点控制器就会询问云服务是否节点的虚拟机仍可用。
+如果不可用，节点控制器会将该节点从它的节点列表删除。
+
+第三个是监控节点的健康情况。
+节点控制器负责在节点不可达（即，节点控制器因为某些原因没有收到心跳，例如节点宕机）时， 将节点状态的 NodeReady 状况更新为 "Unknown"。
+如果节点接下来持续处于不可达状态，节点控制器将逐出节点上的所有 Pod（使用体面终止）。
+默认情况下 40 秒后开始报告 "Unknown"，在那之后 5 分钟开始逐出 Pod。
+节点控制器每隔 `--node-monitor-period` 秒检查每个节点的状态。
+
+**心跳机制**
+
+Kubernetes 节点发送的心跳（Heartbeats）用于确定节点的可用性。
+
+心跳有两种形式：`NodeStatus` 和 `Lease` 对象。
+
+每个节点在 `kube-node-lease` 名字空间 中都有一个与之关联的 Lease 对象。
+Lease 是一种轻量级的资源，可在集群规模扩大时提高节点心跳机制的性能。
+
+`kubelet` 负责创建和更新 `NodeStatus` 和 `Lease` 对象。
+
+ - 当状态发生变化时，或者在配置的时间间隔内没有更新事件时，kubelet 会更新 NodeStatus。
+   NodeStatus 更新的默认间隔为 5 分钟（比不可达节点的 40 秒默认超时时间长很多）。
+ - kubelet 会每 10 秒（默认更新间隔时间）创建并更新其 Lease 对象。
+   Lease 更新独立于 NodeStatus 更新而发生。
+   如果 Lease 的更新操作失败，kubelet 会采用指数回退机制，从 200 毫秒开始重试，最长重试间隔为 7 秒钟。
+
+
+**可靠性**
+
+大部分情况下，节点控制器把逐出速率限制在每秒 `--node-eviction-rate` 个（默认为 0.1）。
+这表示它每 10 秒钟内至多从一个节点驱逐 Pod。
+
+当一个可用区域（Availability Zone）中的大量节点变为不健康时，节点的驱逐行为将发生改变。
+节点控制器会同时检查可用区域中不健康（NodeReady 状况为 Unknown 或 False） 的节点的百分比。
+如果不健康节点的比例超过 `--unhealthy-zone-threshold` （默认为 0.55）， 驱逐速率将会降低：
+
+ - 如果集群较小（意即小于等于 `--large-cluster-size-threshold` 个节点 - 默认为 50），
+   驱逐操作将会停止，
+ - 否则驱逐速率将降为每秒 `--secondary-node-eviction-rate` 个（默认为 0.01）。
+
+
+在单个可用区域实施这些策略的原因是当一个可用区域可能从控制面脱离时其它可用区域可能仍然保持连接。
+如果你的集群没有跨越云服务商的多个可用区域，那（整个集群）就只有一个可用区域。
+
+跨多个可用区域部署你的节点的一个关键原因是当某个可用区域整体出现故障时，工作负载可以转移到健康的可用区域。
+因此，如果一个可用区域中的所有节点都不健康时，节点控制器会以正常的速率 `--node-eviction-rate` 进行驱逐操作。
+在所有的可用区域都不健康（也即集群中没有健康节点）的极端情况下，
+节点控制器将假设控制面节点的连接出了某些问题，它将停止所有驱逐动作直到一些连接恢复。
+
+节点控制器还负责 **驱逐运行在拥有 NoExecute 污点的节点上的 Pod**， 除非这些 Pod 能够容忍此污点。
+
+此外，节点控制器还负责 **根据节点故障（例如节点不可访问或没有就绪）为其添加污点** 。这意味着调度器不会将 Pod 调度到不健康的节点上。
+
+Ps: `kubectl cordon` 会将节点标记为“不可调度（Unschedulable）”。
+此操作的副作用是，服务控制器会将该节点从负载均衡器中之前的目标节点列表中移除， 从而使得来自负载均衡器的网络请求不会到达被保护起来的节点。
 
 #### 节点容量
 
+Node 对象会记录节点上资源的容量（例如可用内存和 CPU 数量）。
+
+通过
+[自注册](https://kubernetes.io/zh/docs/concepts/architecture/nodes/#self-registration-of-nodes)
+机制生成的 Node 对象会在注册期间报告自身容量。 如果你手动添加了 Node，你就需要在添加节点时 手动设置节点容量。
+
+Kubernetes 调度器保证节点上有足够的资源供其上的所有 Pod 使用。它会检查节点上所有容器的请求的总和不会超过节点的容量。
+总的请求包括由 kubelet 启动的所有容器，但不包括由容器运行时直接启动的容器， 也不包括不受 kubelet 控制的其他进程。
+
+Ps: 如果要为非 Pod 进程显式保留资源。请参考
+[为系统守护进程预留资源](https://kubernetes.io/zh/docs/tasks/administer-cluster/reserve-compute-resources/#system-reserved) 。
 
 ### 节点拓扑
 
+支持版本: Kubernetes v1.16 [alpha]
 
+如果启用了  
+[TopologyManager 特性门控](https://kubernetes.io/zh/docs/reference/command-line-tools-reference/feature-gates/) 
+，kubelet 可以在作出资源分配决策时使用拓扑提示。 参考
+[控制节点上拓扑管理策略](https://kubernetes.io/zh/docs/tasks/administer-cluster/topology-manager/)
+了解详细信息。
 
 ### 节点优雅退出
 
+支持版本: Kubernetes v1.20 [alpha]
 
+如果你启用了
+[GracefulNodeShutdown 特性门控](https://kubernetes.io/zh/docs/reference/command-line-tools-reference/feature-gates/) 
+， 那么 kubelet 尝试检测节点的系统关闭事件并终止在节点上运行的 Pod。
+在节点终止期间，kubelet 保证 Pod 遵从常规的 
+[Pod 终止流程](https://kubernetes.io/zh/docs/concepts/workloads/pods/pod-lifecycle/#pod-termination) 。
+
+当启用了 GracefulNodeShutdown 特性门控时， kubelet 使用
+[systemd 抑制器锁](https://www.freedesktop.org/wiki/Software/systemd/inhibit/) 
+在给定的期限内延迟节点关闭。在关闭过程中，kubelet 分两个阶段终止 Pod：
+
+1. 终止在节点上运行的常规 Pod。
+2. 终止在节点上运行的[关键 Pod](https://kubernetes.io/zh/docs/tasks/administer-cluster/guaranteed-scheduling-critical-addon-pods/#marking-pod-as-critical) 。
+
+
+节点优雅退出的特性对应两个 KubeletConfiguration 选项：
+
+ - ShutdownGracePeriod: 指定节点应延迟关闭的总持续时间。此时间是 Pod 体面终止的时间总和，不区分常规 Pod 还是 关键 Pod。
+ - ShutdownGracePeriodCriticalPods: 在节点关闭期间指定用于终止关键Pod的持续时间。该值应小于 ShutdownGracePeriod。
+
+
+例如，如果设置了 ShutdownGracePeriod=30s 和 ShutdownGracePeriodCriticalPods=10s，则 kubelet 将延迟 30 秒关闭节点。
+在关闭期间，将保留前 20（30 - 10）秒用于体面终止常规 Pod，而保留最后 10 秒用于终止 关键 Pod。
 
 
 ## 控制面到节点通信
