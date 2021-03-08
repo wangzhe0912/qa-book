@@ -85,6 +85,7 @@
   * [解决nginx中文乱码问题](./middleware/nginx/chinese.md)
 * [openresty](./middleware/openresty/beginning.md)
 * [zookeeper](./middleware/zookeeper/beginning.md)
+* [sentry](./middleware/sentry/beginning.md)
 
 ## 操作系统与内核篇
 
