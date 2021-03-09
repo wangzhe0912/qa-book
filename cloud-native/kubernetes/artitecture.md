@@ -305,7 +305,25 @@ Ps: 如果要为非 Pod 进程显式保留资源。请参考
 
 ## 控制面到节点通信
 
+Kubernetes 采用的是中心辐射型（Hub-and-Spoke）API 模式。
+所有从集群（或所运行的 Pods）发出的 API 调用都终止于 apiserver（其它控制面组件都没有被设计为可暴露远程服务）。
 
+apiserver 被配置为在一个安全的 HTTPS 端口（443）上监听远程连接请求，并启用一种或多种形式的客户端
+[身份认证](https://kubernetes.io/zh/docs/reference/access-authn-authz/authentication/)
+机制。
+
+一种或多种客户端身份认证应该被启用， 特别是在允许使用
+[匿名请求](https://kubernetes.io/zh/docs/reference/access-authn-authz/authentication/#anonymous-requests)
+或
+[服务账号](https://kubernetes.io/zh/docs/reference/access-authn-authz/authentication/#service-account-tokens)
+令牌的时候。
+
+应该使用集群的公共根证书开通节点，这样它们就能够基于有效的客户端凭据安全地连接 apiserver。
+一种好的方法是以客户端证书的形式将客户端凭据提供给 kubelet。 请查看 
+[kubelet TLS 启动引导](https://kubernetes.io/zh/docs/reference/command-line-tools-reference/kubelet-tls-bootstrapping/)
+以了解如何自动提供 kubelet 客户端证书。
+
+想要连接到 apiserver 的 Pod 可以使用服务账号安全地进行连接。
 
 
 ## 控制器
