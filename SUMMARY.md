@@ -109,6 +109,11 @@
 
 ## AI篇
 
+* [浅谈AI数学基础](./ai/math/beginning.md)
+* [tensorflow快速入门](./ai/tensorflow/beginning.md)
+* [keras快速入门](./ai/keras/beginning.md)
+* [paddle快速入门](./ai/paddle/beginning.md)
+
 
 ## 音视频技术篇
 
