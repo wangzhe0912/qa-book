@@ -110,6 +110,13 @@
 ## AI篇
 
 * [浅谈AI数学基础](./ai/math/beginning.md)
+  * [计算机的源头: 二进制](./ai/math/binary.md)
+  * [原来取余操作本身就是个哈希函数: 余数](./ai/math/remainder.md)
+  * [自己来计算平方根: 迭代法](./ai/math/iterative.md)
+  * [提升代码运行效率的利器: 数学归纳法](./ai/math/mathematical_induction.md)
+  * [浅谈递归算法](./ai/math/rcursion.md)
+  * [浅谈排列组合](./ai/math/arrangement_and_combination.md)
+  * [浅谈动态规划](./ai/math/dynamic_programming.md)
 * [tensorflow快速入门](./ai/tensorflow/beginning.md)
 * [keras快速入门](./ai/keras/beginning.md)
 * [paddle快速入门](./ai/paddle/beginning.md)
