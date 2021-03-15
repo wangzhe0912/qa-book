@@ -79,23 +79,87 @@ python3 -c "import tensorflow as tf"
 
 如果没有看到什么报错的话，那么恭喜你，你的 tensorflow 环境已经基本搭建好了。
 
+下面，我们来体验一下 tensorflow 的 hello world !
+
+编写 `hello_tensorflow.py` 文件如下：
+
+```python
+# -*- coding: UTF-8 -*-
+import tensorflow as tf
+# 定义一个hello 的常量
+hello = tf.constant("Hello Tensorflow")
+
+# 创建一个会话
+session = tf.Session()
+
+# 执行常量操作并打印到标准输出
+print(session.run(hello))
+```
+
+运行 `hello_tensorflow.py` 文件，你就可以看到命令行中打印的标准输出了。
+
+
 ## jupyter notebook 中使用 tensorflow
 
+但是，通过编写一个完整的 Python 文件并执行在调试或者学习过程中，往往是非常低效的。
 
+而 Python 虽然也提供了交互式命令行工具，但是对于画图等场景并不友好，因此，我们接下来，需要使用一个 Python 开发利器: `Jupyter Notebook`。
 
+Jupyter Notebook 是一个 Python的交互式开发环境，也属于 Python 的第三方扩展工具，同样可以使用 `pip` 包管理工具进行安装。
 
+同样是需要先进入之前创建的虚拟环境，然后执行如下命令可以安装 Jupyter Notebook :
 
+```shell
+pip3 install jupyter
+```
+
+安装完成后，只需要执行
+
+```shell
+jupyter-notebook
+```
+
+即可启动对应的 Jupyter Notebook 服务。
+
+此时，`jupyter-notebook` 会自动打开浏览器，并访问对应 jupyter-notebook 页面，你可以在该页面中创建 notebook 文件并执行。
 
 
 ## 在 Docker 容器中使用 tensorflow
 
+最后，我们来了解一下在云原生时代，我们是如何使用 tensorflow 的。
+
+云原生时代最大的成果之一就是 Docker 了。
+
+通过 Docker 镜像，我们可以将运行某个程序的所有依赖环境全部都打包的镜像中去，真正运行容器时，只需要拉取镜像并启动镜像即可。
+不再需要因为环境搭建、依赖复杂等问题影响我们的工作效率了。
+
+当然，想要使用 Docker 容器首先需要安装 Docker 软件，这一步骤
+[官网](https://www.docker.com/get-started)
+已经有了详细的说明，我们就不再赘述了。
+
+安装完成后，我们可以直接拉取对应的 Docker 镜像：
+
+```shell
+docker pull tensorflow/tensorflow:nightly-jupyter
+```
+
+其中:
+
+ - tensorflow/tensorflow 是对应的镜像名称。
+ - nightly-jupyter 是我们要拉取的镜像tag，其中: nightly-jupyter 表示轻量级 tensorflow 且安装有 jupyter notebook
 
 
+镜像拉取可能需要一段时间，当镜像拉取完成后，我们可以启动该 Docker 镜像:
+
+```shell
+docker run -it -p 8888:8888 -v ${local_path}:/tf/notebooks tensorflow/tensorflow:nightly-jupyter
+```
+
+其中:
+
+ - -it 表示以交互式命令行的方式前台启动该镜像。
+ - -p 表示需要镜像端口映射，即将容器内的8888端口映射到本地的8888端口，从而可以在本地浏览器进行访问。
+ - -v 表示进行目录映射，即将本地的指定目录（需手动修改）挂载到容器内部的 `/tf/notebooks` 目录下，这样，我们就可以在容器内部看到并修改本地的文件了。
 
 
-
-
-
-
-
-
+启动该容器后，我们就可以打开浏览器并访问 `http://127.0.0.1:8888/tree` 进行相关的操作了。
