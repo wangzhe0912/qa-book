@@ -34,9 +34,13 @@ tensorflow 是由 Google 开源的一款深度学习框架，也是目前最流�
 
 ## Tensorflow 发展现状
 
+![github](./pictures/github.png)
 
+目前，Github 中的 tensorflow 代码库已经有了超过 154K 的Star，同时也被 Fork 了超过 84.2k 次。
+这一数据在 Github 中已经进入了前10名的范围。
 
+同时，最新的 tensorflow 也已经进入 2.0+ 版本，相比 1.0+ 版本而言， 2.0版本有了更加友好的体验和更加强大的功能。
 
+Tensorflow 也支持各种编程语言的接口，例如 Python, c++, Java, Go, JS等等，基本可以满足任何开发场景的需求。
 
-
-
+怎么样？听了我们的描述，是不是对 Tensorflow 已经充满了求知的欲望，下面，来跟着我们一起进入 tensorflow 的学习吧。
