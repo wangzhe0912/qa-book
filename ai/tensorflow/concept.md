@@ -299,3 +299,53 @@ $$
 \theta^* = arg \min_\theta R_{srm}(f) = arg \min\frac{1}{N} \sum_{i=1}^{N} L(f(x_i; \theta), y_i) + \lambda J(\theta)
 $$
 
+了解了 **损失函数** 、 **经验风险** 、 **结构风险** 的相关概念之后，我们知道其实深度学习本质上就是求解一个最优化的问题。
+
+求解最优化问题的方法我们称之为 **优化算法** ，通常采用迭代的方式来实现:
+首先设置一个初试的可行解，然后基于特定函数反复重新计算可行解，直到找到一个最优解或者达到预设的收敛条件。
+
+不同的优化算法采用的迭代策略各有不同，常见的迭代算法包括：
+
+ - 使用目标函数的一阶导数，如梯度下降法。
+ - 使用目标函数的二阶导数，如牛顿法。
+ - 使用前几轮的迭代信息，如Adam。
+
+
+基于梯度下降法的迭代策略相对最简单，它表示直接沿着梯度的负方向，即 **目标函数下降最快** 的方向进行直线迭代，其计算表达式如下：
+
+$$
+x_{k+1} = x_k - \alpha * grad(x_k)
+$$
+
+其中，$$\alpha$$ 表示每次迭代的步长。
+
+因此，对于一个典型的深度学习问题而言，包含以下三部分：
+
+1. 模型：$$y = f(x) = wx + b$$，其中 x 是输入数据， y 是模型输出的推理值，f 是模型的定义，其中可能包含若干个需要用户训练的模型参数。
+2. 损失函数：$$loss = L(y, y')$$，其中，y' 对应x的真实值（标签），loss为损失函数输出的损失值。
+3. 优化算法：$$w <- w + \alpha * grad(w)$$、$$b <- b + \alpha * grad(b)$$ 其中，
+   grad(w) 和 grad(b) 分别表示当损失值为loss时，模型参数 w 和 b 各自的梯度值。
+
+
+而具体到优化算法时，一次典型的迭代优化可以分为以下 3 个步骤：
+
+1. 计算梯度: 调用 `compute_gradients` 方法。
+2. 处理梯度: 用户按照自己的需求处理梯度值，例如梯度裁剪和梯度加权。
+3. 应用梯度: 调用 `apply_gradients` 方法，将处理后的梯度值应用到模型参数的迭代中。
+
+
+最后，我们来看一下 tensorflow 中已经内置了哪些优化器吧：
+
+|优化器名称|文件路径|
+|-----|---------|
+|Adadelta|tensorflow/python/training/adadelta.py
+|Adagrad|tensorflow/python/training/adagrad.py
+|Adagrad Dual Averaging|tensorflow/python/training/adagrad_da.py
+|Adam|tensorflow/python/training/adam.py
+|Ftrl|tensorflow/python/training/ftrl.py
+|Gradient Descent|tensorflow/python/training/gradent_descent.py
+|Momentum|tensorflow/python/training/momentum.py
+|Proximal Adagrad|tensorflow/python/training/proximal_adagrad.py
+|Proximal Gradient Descent|tensorflow/python/training/proximal_gradent_descent.py
+|Rmsprop|tensorflow/python/training/rmsprop.py
+|Synchronize Replicas|tensorflow/python/training/sync_replicas_optimizer.py
