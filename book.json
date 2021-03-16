@@ -19,7 +19,8 @@
     "copy-code-button",
     "expandable-chapters-small",
     "valine",
-    "donate"
+    "donate",
+    "katex"
   ],
   "pluginsConfig": {
     "valine": {

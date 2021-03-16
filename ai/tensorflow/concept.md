@@ -231,7 +231,9 @@ with tf.device("/gpu:0"):
 
 一个广义的损失函数 L 的形式化定义如下：
 
-$$ loss = L(f(x_i; \Theta), y_i) $$
+$$
+loss = L(f(x_i; \Theta), y_i)
+$$
 
 其中：
 
