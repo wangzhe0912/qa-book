@@ -209,12 +209,54 @@ Python 中关于数据可视化提供了如下相关的第三方库：
 3. mpl_toolkits.mplot3d: 它是一个基础的 3D 绘图工具集，也是 matplotlib 的一部分。
 
 
-其数据可视化数据如下，横轴表示房屋面积，纵轴表示房屋价格：
+下面，我们分别来将刚才的读入的数据进行数据可视化。
+
+对于单变量数据而言，其数据可视化数据如下，横轴表示房屋面积，纵轴表示房屋价格：
+
+```python
+import pandas as pd
+import seaborn as sns
+
+# 设置 seaborn 的基本配置
+sns.set(context="notebook", style="whitegrid", palette="dark")
+
+# 读取指定 csv 文件，并为每一列设置列名
+df0 = pd.read_csv('data0.csv', names=['square', 'price'])
+
+# 数据可视化图
+sns.lmplot('square', 'price', df0, height=4, fit_reg=False)  # fit_reg 设置为 True 时，可以自动生成拟合线
+```
 
 ![dimension_1](./pictures/dimension_1.png)
 
 
-我们想要做
+对于多变量数据而言，其数据可视化数据如下，x轴表示房屋面积，y轴表示房间数量，z轴表示房屋价格：
+
+```python
+import pandas as pd
+import matplotlib.pyplot as plt
+from mpl_toolkits import mplot3d
+
+# 读取多变量数据
+df1 = pd.read_csv('data1.csv', names=['square', 'bedrooms', 'price'])
+
+# 创建一个 Axes3D object
+fig = plt.figure()
+ax = plt.axes(projection='3d')
+# 设置 3 个坐标轴的名称
+ax.set_xlabel('square')
+ax.set_ylabel('bedrooms')
+ax.set_zlabel('price')
+# 绘制 3D 散点图, c表示散点深度的取决对象，cmap表示散点的颜色
+ax.scatter3D(df1['square'], df1['bedrooms'], df1['price'], c=df1['price'], cmap='Greens')
+```
+
+![dimension_2](./pictures/dimension_2.png)
+
+
+
+
+
 
 ## 模型训练
 
