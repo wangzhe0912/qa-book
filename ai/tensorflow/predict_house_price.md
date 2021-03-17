@@ -67,7 +67,7 @@ $$
 而梯度迭代法就是指在优化目标函数的每一轮迭代中，都按照模型参数 $$\theta$$ 的梯度方向进行变更，即表达式如下：
 
 $$
-\theta_j := \theta_j - \alpha \frag{1}{\theta_j} J(\theta)
+\theta_j := \theta_j - \alpha \frag{\partial}{\partial\theta_j} J(\theta)
 $$
 
 代入 $$J(\theta)$$ 进行求导，得到的结果如下：
