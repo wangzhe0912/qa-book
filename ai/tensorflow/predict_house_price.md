@@ -87,7 +87,7 @@ $$
 那么，我们也就可以假设函数如下：
 
 $$
-h_\theta(X) = \theta_0(x_0) + \theta_1(x_1) + \theta_2(x_2) = \theta(x)^{T}X      (x_0=1)
+h_\theta(X) = \theta_{0}x_0 + \theta_{1}x_1 + \theta_{2}x_2 = \theta(x)^{T}X      (x_0=1)
 $$
 
 其中，$$\theta$$ 就是我们假设的函数参数。
@@ -253,11 +253,131 @@ ax.scatter3D(df1['square'], df1['bedrooms'], df1['price'], c=df1['price'], cmap=
 
 ![dimension_2](./pictures/dimension_2.png)
 
+观察上述三维散点图，你会发现它的 x 轴、 y 轴 和 z 轴的分布太不均匀了。
+
+例如：
+
+ - x 轴的区间是 1-5
+ - y 轴的区间是 0- 5000
+ - z 轴的区间甚至是 0 - 7000000
 
 
+如此不均匀的分布对于模型训练等场景都会带来一定的弊端，因此，在模型训练还是之前，我们通常需要将其进行数据归一化。
 
+常用的数据归一化的方式如下：
+
+$$
+x' = \frac{x - \bar{x}}{\sigma}
+$$
+
+那么，我们再来看看如何用代码实现呢？这是就要体现出 pandas 强大的功能了。
+
+```python
+def normalize_feature(df):
+    """
+    归一化函数
+    """
+    return df.apply(lambda column: (column - column.mean()) / column.std())
+
+df1 = pd.read_csv('data1.csv', names=['square', 'bedrooms', 'price'])
+df = normalize_feature(df1)
+```
+
+我们定义了一个归一化函数 `normalize_feature` ，在该函数内，我们针对每一列，计算的列内元素的均值和方差，并从而进行了数据的归一化。
+
+```python
+# 创建一个 Axes3D object
+fig = plt.figure()
+ax = plt.axes(projection='3d')
+# 设置 3 个坐标轴的名称
+ax.set_xlabel('square')
+ax.set_ylabel('bedrooms')
+ax.set_zlabel('price')
+# 绘制 3D 散点图, c表示散点深度的取决对象，cmap表示散点的颜色
+ax.scatter3D(df['square'], df['bedrooms'], df['price'], c=df['price'], cmap='Reds')
+```
+
+归一化后的数据可视化图如下所示：
+
+![normalized_image](./pictures/normalized_image.png)
+
+## 设计数据流图
+
+下面，我们就要正式进入到数据流图的设计中了。 而设计数据流图的第一步就是要确定输入、输出数据了。
+
+我们以 **多变量预测问题** 为例，我们其实就是想要估计下式中的 `\theta` :
+
+$$
+h_\theta(X) = \theta_{0}x_0 + \theta_{1}x_1 + \theta_{2}x_2 = \theta(x)^{T}X      (x_0=1)
+$$
+
+为了能够方便的进行矩阵乘法，我们需要对输入参数中进行 $$x_0 = 1$$ 的填充，即增加一列全为1的列。
+
+此时，我们就需要用到另外一个 Python 的第三方库 numpy 了。
+
+numpy 可以说是 Python 机器学习中的基础了，几乎所有的深度学习框架底层的数据结构存储都是基于 numpy 的。
+同时 numpy 也是一个基础科学计算库，在多维数组上实现了线性袋鼠、傅立叶变换和其他丰富的函数计算。
+
+下面，我们就来看看如何将读取的数据进行转换，得到模型的输入和输出数据吧：
+
+```python
+import numpy as np
+ones = pd.DataFrame({'ones': np.ones(len(df))})  # 生成一列全为1的列
+df = pd.concat([ones, df], axis=1) # 将全为1的列插入到原有的 dataframe 中
+
+X_data = np.array(df[df.columns[0:3]])  # 前三列为模型的输入数据
+y_data = np.array(df[df.columns[-1]]).reshape(len(df), 1)   # 最后一列为标记结果，用于与模型的输出结果计算偏差
+```
+
+完成了输入和输出数据，接下来，就是要完整的定义模型的数据流图了：
+
+```python
+import tensorflow as tf
+
+alpha = 0.01 # 学习率 alpha
+epoch = 500 # 训练全量数据集的轮数
+
+# 输入 X，形状[47, 3]
+X = tf.placeholder(tf.float32, X_data.shape)
+# 输出 y，形状[47, 1]
+y = tf.placeholder(tf.float32, y_data.shape)
+
+# 权重变量 W，形状[3,1]
+W = tf.get_variable("weights", (X_data.shape[1], 1), initializer=tf.constant_initializer())
+
+# 假设函数 h(x) = w0*x0+w1*x1+w2*x2, 其中x0恒为1
+# 推理值 y_pred  形状[47,1]
+y_pred = tf.matmul(X, W)
+
+# 损失函数采用最小二乘法，y_pred - y 是形如[47, 1]的向量。
+# tf.matmul(a,b,transpose_a=True) 表示：矩阵a的转置乘矩阵b，即 [1,47] X [47,1]
+# 损失函数操作 loss
+loss_op = 1 / (2 * len(X_data)) * tf.matmul((y_pred - y), (y_pred - y), transpose_a=True)
+# 随机梯度下降优化器 opt
+opt = tf.train.GradientDescentOptimizer(learning_rate=alpha)
+# 单轮训练操作 train_op
+train_op = opt.minimize(loss_op)
+```
+
+在上述的代码中，我们完整的定义了整个模型的结构（即数据流图），其中包含了节点关系、损失函数以及优化器等。
 
 
 ## 模型训练
 
+当数据流图定义完成，此时我们就可以直接建立一个会话进行模型的训练了：
 
+```python
+with tf.Session() as sess:
+    # 初始化全局变量
+    sess.run(tf.global_variables_initializer())
+    # 开始训练模型，
+    # 因为训练集较小，所以每轮都使用全量数据训练
+    for e in range(1, epoch + 1):
+        sess.run(train_op, feed_dict={X: X_data, y: y_data})
+        if e % 10 == 0:
+            loss, w = sess.run([loss_op, W], feed_dict={X: X_data, y: y_data})
+            log_str = "Epoch %d \t Loss=%.4g \t Model: y = %.4gx1 + %.4gx2 + %.4g"
+            print(log_str % (e, loss, w[1], w[2], w[0]))
+```
+
+此时，模型才会正式进入计算的过程中，并在不断迭代的过程中打印相关的loss值及训练过程中的模型参数值等信息。
