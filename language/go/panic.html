@@ -1,0 +1,2464 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>panic、recover、defer语句使用 · title</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-search-pro/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-prism/prism-solarizedlight.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-bibtex-indexed-cite/style.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-anchor-navigation-ex/style/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-page-footer-ex/style/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-splitter/splitter.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-expandable-chapters-small/expandable-chapters-small.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-donate/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-katex/katex.min.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="../../databases/mongo/beginning.html" />
+    
+    
+    <link rel="prev" href="exception.html" />
+    
+
+    <style>
+    @media only screen and (max-width: 640px) {
+        .book-header .hidden-mobile {
+            display: none;
+        }
+    }
+    </style>
+    <script>
+        window["gitbook-plugin-github-buttons"] = {"buttons":[{"user":"wangzhe0912","repo":"qa-book","type":"star","size":"small","count":true}]};
+    </script>
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../../">
+            
+                <a href="../../">
+            
+                    
+                    Welcome
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">编程语言篇</li>
+        
+        
+    
+        <li class="chapter " data-level="2.1" data-path="../python/beginning.html">
+            
+                <a href="../python/beginning.html">
+            
+                    
+                    python基础
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="2.1.1" data-path="../python/daemon.html">
+            
+                <a href="../python/daemon.html">
+            
+                    
+                    Python多线程中daemon属性的作用
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.1.2" data-path="../python/re.html">
+            
+                <a href="../python/re.html">
+            
+                    
+                    Python正则表达式详解
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.1.3" data-path="../python/datetime.html">
+            
+                <a href="../python/datetime.html">
+            
+                    
+                    Python时间日期详解
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.1.4" data-path="../python/os_system.html">
+            
+                <a href="../python/os_system.html">
+            
+                    
+                    Python判断当前操作系统
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.1.5" data-path="../python/directory.html">
+            
+                <a href="../python/directory.html">
+            
+                    
+                    Python目录相关操作总结
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.1.6" data-path="../python/import.html">
+            
+                <a href="../python/import.html">
+            
+                    
+                    Python import详解
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2" data-path="../python-thirdparty/beginning.html">
+            
+                <a href="../python-thirdparty/beginning.html">
+            
+                    
+                    常用Python第三方库
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="2.2.1" data-path="../python-thirdparty/python-nmap.html">
+            
+                <a href="../python-thirdparty/python-nmap.html">
+            
+                    
+                    python-nmap进行端口扫描
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2.2" data-path="../python-thirdparty/ijson.html">
+            
+                <a href="../python-thirdparty/ijson.html">
+            
+                    
+                    使用ijson解析超大JSON文件
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2.3" data-path="../python-thirdparty/websockets.html">
+            
+                <a href="../python-thirdparty/websockets.html">
+            
+                    
+                    Python实战websocket协议
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2.4" data-path="../python-thirdparty/flask_sockets.html">
+            
+                <a href="../python-thirdparty/flask_sockets.html">
+            
+                    
+                    Flask websocket协议实战
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2.5" data-path="../python-thirdparty/scikit-image-1.html">
+            
+                <a href="../python-thirdparty/scikit-image-1.html">
+            
+                    
+                    scikit-image快速入门
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="2.3" data-path="../django/beginning.html">
+            
+                <a href="../django/beginning.html">
+            
+                    
+                    熟练掌握Django
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="2.3.1" data-path="../django/quickstart.html">
+            
+                <a href="../django/quickstart.html">
+            
+                    
+                    Django快速上手
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.3.2" data-path="../django/settings.html">
+            
+                <a href="../django/settings.html">
+            
+                    
+                    Django配置文件详解
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.3.3" data-path="../django/frontend.html">
+            
+                <a href="../django/frontend.html">
+            
+                    
+                    Django自定义页面编写
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.3.4" data-path="../django/admin.html">
+            
+                <a href="../django/admin.html">
+            
+                    
+                    DjangoAdmin高级用法
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.3.5" data-path="../django/rest.html">
+            
+                <a href="../django/rest.html">
+            
+                    
+                    DjangoRestFramework快速入门
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.3.6" data-path="../django/celery.html">
+            
+                <a href="../django/celery.html">
+            
+                    
+                    DjangoCelery快速入门
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="2.4" data-path="../shell/beginning.html">
+            
+                <a href="../shell/beginning.html">
+            
+                    
+                    Shell快速入门
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.5" data-path="../kotlin/beginning.html">
+            
+                <a href="../kotlin/beginning.html">
+            
+                    
+                    Kotlin快速入门
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="2.5.1" data-path="../kotlin/basic_grammer.html">
+            
+                <a href="../kotlin/basic_grammer.html">
+            
+                    
+                    Kotlin基本语法
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.5.2" data-path="../kotlin/basic_data_type.html">
+            
+                <a href="../kotlin/basic_data_type.html">
+            
+                    
+                    Kotlin基本数据类型
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.5.3" data-path="../kotlin/condition_control.html">
+            
+                <a href="../kotlin/condition_control.html">
+            
+                    
+                    Kotlin条件控制
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.5.4" data-path="../kotlin/loop.html">
+            
+                <a href="../kotlin/loop.html">
+            
+                    
+                    Kotlin循环语句
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.5.5" data-path="../kotlin/object.html">
+            
+                <a href="../kotlin/object.html">
+            
+                    
+                    Kotlin类和对象
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.5.6" data-path="../kotlin/inherit.html">
+            
+                <a href="../kotlin/inherit.html">
+            
+                    
+                    Kotlin继承
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.5.7" data-path="../kotlin/interface.html">
+            
+                <a href="../kotlin/interface.html">
+            
+                    
+                    Kotlin接口
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.5.8" data-path="../kotlin/extension.html">
+            
+                <a href="../kotlin/extension.html">
+            
+                    
+                    Kotlin扩展
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.5.9" data-path="../kotlin/data_type.html">
+            
+                <a href="../kotlin/data_type.html">
+            
+                    
+                    Kotlin数据类与密封类
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.5.10" data-path="../kotlin/generic.html">
+            
+                <a href="../kotlin/generic.html">
+            
+                    
+                    Kotlin泛型
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.5.11" data-path="../kotlin/enum.html">
+            
+                <a href="../kotlin/enum.html">
+            
+                    
+                    Kotlin枚举类
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.5.12" data-path="../kotlin/object_express.html">
+            
+                <a href="../kotlin/object_express.html">
+            
+                    
+                    Kotlin对象表达式/声明
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.5.13" data-path="../kotlin/commission.html">
+            
+                <a href="../kotlin/commission.html">
+            
+                    
+                    Kotlin委托
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="2.6" data-path="beginning.html">
+            
+                <a href="beginning.html">
+            
+                    
+                    go语言快速入门
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="2.6.1" data-path="gopath.html">
+            
+                <a href="gopath.html">
+            
+                    
+                    Go的工作区与GOPATH
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.6.2" data-path="command_source_file.html">
+            
+                <a href="command_source_file.html">
+            
+                    
+                    命令源码文件
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.6.3" data-path="lib_source_file.html">
+            
+                <a href="lib_source_file.html">
+            
+                    
+                    库源码文件
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.6.4" data-path="entity.html">
+            
+                <a href="entity.html">
+            
+                    
+                    程序实体概述
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.6.5" data-path="array.html">
+            
+                <a href="array.html">
+            
+                    
+                    Go语言的数组与切片
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.6.6" data-path="container.html">
+            
+                <a href="container.html">
+            
+                    
+                    Go语言的Container Package
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.6.7" data-path="dict.html">
+            
+                <a href="dict.html">
+            
+                    
+                    Go语言的字典
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.6.8" data-path="channel.html">
+            
+                <a href="channel.html">
+            
+                    
+                    Go语言的Channel
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.6.9" data-path="struct.html">
+            
+                <a href="struct.html">
+            
+                    
+                    Go语言的结构体
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.6.10" data-path="interface.html">
+            
+                <a href="interface.html">
+            
+                    
+                    Go语言的接口
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.6.11" data-path="point.html">
+            
+                <a href="point.html">
+            
+                    
+                    Go语言的指针
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.6.12" data-path="rule.html">
+            
+                <a href="rule.html">
+            
+                    
+                    Go语句的执行规则
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.6.13" data-path="if_for_switch.html">
+            
+                <a href="if_for_switch.html">
+            
+                    
+                    if、for、switch语句
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.6.14" data-path="exception.html">
+            
+                <a href="exception.html">
+            
+                    
+                    Go语言中的异常处理
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="2.6.15" data-path="panic.html">
+            
+                <a href="panic.html">
+            
+                    
+                    panic、recover、defer语句使用
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+        
+        <li class="header">数据库篇</li>
+        
+        
+    
+        <li class="chapter " data-level="3.1" data-path="../../databases/mongo/beginning.html">
+            
+                <a href="../../databases/mongo/beginning.html">
+            
+                    
+                    mongodb
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="3.1.1" data-path="../../databases/mongo/install.html">
+            
+                <a href="../../databases/mongo/install.html">
+            
+                    
+                    MongoDB的安装
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.1.2" data-path="../../databases/mongo/install_package.html">
+            
+                <a href="../../databases/mongo/install_package.html">
+            
+                    
+                    MongoDB安装包剖析
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.1.3" data-path="../../databases/mongo/tool_package.html">
+            
+                <a href="../../databases/mongo/tool_package.html">
+            
+                    
+                    MongoDB工具包剖析
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.1.4" data-path="../../databases/mongo/server_args.html">
+            
+                <a href="../../databases/mongo/server_args.html">
+            
+                    
+                    MongoDB Server命令行与配置文件解析
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.1.5" data-path="../../databases/mongo/mongo_charts.html">
+            
+                <a href="../../databases/mongo/mongo_charts.html">
+            
+                    
+                    MongoCharts的安装与使用
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2" data-path="../../databases/elasicsearch/beginning.html">
+            
+                <a href="../../databases/elasicsearch/beginning.html">
+            
+                    
+                    elasicsearch
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3" data-path="../../databases/etcd/beginning.html">
+            
+                <a href="../../databases/etcd/beginning.html">
+            
+                    
+                    etcd
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="3.3.1" data-path="../../databases/etcd/install.html">
+            
+                <a href="../../databases/etcd/install.html">
+            
+                    
+                    etcd的安装
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3.2" data-path="../../databases/etcd/quickstart.html">
+            
+                <a href="../../databases/etcd/quickstart.html">
+            
+                    
+                    etcd的快速入门
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3.3" data-path="../../databases/etcd/etcd_in_python.html">
+            
+                <a href="../../databases/etcd/etcd_in_python.html">
+            
+                    
+                    在Python中使用ETCD
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="3.4" data-path="../../databases/redis/beginning.html">
+            
+                <a href="../../databases/redis/beginning.html">
+            
+                    
+                    redis
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="3.4.1" data-path="../../databases/redis/install.html">
+            
+                <a href="../../databases/redis/install.html">
+            
+                    
+                    redis的安装
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+        
+        <li class="header">中间件篇</li>
+        
+        
+    
+        <li class="chapter " data-level="4.1" data-path="../../middleware/rabbitmq/beginning.html">
+            
+                <a href="../../middleware/rabbitmq/beginning.html">
+            
+                    
+                    RabbitMQ
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="4.1.1" data-path="../../middleware/rabbitmq/install.html">
+            
+                <a href="../../middleware/rabbitmq/install.html">
+            
+                    
+                    RabbitMQ的安装
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="4.2" data-path="../../middleware/mqtt/beginning.html">
+            
+                <a href="../../middleware/mqtt/beginning.html">
+            
+                    
+                    MQTT
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="4.2.1" data-path="../../middleware/mqtt/install.html">
+            
+                <a href="../../middleware/mqtt/install.html">
+            
+                    
+                    MQTT的安装
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="4.3" data-path="../../middleware/nginx/beginning.html">
+            
+                <a href="../../middleware/nginx/beginning.html">
+            
+                    
+                    nginx
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="4.3.1" data-path="../../middleware/nginx/install.html">
+            
+                <a href="../../middleware/nginx/install.html">
+            
+                    
+                    nginx的安装
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.3.2" data-path="../../middleware/nginx/chinese.html">
+            
+                <a href="../../middleware/nginx/chinese.html">
+            
+                    
+                    解决nginx中文乱码问题
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="4.4" data-path="../../middleware/openresty/beginning.html">
+            
+                <a href="../../middleware/openresty/beginning.html">
+            
+                    
+                    openresty
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.5" data-path="../../middleware/zookeeper/beginning.html">
+            
+                <a href="../../middleware/zookeeper/beginning.html">
+            
+                    
+                    zookeeper
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.6" data-path="../../middleware/sentry/beginning.html">
+            
+                <a href="../../middleware/sentry/beginning.html">
+            
+                    
+                    sentry
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">操作系统与内核篇</li>
+        
+        
+    
+        <li class="chapter " data-level="5.1" data-path="../../linux/basic/beginning.html">
+            
+                <a href="../../linux/basic/beginning.html">
+            
+                    
+                    Linux基础
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="5.1.1" data-path="../../linux/basic/ssh.html">
+            
+                <a href="../../linux/basic/ssh.html">
+            
+                    
+                    Ubuntu系统开启远程ssh访问
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.1.2" data-path="../../linux/basic/ftp.html">
+            
+                <a href="../../linux/basic/ftp.html">
+            
+                    
+                    Ubuntu系统下搭建FTP服务器
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.1.3" data-path="../../linux/basic/file_server.html">
+            
+                <a href="../../linux/basic/file_server.html">
+            
+                    
+                    使用Python搭建简单的文件服务器
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.1.4" data-path="../../linux/basic/expect.html">
+            
+                <a href="../../linux/basic/expect.html">
+            
+                    
+                    通过expect实现无交互式的远程命令执行与远程文件传输
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.1.5" data-path="../../linux/basic/supervisor.html">
+            
+                <a href="../../linux/basic/supervisor.html">
+            
+                    
+                    Supervisor实现程序管理与保活
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="5.2" data-path="../../linux/network/beginning.html">
+            
+                <a href="../../linux/network/beginning.html">
+            
+                    
+                    网络协议相关
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="5.2.1" data-path="../../linux/network/ports.html">
+            
+                <a href="../../linux/network/ports.html">
+            
+                    
+                    端口存活查询与验证
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.2.2" data-path="../../linux/network/dhcp.html">
+            
+                <a href="../../linux/network/dhcp.html">
+            
+                    
+                    DHCP服务搭建
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.2.3" data-path="../../linux/network/ntp.html">
+            
+                <a href="../../linux/network/ntp.html">
+            
+                    
+                    NTP服务搭建
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.2.4" data-path="../../linux/network/rtsp.html">
+            
+                <a href="../../linux/network/rtsp.html">
+            
+                    
+                    rtsp协议与实战
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.2.5" data-path="../../linux/network/dhcp.html">
+            
+                <a href="../../linux/network/dhcp.html">
+            
+                    
+                    DHCP服务搭建
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.2.6" data-path="../../linux/network/snmp.html">
+            
+                <a href="../../linux/network/snmp.html">
+            
+                    
+                    Linux上如何扫描同一网段内的所有设备
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.2.7" data-path="../../linux/network/network_priority.html">
+            
+                <a href="../../linux/network/network_priority.html">
+            
+                    
+                    Linux多网卡优先级配置
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="5.3" data-path="../../linux/git/beginning.html">
+            
+                <a href="../../linux/git/beginning.html">
+            
+                    
+                    git杂谈
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="5.3.1" data-path="../../linux/git/gitignore.html">
+            
+                <a href="../../linux/git/gitignore.html">
+            
+                    
+                    Git忽略已加入版本控制系统中的文件
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.3.2" data-path="../../linux/git/mirror.html">
+            
+                <a href="../../linux/git/mirror.html">
+            
+                    
+                    Git mirror实现飞速上传/下载
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+        
+        <li class="header">AI篇</li>
+        
+        
+    
+        <li class="chapter " data-level="6.1" data-path="../../ai/math/beginning.html">
+            
+                <a href="../../ai/math/beginning.html">
+            
+                    
+                    浅谈AI数学基础
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="6.1.1" data-path="../../ai/math/binary.html">
+            
+                <a href="../../ai/math/binary.html">
+            
+                    
+                    计算机的源头: 二进制
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.1.2" data-path="../../ai/math/remainder.html">
+            
+                <a href="../../ai/math/remainder.html">
+            
+                    
+                    原来取余操作本身就是个哈希函数: 余数
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.1.3" data-path="../../ai/math/iterative.html">
+            
+                <a href="../../ai/math/iterative.html">
+            
+                    
+                    自己来计算平方根: 迭代法
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.1.4" data-path="../../ai/math/mathematical_induction.html">
+            
+                <a href="../../ai/math/mathematical_induction.html">
+            
+                    
+                    提升代码运行效率的利器: 数学归纳法
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.1.5" data-path="../../ai/math/rcursion.html">
+            
+                <a href="../../ai/math/rcursion.html">
+            
+                    
+                    浅谈递归算法
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.1.6" data-path="../../ai/math/arrangement_and_combination.html">
+            
+                <a href="../../ai/math/arrangement_and_combination.html">
+            
+                    
+                    浅谈排列组合
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.1.7" data-path="../../ai/math/dynamic_programming.html">
+            
+                <a href="../../ai/math/dynamic_programming.html">
+            
+                    
+                    浅谈动态规划
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="6.2" data-path="../../ai/python/beginning.html">
+            
+                <a href="../../ai/python/beginning.html">
+            
+                    
+                    Python科学计算实用库入门
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="6.2.1" data-path="../../ai/python/numpy.html">
+            
+                <a href="../../ai/python/numpy.html">
+            
+                    
+                    Numpy
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.2.2" data-path="../../ai/python/pandas.html">
+            
+                <a href="../../ai/python/pandas.html">
+            
+                    
+                    Pandas
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.2.3" data-path="../../ai/python/matplotlib.html">
+            
+                <a href="../../ai/python/matplotlib.html">
+            
+                    
+                    Matplotlib
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.2.4" data-path="../../ai/python/seaborn.html">
+            
+                <a href="../../ai/python/seaborn.html">
+            
+                    
+                    Seaborn
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.2.5" data-path="../../ai/python/scipy.html">
+            
+                <a href="../../ai/python/scipy.html">
+            
+                    
+                    Scipy
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="6.3" data-path="../../ai/tensorflow/beginning.html">
+            
+                <a href="../../ai/tensorflow/beginning.html">
+            
+                    
+                    tensorflow快速入门
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="6.3.1" data-path="../../ai/tensorflow/install.html">
+            
+                <a href="../../ai/tensorflow/install.html">
+            
+                    
+                    tensorflow环境搭建
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.3.2" data-path="../../ai/tensorflow/artitecture.html">
+            
+                <a href="../../ai/tensorflow/artitecture.html">
+            
+                    
+                    tensorflow架构介绍
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.3.3" data-path="../../ai/tensorflow/concept.html">
+            
+                <a href="../../ai/tensorflow/concept.html">
+            
+                    
+                    tensorflow核心概念
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.3.4" data-path="../../ai/tensorflow/predict_house_price.html">
+            
+                <a href="../../ai/tensorflow/predict_house_price.html">
+            
+                    
+                    tensorflow初体验之房价预测
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.3.5" data-path="../../ai/tensorflow/tensorboard.html">
+            
+                <a href="../../ai/tensorflow/tensorboard.html">
+            
+                    
+                    TensorBoard快速入门
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="6.4" data-path="../../ai/keras/beginning.html">
+            
+                <a href="../../ai/keras/beginning.html">
+            
+                    
+                    keras快速入门
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.5" data-path="../../ai/paddle/beginning.html">
+            
+                <a href="../../ai/paddle/beginning.html">
+            
+                    
+                    paddle快速入门
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">音视频技术篇</li>
+        
+        
+    
+        <li class="chapter " data-level="7.1" data-path="../../auvideo/stream_practice/beginning.html">
+            
+                <a href="../../auvideo/stream_practice/beginning.html">
+            
+                    
+                    流媒体协议实战
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="7.1.1" data-path="../../auvideo/stream_practice/rtsp.html">
+            
+                <a href="../../auvideo/stream_practice/rtsp.html">
+            
+                    
+                    rtsp协议杂谈与实战
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+        
+        <li class="header">移动端开发</li>
+        
+        
+    
+        <li class="chapter " data-level="8.1" data-path="../../mobile/android/beginning.html">
+            
+                <a href="../../mobile/android/beginning.html">
+            
+                    
+                    android快速入门
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">嵌入式开发</li>
+        
+        
+    
+        <li class="chapter " data-level="9.1" data-path="../../embedded-system/micro-python/beginning.html">
+            
+                <a href="../../embedded-system/micro-python/beginning.html">
+            
+                    
+                    micro-python快速入门
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="9.1.1" data-path="../../embedded-system/micro-python/environment.html">
+            
+                <a href="../../embedded-system/micro-python/environment.html">
+            
+                    
+                    micro-python环境搭建
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="9.1.2" data-path="../../embedded-system/micro-python/network.html">
+            
+                <a href="../../embedded-system/micro-python/network.html">
+            
+                    
+                    micro-python环境联网与HTTP请求
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="9.2" data-path="../../embedded-system/raspberry/beginning.html">
+            
+                <a href="../../embedded-system/raspberry/beginning.html">
+            
+                    
+                    树莓派快速入门
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="9.2.1" data-path="../../embedded-system/raspberry/gladys_assistant.html">
+            
+                <a href="../../embedded-system/raspberry/gladys_assistant.html">
+            
+                    
+                    树莓派Gladys Assistant环境搭建
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="9.2.2" data-path="../../embedded-system/raspberry/speech.html">
+            
+                <a href="../../embedded-system/raspberry/speech.html">
+            
+                    
+                    树莓派语音处理实战
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+        
+        <li class="header">云原生篇</li>
+        
+        
+    
+        <li class="chapter " data-level="10.1" data-path="../../cloud-native/docker/beginning.html">
+            
+                <a href="../../cloud-native/docker/beginning.html">
+            
+                    
+                    docker杂谈
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="10.2" data-path="../../cloud-native/kubernetes/beginning.html">
+            
+                <a href="../../cloud-native/kubernetes/beginning.html">
+            
+                    
+                    Kubernetes
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="10.2.1" data-path="../../cloud-native/kubernetes/concept.html">
+            
+                <a href="../../cloud-native/kubernetes/concept.html">
+            
+                    
+                    Kubernetes基本概述
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="10.2.2" data-path="../../cloud-native/kubernetes/artitecture.html">
+            
+                <a href="../../cloud-native/kubernetes/artitecture.html">
+            
+                    
+                    Kubernetes架构
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="10.2.3" data-path="../../cloud-native/kubernetes/setup_env.html">
+            
+                <a href="../../cloud-native/kubernetes/setup_env.html">
+            
+                    
+                    Kubernetes环境搭建
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="10.3" data-path="../../cloud-native/helm/beginning.html">
+            
+                <a href="../../cloud-native/helm/beginning.html">
+            
+                    
+                    Helm
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">工具杂谈篇</li>
+        
+        
+    
+        <li class="chapter " data-level="11.1" data-path="../../tools/pycharm/beginning.html">
+            
+                <a href="../../tools/pycharm/beginning.html">
+            
+                    
+                    PyCharm
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="11.1.1" data-path="../../tools/pycharm/chinese_input.html">
+            
+                <a href="../../tools/pycharm/chinese_input.html">
+            
+                    
+                    Ubuntu 20.04下解决Pyharm无法输入中文的问题
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="11.1.2" data-path="../../tools/pycharm/remote_debug.html">
+            
+                <a href="../../tools/pycharm/remote_debug.html">
+            
+                    
+                    PyCharm远程调试
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="11.2" data-path="../../tools/Wireshark/beginning.html">
+            
+                <a href="../../tools/Wireshark/beginning.html">
+            
+                    
+                    Wireshark
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="11.2.1" data-path="../../tools/Wireshark/tutorial.html">
+            
+                <a href="../../tools/Wireshark/tutorial.html">
+            
+                    
+                    Wireshark快速入门
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="11.2.2" data-path="../../tools/Wireshark/practice.html">
+            
+                <a href="../../tools/Wireshark/practice.html">
+            
+                    
+                    Wireshark上手使用
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="11.2.3" data-path="../../tools/Wireshark/capture_filter.html">
+            
+                <a href="../../tools/Wireshark/capture_filter.html">
+            
+                    
+                    Wireshark捕获过滤器
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="11.2.4" data-path="../../tools/Wireshark/show_filter.html">
+            
+                <a href="../../tools/Wireshark/show_filter.html">
+            
+                    
+                    Wireshark显示过滤器
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="11.3" data-path="../../tools/proxy/beginning.html">
+            
+                <a href="../../tools/proxy/beginning.html">
+            
+                    
+                    国内快速下载github等国外资源秘籍
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">测试杂谈篇</li>
+        
+        
+    
+        <li class="chapter " data-level="12.1" data-path="../../test/performance/beginning.html">
+            
+                <a href="../../test/performance/beginning.html">
+            
+                    
+                    性能测试原理剖析
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="12.2" data-path="../../test/jmeter/beginning.html">
+            
+                <a href="../../test/jmeter/beginning.html">
+            
+                    
+                    Jmeter
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="12.3" data-path="../../test/locust/beginning.html">
+            
+                <a href="../../test/locust/beginning.html">
+            
+                    
+                    Locust
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="12.4" data-path="../../test/interface/beginning.html">
+            
+                <a href="../../test/interface/beginning.html">
+            
+                    
+                    接口自动化测试
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="12.4.1" data-path="../../test/interface/json_schema.html">
+            
+                <a href="../../test/interface/json_schema.html">
+            
+                    
+                    JSONSchema在接口测试中的应用
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="12.5" data-path="../../test/ui/beginning.html">
+            
+                <a href="../../test/ui/beginning.html">
+            
+                    
+                    UI自动化测试
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">测试服务篇</li>
+        
+        
+    
+        <li class="chapter " data-level="13.1" data-path="../../service/function/beginning.html">
+            
+                <a href="../../service/function/beginning.html">
+            
+                    
+                    一站式自动化测试平台
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="13.2" data-path="../../service/performance/beginning.html">
+            
+                <a href="../../service/performance/beginning.html">
+            
+                    
+                    分布式性能测试平台
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="13.3" data-path="../../service/mock/beginning.html">
+            
+                <a href="../../service/mock/beginning.html">
+            
+                    
+                    通用Mock服务管理平台
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="13.4" data-path="../../service/chaos/beginning.html">
+            
+                <a href="../../service/chaos/beginning.html">
+            
+                    
+                    混沌工程实践平台
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">个人成长篇</li>
+        
+        
+    
+        <li class="chapter " data-level="14.1" data-path="../../person/open_source/beginning.html">
+            
+                <a href="../../person/open_source/beginning.html">
+            
+                    
+                    开源项目
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="14.1.1" data-path="../../person/open_source/learn.html">
+            
+                <a href="../../person/open_source/learn.html">
+            
+                    
+                    如何高效的学习开源项目
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="../.." >panic、recover、defer语句使用</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <p><footer class="page-footer-ex"> <span class="page-footer-ex-copyright"> By <a href="https://github.com/wangzhe0912" target="_blank">wangzhe0912</a>&#xFF0C;&#x4F7F;&#x7528;<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">&#x77E5;&#x8BC6;&#x5171;&#x4EAB; &#x7F72;&#x540D;-&#x76F8;&#x540C;&#x65B9;&#x5F0F;&#x5171;&#x4EAB; 4.0&#x534F;&#x8BAE;</a>&#x53D1;&#x5E03; </span> &#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0; <span class="page-footer-ex-footer-update"> &#x6B64;&#x9875;&#x9762;&#x4FEE;&#x8BA2;&#x4E8E;&#xFF1A; 2021-03-17 05:47:30 </span> </footer><hr><div id="vcomments"></div><script src="//unpkg.com/valine/dist/Valine.min.js"></script><script>new Valine({el: "#vcomments",appId: '3tCbXut5BLzJCjGpdz0D3vPL-gzGzoHsz',appKey: 'DxRzz6qzatHku9sgCAgW73pe',placeholder: 'Just go go',avatar: '',meta: undefined,pageSize: 10,lang: 'zh-CN',recordIP: false})</script></p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="exception.html" class="navigation navigation-prev " aria-label="Previous page: Go语言中的异常处理">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="../../databases/mongo/beginning.html" class="navigation navigation-next " aria-label="Next page: mongodb">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"panic、recover、defer语句使用","level":"2.6.15","depth":2,"next":{"title":"mongodb","level":"3.1","depth":1,"path":"databases/mongo/beginning.md","ref":"./databases/mongo/beginning.md","articles":[{"title":"MongoDB的安装","level":"3.1.1","depth":2,"path":"databases/mongo/install.md","ref":"./databases/mongo/install.md","articles":[]},{"title":"MongoDB安装包剖析","level":"3.1.2","depth":2,"path":"databases/mongo/install_package.md","ref":"./databases/mongo/install_package.md","articles":[]},{"title":"MongoDB工具包剖析","level":"3.1.3","depth":2,"path":"databases/mongo/tool_package.md","ref":"./databases/mongo/tool_package.md","articles":[]},{"title":"MongoDB Server命令行与配置文件解析","level":"3.1.4","depth":2,"path":"databases/mongo/server_args.md","ref":"./databases/mongo/server_args.md","articles":[]},{"title":"MongoCharts的安装与使用","level":"3.1.5","depth":2,"path":"databases/mongo/mongo_charts.md","ref":"./databases/mongo/mongo_charts.md","articles":[]}]},"previous":{"title":"Go语言中的异常处理","level":"2.6.14","depth":2,"path":"language/go/exception.md","ref":"./language/go/exception.md","articles":[]},"dir":"neutral"},"config":{"plugins":["-lunr","-search","search-pro","-sharing","github-buttons","editlink","ga","-highlight","prism","bibtex-indexed-cite","anchor-navigation-ex","page-footer-ex","splitter","todo","copy-code-button","expandable-chapters-small","valine","donate","katex"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"prism":{"ignore":["mermaid","eval-js"],"css":["prismjs/themes/prism-solarizedlight.css"]},"editlink":{"label":"Edit","multilingual":false,"base":"https://github.com/wangzhe0912/qa-book/blob/master"},"todo":{},"page-footer-ex":{"copyright":"By [wangzhe0912](https://github.com/wangzhe0912)，使用[知识共享 署名-相同方式共享 4.0协议](https://creativecommons.org/licenses/by-sa/4.0/)发布","markdown":true,"update_format":"YYYY-MM-DD HH:mm:ss","update_label":"此页面修订于："},"splitter":{},"search-pro":{"cutWordLib":"nodejieba","defineWord":["Gitbook Use"]},"donate":{"alipay":"https://wangzhe0912.github.io/helm3-book/alipay.jpg","alipayText":"支付宝打赏","button":"赏","title":"","wechat":"https://wangzhe0912.github.io/helm3-book/wechat.jpg","wechatText":"微信打赏"},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"anchor-navigation-ex":{"associatedWithSummary":true,"float":{"floatIcon":"fa fa-navicon","level1Icon":"","level2Icon":"","level3Icon":"","showLevelIcon":false},"mode":"float","multipleH1":true,"pageTop":{"level1Icon":"","level2Icon":"","level3Icon":"","showLevelIcon":false},"printLog":false,"showGoTop":true,"showLevel":false},"bibtex-indexed-cite":{"path":"/"},"github-buttons":{"buttons":[{"user":"wangzhe0912","repo":"qa-book","type":"star","size":"small","count":true}]},"expandable-chapters-small":{},"copy-code-button":{},"ga":{"configuration":"auto","token":"UA-131910384-3"},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"valine":{"avatar":"","lang":"zh-CN","pageSize":10,"placeholder":"Just go go","recordIP":false,"appId":"3tCbXut5BLzJCjGpdz0D3vPL-gzGzoHsz","appKey":"DxRzz6qzatHku9sgCAgW73pe"}},"theme":"default","author":"","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"bibCount":0,"variables":{},"title":"title","bib":[],"gitbook":"*"},"file":{"path":"language/go/panic.md","mtime":"2021-03-17T05:47:30.836Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2021-03-17T05:48:17.890Z"},"basePath":"../..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../../gitbook/gitbook.js"></script>
+    <script src="../../gitbook/theme.js"></script>
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search-pro/jquery.mark.min.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search-pro/search.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-github-buttons/plugin.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-editlink/plugin.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-ga/plugin.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-splitter/splitter.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-copy-code-button/toggle.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-expandable-chapters-small/expandable-chapters-small.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-donate/plugin.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+
