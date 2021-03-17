@@ -61,19 +61,19 @@ $$
 此时，我们可以使用最小二乘法，即它的优化目标为最小化残差平方和：
 
 $$
-J(\theta) = \frag{1}{n} \sum_{i=1}^{n} (h_{\theta}(x_i) - y_i)^2
+J(\theta) = \frac{1}{n} \sum_{i=1}^{n} (h_{\theta}(x_i) - y_i)^2
 $$
 
 而梯度迭代法就是指在优化目标函数的每一轮迭代中，都按照模型参数 $$\theta$$ 的梯度方向进行变更，即表达式如下：
 
 $$
-\theta_j := \theta_j - \alpha \frag{\partial}{\partial\theta_j} J(\theta)
+\theta_j := \theta_j - \alpha \frac{\partial}{\partial\theta_j} J(\theta)
 $$
 
 代入 $$J(\theta)$$ 进行求导，得到的结果如下：
 
 $$
-\theta_j := \theta_j - 2\alpha \frag{1}{n} \sum_{i=1}^{n} (h_{\theta}(x_i) - y_i) (x_i)
+\theta_j := \theta_j - 2\alpha \frac{1}{n} \sum_{i=1}^{n} (h_{\theta}(x_i) - y_i) (x_i)
 $$
 
 下面，我们来看一下 **多变量** 线性回归的场景：
@@ -106,6 +106,16 @@ $$
 
 
 ## 问题描述
+
+下面，我们来以单变量房价预测问题为例，即根据房屋面试 $$x$$ 来预测销售价格 $$y$$ 。
+
+示例的训练数据如下：
+
+|面积（平方英尺）|价格（美元）|
+|-------------|----------|
+|2104|399900|
+
+
 
 
 
