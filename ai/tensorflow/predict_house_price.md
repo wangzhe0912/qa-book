@@ -381,3 +381,45 @@ with tf.Session() as sess:
 ```
 
 此时，模型才会正式进入计算的过程中，并在不断迭代的过程中打印相关的loss值及训练过程中的模型参数值等信息。
+
+## 可视化损失值
+
+为了能够更加直观、有效的分析模型的训练状态和效果，我们常常会在训练过程中将损失值记录下来并进行可视化显示。
+
+修改上述代码如下：
+
+```python
+with tf.Session() as sess:
+    # 初始化全局变量
+    sess.run(tf.global_variables_initializer())
+    # 记录所有损失值
+    loss_data = []
+    # 开始训练模型
+    # 因为训练集较小，所以采用批梯度下降优化算法，每次都使用全量数据训练
+    for e in range(1, epoch + 1):
+        _, loss, w = sess.run([train_op, loss_op, W], feed_dict={X: X_data, y: y_data})
+        # 记录每一轮损失值变化情况
+        loss_data.append(float(loss))
+        if e % 100 == 0:
+            log_str = "Epoch %d \t Loss=%.4g \t Model: y = %.4gx1 + %.4gx2 + %.4g"
+            print(log_str % (e, loss, w[1], w[2], w[0]))
+```
+
+可以看出，我们在上述代码中定义了一个 `loss_data` 的列表用于记录迭代过程中损失值的变化趋势。
+
+Ps: `session.run()` 函数对针对每个 OP 操作的结果进行返回。
+
+最后，我们可以使用 `matplotlib` 库来可视化 loss 曲线。
+
+```python
+import matplotlib.pyplot as plt
+import seaborn as sns
+sns.set(context="notebook", style="whitegrid", palette="dark")
+
+ax = sns.lineplot(x='epoch', y='loss', data=pd.DataFrame({'loss': loss_data, 'epoch': np.arange(epoch)}))
+ax.set_xlabel('epoch')
+ax.set_ylabel('loss')
+plt.show()
+```
+
+![loss](./pictures/loss1.png)
