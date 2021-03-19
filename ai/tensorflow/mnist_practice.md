@@ -225,6 +225,15 @@ history = model.fit(X_train,
 
 ## CNN 网络介绍
 
+CNN模型是一种以卷积为核心的前馈神经网络模型。
+
+20世纪60年代，Hubel和Wiesel在研究猫脑皮层中用于局部敏感和方向选择的神经元时发现其独特的网络结构可以有效地降低反馈神经网络的复杂性，
+继而提出了卷积神经网络（Convolutional Neural Networks，简称CNN）。
+
+
+
+
+
 
 
 ## 利用 CNN 实现手写数字识别的模型
