@@ -131,6 +131,7 @@
   * [tensorflow核心概念](./ai/tensorflow/concept.md)
   * [tensorflow初体验之房价预测](./ai/tensorflow/predict_house_price.md)
   * [TensorBoard快速入门](./ai/tensorflow/tensorboard.md)
+  * [Keras实战之手写数字识别](./ai/tensorflow/mnist_practice.md)
 * [keras快速入门](./ai/keras/beginning.md)
 * [paddle快速入门](./ai/paddle/beginning.md)
 
