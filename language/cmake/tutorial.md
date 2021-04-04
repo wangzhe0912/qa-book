@@ -420,6 +420,65 @@ ctest -C Debug -VV
 
 ## 第五步: 添加系统自检
 
+有时，我们需要根据目标平台是否支持某个功能从而确定是否需要我们引入自己编写的代码。
+
+在本示例中，我们将会根据目标平台是否具备 `log` 和 `exp` 函数来决定是否需要添加我们的代码。
+
+Ps: 几乎所有的平台都会支持 `log` 和 `exp` 函数，此处，我们仅仅用于示例说明而已。
+
+具体来说，如果平台具有 `log` 和 `exp` 函数，那么我们将使用它们来计算 `mysqrt` 函数中的平方根，否则，保留我们之前的逻辑。
+
+我们首先使用 `MathFunctions/CMakeLists.txt` 中的 `CheckSymbolExists` 模块测试这些功能的可用性。
+
+在某些平台上，我们将需要链接到m库。 如果最初没有找到log和exp，则需要m库，然后重试。
+
+```cmake
+include(CheckSymbolExists)
+check_symbol_exists(log "math.h" HAVE_LOG)
+check_symbol_exists(exp "math.h" HAVE_EXP)
+if(NOT (HAVE_LOG AND HAVE_EXP))
+  unset(HAVE_LOG CACHE)
+  unset(HAVE_EXP CACHE)
+  set(CMAKE_REQUIRED_LIBRARIES "m")
+  check_symbol_exists(log "math.h" HAVE_LOG)
+  check_symbol_exists(exp "math.h" HAVE_EXP)
+  if(HAVE_LOG AND HAVE_EXP)
+    target_link_libraries(MathFunctions PRIVATE m)
+  endif()
+endif()
+```
+
+如果可用，请使用 `target_compile_definitions()` 将 `HAVE_LOG` 和 `HAVE_EXP` 指定为 `PRIVATE` 编译定义。
+
+```cmake
+if(HAVE_LOG AND HAVE_EXP)
+  target_compile_definitions(MathFunctions
+                             PRIVATE "HAVE_LOG" "HAVE_EXP")
+endif()
+```
+
+如果 `log` 和 `exp` 在系统上可用，那么我们将使用它们来计算 `mysqrt` 函数中的平方根。
+
+将以下代码添加到 `MathFunctions/mysqrt.cxx` 中的 `mysqrt` 函数中：
+
+```c++
+#if defined(HAVE_LOG) && defined(HAVE_EXP)
+  double result = exp(log(x) * 0.5);
+  std::cout << "Computing sqrt of " << x << " to be " << result
+            << " using log and exp" << std::endl;
+#else
+  double result = x;
+  // 复用之前内容
+```
+
+此外，我们还需要在 `mysqrt.cxx` 文件中，引入 `cmath`。
+
+```c++
+#include <cmath>
+```
+
+重新编译来验证一下看看吧~
+
 
 ## 第六步: 添加自定义命令和生成的文件
 
