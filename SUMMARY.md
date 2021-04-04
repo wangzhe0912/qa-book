@@ -56,6 +56,8 @@
   * [if、for、switch语句](./language/go/if_for_switch.md)
   * [Go语言中的异常处理](./language/go/exception.md)
   * [panic、recover、defer语句使用](./language/go/panic.md)
+* [Cmake快速入门](./language/cmake/beginning.md)
+  * [Cmake入门教程](./language/cmake/tutorial.md)
 
 
 ## 数据库篇
