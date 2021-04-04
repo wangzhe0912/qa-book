@@ -270,9 +270,49 @@ cmake --build .
 ```
 
 
-
 ## 第三步: 添加 Lib 库的使用要求
 
+添加 Lib 库的使用要求可以更好地控制 Lib库或可执行文件的链接，同时还可以更好地控制CMake内部目标的传递属性。
+
+利用使用需求的主要命令是：
+
+1. target_compile_definitions()
+2. target_compile_options()
+3. target_include_directories()
+4. target_link_libraries()
+
+
+让我们来重构我们 Step2 中的代码增加现代 CMake 的方法中的使用要求约束。
+
+我们首先需要声明链接到 MathFunctions 的所有人（除 MathFunctions 本身外）都需要去引用当前的源码目录，也就是说它可以认为是一个接口使用规范。
+
+将以下行添加到 `MathFunctions/CMakeLists.txt` 的末尾：
+
+```cmake
+target_include_directories(MathFunctions
+        INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}
+        )
+```
+
+现在，我们已经指定了 MathFunction 的使用要求。因此，我们可以安全地从顶级 `CMakeLists.txt` 中删除对 `EXTRA_INCLUDES` 变量的使用，
+修改后如下：
+
+```cmake
+if(USE_MYMATH)
+  add_subdirectory(MathFunctions)
+  list(APPEND EXTRA_LIBS MathFunctions)
+endif()
+```
+
+以及:
+
+```cmake
+target_include_directories(Tutorial PUBLIC
+                           "${PROJECT_BINARY_DIR}"
+                           )
+```
+
+完成此操作后，可以再次运行 `cmake` 可执行文件或 `cmake-gui` 来配置项目，然后使用所选的构建工具或使用 `cmake --build` 进行构建。
 
 ## 第四步: 安装和测试
 
