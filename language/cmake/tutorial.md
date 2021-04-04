@@ -316,10 +316,107 @@ target_include_directories(Tutorial PUBLIC
 
 ## 第四步: 安装和测试
 
+接下来，我们需要向项目中添加一些安装规则和测试支持的内容了。
+
 ### 安装规则
+
+安装规则非常简单：对于MathFunctions，我们要安装库和头文件，对于应用程序，我们要安装可执行文件和配置的头文件。
+
+因此，在 `MathFunctions/CMakeLists.txt` 的末尾，我们添加：
+
+```cmake
+install(TARGETS MathFunctions DESTINATION lib)  # 对应lib
+install(FILES MathFunctions.h DESTINATION include)  # 对应include
+```
+
+同时，在顶层 `CMakeLists.txt` 文件末尾，我们需要添加如下内容:
+
+```cmake
+install(TARGETS Tutorial DESTINATION bin)    # 对应 bin 
+install(FILES "${PROJECT_BINARY_DIR}/TutorialConfig.h"   # 对应 include
+  DESTINATION include
+  )
+```
+
+这就是基本的本地安装时所需的全部改动内容。
+
+现在，可以运行 `cmake` 可执行文件或 `cmake-gui` 来配置项目，然后使用所选的构建工具对其进行构建。
+
+然后，通过命令行使用 `cmake` 命令的安装选项来运行安装步骤。
+
+此步骤将安装适当的头文件，库和可执行文件。 例如：
+
+```shell
+cmake --install .
+# 等价于之前的 make install
+```
+
+此外，在 install 的过程中，我们还可以通过 `--prefix` 参数来指定安装前缀，也可以在 `CMAKE_INSTALL_PREFIX` Cmake 变量中设置默认值。
+
+例如:
+
+```shell
+cmake --install . --prefix "/home/myuser/installdir"
+```
+
+现在，你就可以去对应的安装目录下检查一下是否已经正确安装好了相关的文件。
 
 ### 测试支持
 
+接下来让我们测试我们的应用程序。
+
+在顶级 `CMakeLists.txt` 文件的末尾，我们可以启用测试，然后添加一些基本测试以验证应用程序是否正常运行。
+
+```cmake
+enable_testing()
+
+# does the application run
+add_test(NAME Runs COMMAND Tutorial 25)
+
+# does the usage message work?
+add_test(NAME Usage COMMAND Tutorial)
+set_tests_properties(Usage
+  PROPERTIES PASS_REGULAR_EXPRESSION "Usage:.*number"
+  )
+
+# define a function to simplify adding tests
+function(do_test target arg result)
+  add_test(NAME Comp${arg} COMMAND ${target} ${arg})
+  set_tests_properties(Comp${arg}
+    PROPERTIES PASS_REGULAR_EXPRESSION ${result}
+    )
+endfunction(do_test)
+
+# do a bunch of result based tests
+do_test(Tutorial 4 "4 is 2")
+do_test(Tutorial 9 "9 is 3")
+do_test(Tutorial 5 "5 is 2.236")
+do_test(Tutorial 7 "7 is 2.645")
+do_test(Tutorial 25 "25 is 5")
+do_test(Tutorial -25 "-25 is [-nan|nan|0]")
+do_test(Tutorial 0.0001 "0.0001 is 0.01")
+```
+
+第一个测试只是验证应用程序正在运行，没有段错误或其他崩溃，并且返回值为零。这是CTest测试的基本形式。
+
+下一个测试使用 `PASS_REGULAR_EXPRESSION` 测试属性来验证测试的输出是否包含某些字符串。在这种情况下，
+请验证在提供了错误数量的参数时是否打印了用法消息。
+
+最后，我们有一个名为 `do_test` 的函数，该函数运行应用程序并验证所计算的平方根对于给定输入是否正确。
+对于do_test的每次调用，都会根据传递的参数将另一个测试（带有名称，输入和预期结果）添加到项目中。
+
+重新构建应用程序，然后切换到二进制目录并运行 `ctest` 可执行文件：
+
+```shell
+ctest -N    # 显示有哪些testcase
+ctest -VV   # 运行全部testcase
+```
+
+此外，我们也可以在 build 目录下执行如下内容进行 debug 验证：
+
+```shell
+ctest -C Debug -VV
+```
 
 ## 第五步: 添加系统自检
 
