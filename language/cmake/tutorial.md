@@ -482,6 +482,100 @@ endif()
 
 ## 第六步: 添加自定义命令和生成的文件
 
+假设我们决定不再使用平台的 `log` 和 `exp` 函数，而是希望生成一个可在 `mysqrt` 函数中使用的预计算值表。
+
+在本节中，我们将在构建过程中创建预计算值表，然后将该表编译到我们的应用程序中。
+
+首先，让我们在 `MathFunctions/CMakeLists.txt` 中删除对log和exp函数的检查。
+
+然后，从 `mysqrt.cxx` 中删除对 `HAVE_LOG` 和 `HAVE_EXP` 的检查。
+
+同时，我们可以删除 `#include <cmath>`。
+
+在 `MathFunctions` 子目录中，我们提供了一个名为 `MakeTable.cxx` 的新源文件来生成表。
+
+简单浏览该文件，我们可以看到知道这是一段用于生成预计算表的 `C++` 代码，并且输出文件的文件名可以作为参数传入。
+
+下一步是将适当的命令添加到 `MathFunctions/CMakeLists.txt` 文件中，以构建 `MakeTable`可执行文件，
+然后在构建过程中运行它。
+
+下面，我们需要一些命令来完成此操作: 
+
+首先，在 `MathFunctions/CMakeLists.txt` 的顶部，添加 `MakeTable` 的可执行文件，就像添加任何其他可执行文件一样。
+
+```cmake
+add_executable(MakeTable MakeTable.cxx)
+```
+
+然后，我们添加一个自定义命令，该命令指定如何通过运行 `MakeTable` 来产生 `Table.h`。
+
+```cmake
+add_custom_command(
+  OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/Table.h
+  COMMAND MakeTable ${CMAKE_CURRENT_BINARY_DIR}/Table.h
+  DEPENDS MakeTable
+  )
+```
+
+接下来，我们必须让 CMake 知道 `mysqrt.cxx` 取决于生成的文件 `Table.h`。
+这是通过将生成的 `Table.h` 添加到库 `MathFunctions` 的源列表中来完成的。
+
+```cmake
+add_library(MathFunctions
+            mysqrt.cxx
+            ${CMAKE_CURRENT_BINARY_DIR}/Table.h
+            )
+```
+
+我们还必须将当前的二进制目录添加到包含目录列表中，以便 `mysqrt.cxx` 可以找到并包含 `Table.h`。
+
+```cmake
+target_include_directories(MathFunctions
+          INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}
+          PRIVATE ${CMAKE_CURRENT_BINARY_DIR}
+          )
+```
+
+现在，让我们在自定义函数中使用生成的表。
+
+首先，修改 `mysqrt.cxx` 以包含 `Table.h` 。
+
+接下来，我们可以重写 `mysqrt` 函数以使用该表：
+
+```c++
+double mysqrt(double x)
+{
+  if (x <= 0) {
+    return 0;
+  }
+
+  // use the table to help find an initial value
+  double result = x;
+  if (x >= 1 && x < 10) {
+    std::cout << "Use the table to help find an initial value " << std::endl;
+    result = sqrtTable[static_cast<int>(x)];
+  }
+
+  // do ten iterations
+  for (int i = 0; i < 10; ++i) {
+    if (result <= 0) {
+      result = 0.1;
+    }
+    double delta = x - (result * result);
+    result = result + 0.5 * delta / result;
+    std::cout << "Computing sqrt of " << x << " to be " << result << std::endl;
+  }
+
+  return result;
+}
+```
+
+重新编译来验证一下看看吧~
+
+Ps：构建此项目时，它将首先构建 `MakeTable` 可执行文件。
+然后它将运行 `MakeTable` 生成 `Table.h`。
+最后，它将编译包括 `Table.h` 的 `mysqrt.cxx`，以生成 `MathFunctions` 库。
+
 
 ## 第七步: 构建安装程序
 
