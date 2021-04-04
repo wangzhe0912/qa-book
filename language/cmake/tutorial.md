@@ -146,6 +146,130 @@ cmake --build .
 
 ## 第二步: 添加一个 Lib 库
 
+现在，我们需要将 Lib 库添加到我们的项目中，该库将包含我们自己的实现，用于计算数字的平方根，
+然后可执行文件可以使用此库，而不是使用编译器提供的标准平方根函数。
+
+在本教程中，我们将库放入名为 `MathFunctions` 的子目录中。
+
+该目录已经包含头文件 `MathFunctions.h` 和源文件 `mysqrt.cxx`。
+源文件具有一个称为 `mysqrt` 的函数，该函数提供与编译器的 `sqrt` 函数类似的功能。
+
+将以下一行 `CMakeLists.txt` 文件添加到 MathFunctions 目录中：
+
+```cmake
+add_library(MathFunctions mysqrt.cxx)
+```
+
+为了利用新库，我们将在顶层 `CMakeLists.txt` 文件中添加一个 `add_subdirectory()` 调用，以便构建该库。
+
+我们将新库添加到可执行文件，并将MathFunctions添加为包含目录，以便可以找到 `mysqrt.h` 头文件。
+
+顶级 `CMakeLists.txt` 文件的最后几行现在应如下所示：
+
+```cmake
+# add the MathFunctions library
+add_subdirectory(MathFunctions)
+
+# add the executable
+add_executable(Tutorial tutorial.cxx)
+
+target_link_libraries(Tutorial PUBLIC MathFunctions)
+
+# add the binary tree to the search path for include files
+# so that we will find TutorialConfig.h
+target_include_directories(Tutorial PUBLIC
+                          "${PROJECT_BINARY_DIR}"
+                          "${PROJECT_SOURCE_DIR}/MathFunctions"
+                          )
+```
+
+现在让我们将 `MathFunctions` 库设为可选。 虽然对于本教程而言确实没有任何必要，但是对于较大的项目，这是常见的情况。
+
+第一步是向顶级 `CMakeLists.txt` 文件添加一个选项。
+
+```cmake
+# support compile option
+option(USE_MYMATH "Use tutorial provided math implementation" ON)
+
+# configure a header file to pass some of the CMake settings
+# to the source code
+configure_file(TutorialConfig.h.in TutorialConfig.h)
+```
+
+此选项将显示在 `cmake-gui` 和 `ccmake` 中，默认值 ON 可由用户更改。 
+此设置将存储在缓存中，因此用户无需在每次在构建目录上运行CMake时都设置该值。
+
+下一个更改是使条件构建和链接 `MathFunctions` 库成为可选项。
+
+为此，我们将顶级 `CMakeLists.txt` 文件的结尾更改为如下所示：
+
+```cmake
+if(USE_MYMATH)
+  add_subdirectory(MathFunctions)
+  list(APPEND EXTRA_LIBS MathFunctions)    # variable set value
+  list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/MathFunctions")
+endif()
+
+# add the executable
+add_executable(Tutorial tutorial.cxx)
+
+target_link_libraries(Tutorial PUBLIC ${EXTRA_LIBS})   # not effective when EXTRA_LIBS is null 
+
+# add the binary tree to the search path for include files
+# so that we will find TutorialConfig.h
+target_include_directories(Tutorial PUBLIC
+                           "${PROJECT_BINARY_DIR}"
+                           ${EXTRA_INCLUDES}
+                           )
+```
+
+PS: 此处，我们使用变量 `EXTRA_LIBS` 来收集所有可选库，以供以后链接到可执行文件中，变量 `EXTRA_INCLUDES` 类似地用于可选的头文件。
+当处理许多可选组件时，这是一种经典方法，我们将在下一步中介绍现代方法。
+
+对源代码的相应更改非常简单。
+
+首先，在 `tutorial.cxx` 中引用 `MathFunctions.h` 的 Header ：
+
+```c++
+#ifdef USE_MYMATH
+#  include "MathFunctions.h"
+#endif
+```
+
+然后，在同一文件中，使 `USE_MYMATH` 控制使用哪个平方根函数：
+
+```c++
+#ifdef USE_MYMATH
+  const double outputValue = mysqrt(inputValue);
+#else
+  const double outputValue = sqrt(inputValue);
+#endif
+```
+
+由于源代码现在需要使用 `USE_MYMATH`，因此我们可以使用以下行将其添加到 `TutorialConfig.h.in` 中：
+
+```c++
+#cmakedefine USE_MYMATH
+```
+
+Ps: 在项目顶层的 `CMakeLists.txt` 文件中，`USE_MYMATH` 的 option 定义务必在 `TutorialConfig.h.in` 配置声明之前，
+否则，生成的 `TutorialConfig.h` 文件中，是无法找到 `USE_MYMATH` 变量值的。
+
+现在，我们可以构建项目并运行了:
+
+```shell
+mkdir build
+cd ./build
+# 使用自定义的函数
+cmake ..
+cmake --build .
+
+# 使用非自定义的函数
+cmake .. -DUSE_MYMATH=OFF
+cmake --build .
+```
+
+
 
 ## 第三步: 添加 Lib 库的使用要求
 
