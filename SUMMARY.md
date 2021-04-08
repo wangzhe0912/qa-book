@@ -102,6 +102,7 @@
 * [网络协议相关](./linux/network/beginning.md)
   * [端口存活查询与验证](./linux/network/ports.md)
   * [DHCP服务搭建](./linux/network/dhcp.md)
+  * [NFS网络文件系统搭建](./linux/network/nfs.md)
   * [NTP服务搭建](./linux/network/ntp.md)
   * [rtsp协议与实战](./linux/network/rtsp.md)
   * [DHCP服务搭建](./linux/network/dhcp.md)
