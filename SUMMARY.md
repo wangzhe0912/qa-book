@@ -137,6 +137,8 @@
   * [Keras实战之手写数字识别](./ai/tensorflow/mnist_practice.md)
 * [keras快速入门](./ai/keras/beginning.md)
 * [paddle快速入门](./ai/paddle/beginning.md)
+  * [Paddle 核心概念 Tensor 详解](./ai/paddle/tensor.md)
+
 
 
 ## 音视频技术篇
