@@ -58,6 +58,7 @@
   * [panic、recover、defer语句使用](./language/go/panic.md)
 * [Cmake快速入门](./language/cmake/beginning.md)
   * [Cmake入门教程](./language/cmake/tutorial.md)
+* [C++快速入门](./language/cpp/beginning.md)
 
 
 ## 数据库篇
@@ -75,6 +76,12 @@
   * [在Python中使用ETCD](./databases/etcd/etcd_in_python.md)
 * [redis](./databases/redis/beginning.md)
   * [redis的安装](./databases/redis/install.md)
+
+
+## 持续集成篇
+
+* [TeamCity](./ci/teamcity/beginning.md)
+  * [TeamCity的安装](./ci/teamcity/install.md)
 
 
 ## 中间件篇
