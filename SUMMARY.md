@@ -13,6 +13,7 @@
   * [Python目录相关操作总结](./language/python/directory.md)
   * [Python import详解](./language/python/import.md)
   * [Python程序中判断当前Python版本](./language/python/python_version.md)
+  * [Python HTTP请求重试机制](./language/python/requests.md)
 * [常用Python第三方库](./language/python-thirdparty/beginning.md)
   * [python-nmap进行端口扫描](./language/python-thirdparty/python-nmap.md)
   * [使用ijson解析超大JSON文件](./language/python-thirdparty/ijson.md)
