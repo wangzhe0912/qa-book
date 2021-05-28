@@ -28,3 +28,51 @@ Step4: 启动 TeamCity 服务
 默认情况下，TeamCity 启动后会绑定本地 8111 端口，即 http://localhost:8111/ 。
 
 ![teamcity](./pictures/teamcity_page.png)
+
+Step5: 配置开机自启动
+
+假设本地的 TeamCity 安装目录为 `/Users/wangzhe/Desktop/TeamCity` 。
+
+则创建一个文件 `/Library/LaunchDaemons/jetbrains.teamcity.server.plist` ，内容如下：
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>WorkingDirectory</key>
+    <string>/Users/wangzhe/Desktop/TeamCity</string>
+    <key>Debug</key>
+    <false/>
+    <key>Label</key>
+    <string>jetbrains.teamcity.server</string>
+    <key>OnDemand</key>
+    <false/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>--login</string>
+        <string>-c</string>
+        <string>bin/runAll.sh run</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>StandardErrorPath</key>
+    <string>logs/launchd.err.log</string>
+    <key>StandardOutPath</key>
+    <string>logs/launchd.out.log</string>
+    <key>UserName</key>
+    <string>wangzhe</string>
+</dict>
+</plist>
+```
+
+创建完成后，可以用如下命令进行验证：
+
+```shell
+launchctl load /Library/LaunchDaemons/jetbrains.teamcity.server.plist
+```
+
+该命令预期能够正常启动 TeamCity 服务。
