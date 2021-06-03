@@ -30,6 +30,7 @@
 * [Shell快速入门](./language/shell/beginning.md)
   * [Shell 变量详解](./language/shell/variable.md)
   * [Shell 函数详解](./language/shell/function.md)
+  * [Shell 基本运算符](./language/shell/operators.md)
 * [Kotlin快速入门](./language/kotlin/beginning.md)
   * [Kotlin基本语法](./language/kotlin/basic_grammer.md)
   * [Kotlin基本数据类型](./language/kotlin/basic_data_type.md)
