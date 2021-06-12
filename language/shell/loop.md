@@ -48,7 +48,7 @@ done
 同时，shell 的 for 循环还支持 C 语言风格的循环:
 
 ```shell
-for (( i=1; i<=10; i++)); do
+for (( i=1; i<=10; i++ )); do
   echo "i is ${i}"
 done
 ```
