@@ -117,6 +117,7 @@
   * [使用Python搭建简单的文件服务器](./linux/basic/file_server.md)
   * [通过expect实现无交互式的远程命令执行与远程文件传输](./linux/basic/expect.md)
   * [Supervisor实现程序管理与保活](./linux/basic/supervisor.md)
+  * [Linux 下添加定时任务](./linux/basic/crontab.md)
 * [网络协议相关](./linux/network/beginning.md)
   * [端口存活查询与验证](./linux/network/ports.md)
   * [DHCP服务搭建](./linux/network/dhcp.md)
