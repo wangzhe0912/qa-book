@@ -34,6 +34,7 @@
   * [Shell 文本处理](./language/shell/string.md)
   * [Shell 条件语句](./language/shell/condition.md)
   * [Shell 循环语句](./language/shell/loop.md)
+  * [Shell 脚本的执行方式](./language/shell/execute_method.md)
 * [Kotlin快速入门](./language/kotlin/beginning.md)
   * [Kotlin基本语法](./language/kotlin/basic_grammer.md)
   * [Kotlin基本数据类型](./language/kotlin/basic_data_type.md)
