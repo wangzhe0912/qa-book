@@ -1,6 +1,9 @@
 #!/bin/bash
 
-while [ $# -gt 0 ]; do
-    echo "receive param： ${1}"
-    shift
+trap "echo sig 15" 15
+
+echo $$
+
+while  : ; do
+    :
 done
