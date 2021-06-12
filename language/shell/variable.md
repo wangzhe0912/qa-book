@@ -444,3 +444,30 @@ EOF
 4. ${number}: 用于参数接收，表示接收第 number 个传入的参数。
 5. ${number-default}: 用于参数接收，表示接收第 number 个传入的参数，如果没有传入参数，则将default值作为默认值。
 
+
+## 环境变量配置文件
+
+我们已经知道，环境变量在 Shell 中非常重要了，那么怎么设置默认的环境变量呢？
+
+在 Linux 系统中，与环境变量相关的配置文件包括如下：
+
+ - /etc/profile
+ - /etc/profile.d/
+ - /etc/bashrc
+ - ~/.bash_profile
+ - ~/.bashrc
+
+
+那么为什么需要这么多的配置文件来设置环境变量呢？各个不同的文件有什么区别呢？
+
+首先，适用范围不同：
+
+ - 对于 /etc/ 目录下的配置文件而言，生效的范围是所有登录用户。
+ - 对于 ~ 目录下的配置文件当前，生效的范围是当前用户。
+
+
+其次，加载时机不同：
+
+ - 对于 profile 类配置文件而言: 对于 no login shell 而言，是不会生效的。如 `su root`
+ - 对于 bashrc 类配置文件而言: 无论是 login shell 还是 no login shell，都会生效。如 `su - root`
+
