@@ -45,6 +45,14 @@ for i in {1..9}; do
 done
 ```
 
+同时，shell 的 for 循环还支持 C 语言风格的循环:
+
+```shell
+for (( i=1; i<=10; i++)); do
+  echo "i is ${i}"
+done
+```
+
 ## while 循环
 
 while 循环用于不断执行一系列命令，也用于从输入文件中读取数据。其语法格式为：
