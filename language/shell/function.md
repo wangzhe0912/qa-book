@@ -110,3 +110,17 @@ done
 ```
 
 其中，`shift` 表示去除传入的第一个参数。
+
+
+## 系统内置函数
+
+在 Linux 系统中，在 `/etc/init.d/functions` 文件中已经定义了一系列的内置常用函数，我们可以直接使用。
+
+例如:
+
+```shell
+source /etc/init.d/functions
+echo_success
+echo_failure
+echo_passed
+```
