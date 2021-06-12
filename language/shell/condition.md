@@ -92,3 +92,4 @@ fi
 
 关于 `test` 命令的更多介绍，可以参考 [文档](https://www.runoob.com/linux/linux-shell-test.html) 。
 
+Ps: test 其实可以简单为 [] 方括号~
