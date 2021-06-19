@@ -99,6 +99,7 @@
 
 * [RabbitMQ](./middleware/rabbitmq/beginning.md)
   * [RabbitMQ的安装](./middleware/rabbitmq/install.md)
+  * [RabbitMQ的Demo示例](./middleware/rabbitmq/demo.md)
 * [MQTT](./middleware/mqtt/beginning.md)
   * [MQTT的安装](./middleware/mqtt/install.md)
 * [nginx](./middleware/nginx/beginning.md)
