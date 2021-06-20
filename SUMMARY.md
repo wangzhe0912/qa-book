@@ -104,6 +104,7 @@
   * [RabbitMQ的Fanout类型的Exchange（发布订阅模式）](./middleware/rabbitmq/publish_subscribe.md)
   * [RabbitMQ的Direct类型的Exchange（选择性订阅）](./middleware/rabbitmq/direct_mode.md)
   * [RabbitMQ的Topic类型的Exchange（高级选择性订阅）](./middleware/rabbitmq/topic_mode.md)
+  * [利用RabbitMQ实现远程服务调用](./middleware/rabbitmq/rpc.md)
 * [MQTT](./middleware/mqtt/beginning.md)
   * [MQTT的安装](./middleware/mqtt/install.md)
 * [nginx](./middleware/nginx/beginning.md)
