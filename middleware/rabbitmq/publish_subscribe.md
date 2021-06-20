@@ -1,4 +1,4 @@
-# RabbitMQ的发布订阅模式
+# RabbitMQ的Fanout类型的Exchange（发布订阅模式）
 
 在之前的内容中，我们学习了RabbitMQ的介绍、安装和以工作队列的形式发布和接收消息。
 
