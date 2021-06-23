@@ -142,6 +142,23 @@
 
 ## AI篇
 
+* [算法与数据结构入门](./ai/algorithm_and_data_structure/beginning.md)
+  * [数组与链表](./ai/algorithm_and_data_structure/linked_list.md)
+  * [堆栈和队列](./ai/algorithm_and_data_structure/stack_and_queue.md)
+  * [优先队列](./ai/algorithm_and_data_structure/priority_queue.md)
+  * [哈希表](./ai/algorithm_and_data_structure/dict_and_set.md)
+  * [二叉数](./ai/algorithm_and_data_structure/binary_tree.md)
+  * [递归和分治](./ai/algorithm_and_data_structure/rcursion.md)
+  * [贪心算法](./ai/algorithm_and_data_structure/greedy.md)
+  * [深度优先/广度优先搜索](./ai/algorithm_and_data_structure/DFS_BFS.md)
+  * [剪枝](./ai/algorithm_and_data_structure/pruning.md)
+  * [二分查找](./ai/algorithm_and_data_structure/binary_search.md)
+  * [字典树](./ai/algorithm_and_data_structure/dict_tree.md)
+  * [位运算](./ai/algorithm_and_data_structure/bit.md)
+  * [动态规划](./ai/algorithm_and_data_structure/dynamic_programming.md)
+  * [并查集](./ai/algorithm_and_data_structure/disjoint_set.md)
+  * [LRU Cache](./ai/algorithm_and_data_structure/lru.md)
+  * [布隆过滤器](./ai/algorithm_and_data_structure/bloom_filter.md)
 * [浅谈AI数学基础](./ai/math/beginning.md)
   * [计算机的源头: 二进制](./ai/math/binary.md)
   * [原来取余操作本身就是个哈希函数: 余数](./ai/math/remainder.md)
