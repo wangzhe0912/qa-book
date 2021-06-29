@@ -108,6 +108,7 @@
 * [MQTT](./middleware/mqtt/beginning.md)
   * [MQTT的安装](./middleware/mqtt/install.md)
 * [nginx](./middleware/nginx/beginning.md)
+  * [初识Nginx](./middleware/nginx/getting_to_know.md)
   * [nginx的安装](./middleware/nginx/install.md)
   * [解决nginx中文乱码问题](./middleware/nginx/chinese.md)
 * [openresty](./middleware/openresty/beginning.md)
