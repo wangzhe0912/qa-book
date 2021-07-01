@@ -161,3 +161,57 @@ upstream 块其实就是用于包含上游业务服务器的地址，此处，�
 
 ## 用GoAccess实现可视化并实时监控access日志
 
+在 nginx 中，access log 对我们而言是非常重要的，我们可以从 access log 中分析有哪些访问用户，访问请求量有多大等等。
+
+但是 access log 毕竟是以文本的方式在 nginx 机器上存放，不利于我们快速的进行分析，此处，我们将会介绍一款工具，GoAccess。
+
+它可以以可视化的方式，帮助我们来进行实时可视化的access log的数据分析。
+
+GoAccess 的官方介绍网站如下: [https://goaccess.io/get-started](https://goaccess.io/get-started)
+
+### GoAccess 的安装
+
+GoAccess 的安装相对简单，可以直接使用如下命令进行源码编译和安装:
+
+```shell
+wget https://tar.goaccess.io/goaccess-1.5.1.tar.gz
+tar -xzvf goaccess-1.5.1.tar.gz
+cd goaccess-1.5.1/
+apt-get install gettext autoconf gcc autopoint libmaxminddb-dev libncursesw5-dev
+./configure --enable-utf8 --enable-geoip=mmdb
+make
+make install
+```
+
+### GoAccess 的启动
+
+GoAccess 安装完成后，启动就非常简单了。示例命令如下：
+
+```shell
+goaccess ./logs/access.log -o ./html/report.html --real-time-html --log-format=COMBINED
+```
+
+上述命令表示：
+
+1. 监听的是 logs/access.log 文件。
+2. 输出结果写入到 html/report.html 文件中。
+3. 实时access log，并更新html文件。
+4. access log的日志格式为默认是的日志格式。
+
+下面，我们可以查看html/report.html文件，发现的确已经有了这一文件。
+
+### GoAccess 效果观察
+
+那么，我们应该如何从浏览器访问该 HTML 页面呢？详细通过上面的学习你已经很快能想到了！
+
+对，就是再添加一个静态资源的WEB Location配置即可。
+
+修改 Nginx 的配置，增加如下配置即可：
+
+![quick_start11](./picture/quick_start11.png)
+
+下面，我们打开浏览器进行访问：
+
+![quick_start12](./picture/quick_start12.png)
+
+棒，我们已经成功启动了 goaccess ，并能够从浏览器中看到相关的数据了，关于各个数据图的含义就需要你下面仔细了解了。
