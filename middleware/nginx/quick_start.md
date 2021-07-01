@@ -216,3 +216,10 @@ goaccess ./logs/access.log -o ./html/report.html --real-time-html --log-format=C
 ![quick_start12](./picture/quick_start12.png)
 
 棒，我们已经成功启动了 goaccess ，并能够从浏览器中看到相关的数据了，关于各个数据图的含义就需要你下面仔细了解了。
+
+## 基于 OpenResty 用 Lua 语言实现简单服务
+
+之前的讲解我们都还是基于原生的 Nginx 进行演示，下面，我们来看一下如何基于 OpenResty 用 Lua 语言实现简单服务。
+
+
+
