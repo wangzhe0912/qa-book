@@ -188,7 +188,7 @@ make install
 GoAccess 安装完成后，启动就非常简单了。示例命令如下：
 
 ```shell
-goaccess ./logs/access.log -o ./html/report.html --real-time-html --log-format=COMBINED
+goaccess ./logs/access.log -o ./html/report.html --real-time-html --log-format=COMBINED --port 8890
 ```
 
 上述命令表示：
@@ -197,6 +197,7 @@ goaccess ./logs/access.log -o ./html/report.html --real-time-html --log-format=C
 2. 输出结果写入到 html/report.html 文件中。
 3. 实时access log，并更新html文件。
 4. access log的日志格式为默认是的日志格式。
+5. 设置 goaccess WebSocket 的端口为8890，保证浏览器可以正常访问端口，从而实现数据的实时更新。
 
 下面，我们可以查看html/report.html文件，发现的确已经有了这一文件。
 
