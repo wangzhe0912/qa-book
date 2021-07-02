@@ -100,3 +100,40 @@ root     26403 24374  0 09:23 pts/1    00:00:00 grep --color=auto nginx
 ```
 
 虽然，原有的`23833`号进程退出了，但是nginx master很快就有创建出来了一个新的子进程，保证nginx worker的存活数量始终满足配置文件的要求。
+
+## 使用信号管理 Nginx 进程
+
+Nginx 本身是一个多进程的程序。 Nginx 进程时间的通信和管理主要也是依赖信号来实现的。
+
+下面，我们来具体看一下是如何通过信号来管理Nginx进程的吧。
+
+### Master 进程
+
+对于 Master 进程而言，最重要的工作之一就是管理 worker 进程了。
+
+而 Master 管理 Worker 进程中最核心的任务就是监控 Worker 进程是否向 Master 进程发送了 CHLD 信号。
+
+Ps: 在 Linux 系统中，如果子进程退出，则会向父进程发送 CHLD 信号。
+
+此外，Master 进程还可以接收一些外部信号来管理 Worker 进程，例如可以接收的信号包括:
+
+ - TERM, INT: 立即停止Nginx进程。
+ - QUIT: 优雅停止NGINX进程。
+ - HUP: 重载配置文件。
+ - USR1: 重新打开新的日志文件，进行日志文件的切割。
+ - USR2: 启动热部署，启动一个新的NGINX Master，并自动实现无损流量切换。
+ - WINCH: 热部署中，停止旧的NGINX Worker进程。
+
+
+### Nginx 命令行
+
+在 Nginx 命令行中，我们可以实现一些基础的对 Nginx Master的信号发送。
+
+具体来说：
+
+ - reload: HUP 信号
+ - report: USR1 信号
+ - stop: TERM 信号
+ - quit: QUIT 信号
+
+
