@@ -112,6 +112,7 @@
   * [nginx的安装](./middleware/nginx/install.md)
   * [nginx的快速上手](./middleware/nginx/quick_start.md)
   * [nginx与HTTPS协议](./middleware/nginx/https.md)
+  * [浅谈nginx架构](./middleware/nginx/architecture.md)
   * [解决nginx中文乱码问题](./middleware/nginx/chinese.md)
 * [openresty](./middleware/openresty/beginning.md)
 * [zookeeper](./middleware/zookeeper/beginning.md)
