@@ -221,5 +221,81 @@ goaccess ./logs/access.log -o ./html/report.html --real-time-html --log-format=C
 
 之前的讲解我们都还是基于原生的 Nginx 进行演示，下面，我们来看一下如何基于 OpenResty 用 Lua 语言实现简单服务。
 
+### 下载安装 OpenResty
 
+OpenResty 的 [官方网站](http://openresty.org/cn/) 。
 
+与 Nginx 一样，我们下载 OpenResty 的源码进行编译安装。
+
+```shell
+wget https://openresty.org/download/openresty-1.19.3.2.tar.gz
+tar -zxvf openresty-1.19.3.2.tar.gz
+cd ./openresty-1.19.3.2/
+```
+
+首先来简单了解一下 OpenResty 源码的目录结构：
+
+![quick_start13](./picture/quick_start13.png)
+
+其中，各个模块的核心代码都在 `bundle` 目录下，包括 nginx 的源码目录。
+
+![quick_start14](./picture/quick_start14.png)
+
+`bundle` 目录下除了 nginx 外，其他的目录大致可以分为两类。
+
+一类是以 ngx 开头的 c 模块，一类是以 lua 开头的 lua 编写的扩展模块。
+
+其中，编译中会编译的其实是 c 模块，lua 相关的模块是在运行过程中动态加载执行的。
+
+下面，我们来进行编译和安装:
+
+```shell
+./configure --prefix=/home/wangzhe/openresty
+make
+make install
+```
+
+### Lua扩展及验证
+
+安装完成后，我们可以进入了安装的 openresty 目录。
+
+可以看到，对于一个 openresty 的项目而言，其配置文件位于 `nginx/conf/nginx.conf` 文件。
+
+修改配置文件中http块如下：
+
+```
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+    sendfile        on;
+    keepalive_timeout  65;
+    server {
+        listen       8210;
+        server_name  localhost;
+        location /lua {
+            default_type text/html;
+            content_by_lua '
+ngx.say("User-Agent: ", ngx.req.get_headers()["User-Agent"])
+            ';
+        }
+        location / {
+            root   html;
+            index  index.html index.htm;
+        }
+    }
+}
+```
+
+其中，我们增加了一个 location `/lua`。
+
+访问该 url 时，我们引入了一个 `content_by_lua` 的指令，即通过执行lua命令来生成返回结果。
+
+下面，启动 openresty 服务来访问一下试试吧:
+
+```shell
+./bin/openresty
+```
+
+打开浏览器看一下~
+
+![quick_start15](./picture/quick_start15.png)
