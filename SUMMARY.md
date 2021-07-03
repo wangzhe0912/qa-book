@@ -27,6 +27,7 @@
   * [DjangoAdmin高级用法](./language/django/admin.md)
   * [DjangoRestFramework快速入门](./language/django/rest.md)
   * [DjangoCelery快速入门](./language/django/celery.md)
+* [Spring快速入门](./language/spring/beginning.md)
 * [Shell快速入门](./language/shell/beginning.md)
   * [Shell 变量详解](./language/shell/variable.md)
   * [Shell 函数详解](./language/shell/function.md)
