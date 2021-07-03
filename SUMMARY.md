@@ -113,6 +113,8 @@
   * [nginx的快速上手](./middleware/nginx/quick_start.md)
   * [nginx与HTTPS协议](./middleware/nginx/https.md)
   * [浅谈nginx架构](./middleware/nginx/architecture.md)
+  * [Nginx HTTP模块详解](./middleware/nginx/http.md)
+  * [Nginx 反向代理详解](./middleware/nginx/proxy.md)
   * [解决nginx中文乱码问题](./middleware/nginx/chinese.md)
 * [openresty](./middleware/openresty/beginning.md)
 * [zookeeper](./middleware/zookeeper/beginning.md)
