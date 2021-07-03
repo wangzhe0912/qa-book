@@ -136,4 +136,180 @@ Ps: 在 Linux 系统中，如果子进程退出，则会向父进程发送 CHLD 
  - stop: TERM 信号
  - quit: QUIT 信号
 
+## Nginx Reload 完整流程
+
+Step1: 向 Nginx Master 进程发送 HUP 信号(reload命令)
+
+Step2: Master 进程检查Nginx最新的配置文件语法是否正确
+
+Step3: Master 进程打开新的监听端口
+
+Step4: Master 进程用新配置启动新的worker子进程
+
+Step5: Master 进程向老的worker子进程发送QUIT信号
+
+Step6: 老的Worker子进程关闭监听句柄，处理完当前连接后结束进程。
+
+![architecture3](./picture/architecture3.png)
+
+## 热升级完整流程
+
+Step1: 将旧Nginx文件换成新的Nginx二进制文件（注意备份）。
+
+Step2: 向Master进程发送USR2信号。
+
+Step3: Master进程修改pid文件名，加后缀.oldbin
+
+Step4: Master进程用新的Nginx二进制文件启动新Master进程。
+
+Step5: 向老Master进程发送QUIT信号，关闭老Master。
+
+Step6: 回滚: 向老Master发送HUP信号，向新Master发送QUIT信号。
+
+![architecture4](./picture/architecture4.png)
+
+
+## Worker 优雅退出的步骤
+
+Worker 优雅退出主要针对的是**HTTP请求**。对于websocket或TCP/UDP等协议，优雅退出是无效的。
+
+Step1: 设置定时器 worker_shutdown_timeout。
+
+Step2: 关闭监听句柄。
+
+Step3: 关闭空闲连接。
+
+Step4: 循环中等待全部连接关闭。
+
+Step5: 退出进程。
+
+
+## Nginx 网络收发相关管理
+
+对于一个网络传输请求而言，在一个主机A访问主机B的请求中，数据流是如何传递的呢？
+
+![architecture5](./picture/architecture5.png)
+
+上面的数据流转中，设计到了应用层、传输层、网络层和数据链路层等多个层级的共同作用，那么每一层具体是如果工作的呢？
+最终传输的报文又是什么样的？
+
+![architecture6](./picture/architecture6.png)
+
+在TCP协议中，每一个报文其实就对应着一个网络事件。
+
+具体来说，在网络事件的分类中，我们用可以把网络事件分为读事件和写事件。
+
+其中，
+
+ - 读事件包括 Accept 建立连接以及 Read 读消息。
+ - 写事件包括 Write 写消息。
+
+![architecture7](./picture/architecture7.png)
+
+上图显示了一个事件分发的消费器。
+
+## Nginx 的事件处理机制
+
+Nginx 整体的事件处理机制大体如下图所示:
+
+![architecture8](./picture/architecture8.png)
+
+
+1. Nginx 启动后，就会建立一个连接等待接收事件。
+2. 一旦 Linux 内核接收到网络事件时，就会通过队列的形式发送给 Worker 进行执行。
+3. worker 执行事件动作时，也可能会产生一些新的事件会继续发给到内核中，等待后续执行。
+
+
+在上面的流程中，如何从内核中快速的获取到等待处理的事件其实是非常核心的关键点，那么 Nginx 具体是怎么实现的呢？
+
+**epoll**是Nginx从内核中获取等待事件的核心机制。
+
+![architecture9](./picture/architecture9.png)
+
+上图表示了对几种不同的事件模型的性能的benchmark测试结果。
+
+其中：
+
+ - 横轴表示文件句柄连接数。
+ - 纵轴表示了一次事件处理的耗时。
+
+可以看出epoll随着并发连接数的不断上升，事件处理的耗时相对非常平稳，因此，可以看出 epoll 事件模型非常适合于处理大并发的任务。
+
+在我们日常开发时，我们都知道在处理一下网络请求等相关任务中，异步请求往往比同步等待的效率要高很多。
+
+而Nginx自身能达到很高的性能，也与它选择了非阻塞调用而非阻塞调用有关。
+
+以下图为例:
+
+![architecture10](./picture/architecture10.png)
+
+Nginx 在调用 accept 时，如果 accept 队列为空，其实有两种处理方式:
+
+ - 阻塞调用: 进入sleep, 等到 accept 队列收到事件后再处理，这次操作系统会对齐产生进程间切换，让CPU先来处理其他进程的任务。
+ - 非阻塞调用，直接返回某个错误，代码自主来控制是进行等待还是进行下一个任务的处理，不会被操作系统自动进行进程切换。
+
+由此可见，非阻塞调用的最大的好处之一是可以通过代码来自主控制何时发生进程切换，不会过于频繁的进行进程切换导致性能下降。
+
+而正式由于Nginx底层的非阻塞调用的实现，哪怕我们在OpenResty中编写的是简单的同步代码，实际底层仍然会是非阻塞的，不会导致性能下降。
+
+## Nginx 的模块
+
+Nginx 的模块设计非常的优雅和精良，对于一些第三方开发者而言，也可以很轻松的编写 Nginx 模块并集成至 Nginx 中。
+
+了解具体的 Nginx 模块时，往往包括如下几个内容：
+
+ - 将对应模块编译进入Nginx中
+ - 该模块提供了哪些配置项
+ - 如果启用该模块，该模块在何时会生效
+ - 该提供提供了哪些变量可以供我们使用
+
+
+Nginx 官方模块的文档可以参考 [文档](https://nginx.org/en/docs/) 。
+
+官方模块的支持往往都会配有相对完整的文档描述，然而对于一些第三方开发的模块而言，有可能文档就没有那么完善了。
+
+不过不要怕，我们可以通过阅读源码的方式，按照一些技巧快速找到我们需要的内容。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
