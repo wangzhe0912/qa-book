@@ -190,15 +190,132 @@ server {
 
 ## realip 模块
 
+realip 模块处于 Nginx HTTP 处理中的 POST READ 阶段，它是接收完整 header 后进行处理的第一个阶段。
+
+realip 模块的作用是从请求的Header中找出对应的真实客户端IP，从而可以用于后续的限速等场景。
+
+我们都知道，对于一个 TCP 连接的四元组而言，包括了 src ip, src port, dst ip, dst port 四部分，那么我们是不是只需要获取 src ip 信息即可，
+为什么还需要一个单独的 realip 模块呢？
+
+因为在真实的网络场景下，客户端到服务端的请求往往不能直接送到，中间可能需要经过很多层代理，如下图所示：
+
+![http5](./picture/http5.png)
+
+以一个典型的用户上网场景为例，中间可能会经常CDN，反向代理等等，最终才能到达 Nginx 服务器。
+
+这时，如果 Nginx 服务器直接获取 src ip 字段的信息时，得到的信息只能是反向代理的IP，而拿不到真实的用户 IP，这个与我们的需求往往是不符的。
+
+那怎么能拿到真实的客户端IP呢？
+
+对于所有的代理服务器而言，我们有一套统一的规范，即代理服务器在转发请求时，应该在 http header 中包含 
+
+ - X-Forwarded-For 字段，包含 IP 连接链
+ - X-Real-IP 字段，用于传递原始的客户端 IP
+
+此时，Nginx 接收到客户端请求后，就可以通过解析 X-Forwarded-For 或者 X-Real-IP 字段的信息，来找到真实的客户端 IP。
+
+那么，再获取到真实的客户端IP后，我们应该如何使用呢？例如怎么用客户端的IP进行请求限速。
+
+答案是 **变量** 。
+
+在 Nginx 中，变量在 Nginx 整个处理流程中，启动了重要的作用。
+
+具体来说，当 realip 处理一个请求后，会重写对应的 binary_remote_add 和 remote_addr 的变量，将该变量改写为客户端的真实IP信息，
+后续在限速等场景中，我们可以直接将 binary_remote_add 和 remote_addr 的变量作为限速的 key 即可。
+
+简单对 real ip 模块做一个梳理：
+
+ - realip 模块可以用于查找请求的真实客户端地址。
+ - realip 模块默认不会编译进入Nginx中，需要添加 --with-http_realip_module 来启用该功能。
+ - realip 模块会生成 realip_remote_addr 和 real_ip_remote_port 两个新的变量，用于记录原始的请求信息（非源头）。
+ - realip 模块会重写 binary_remote_add 和 remote_addr 变量，并设置为源头客户端来源IP。
 
 
+同时，realip 模块本身提供了如下几个指令，我们来了解一下:
+
+**set_real_ip_from**
+
+ - 功能描述: 用于设置哪些来源的请求会解析realip。
+ - 语法格式: `set_real_ip_from address|CIDR|unix;`
+ - 默认值: 无
+ - Context: http, server, location。
+ - 说明：只有指定的来源IP区间，我们才会对它的src ip进行解析，否则不会进行相关的src ip解析。
+
+**real_ip_header**
+
+ - 功能描述：设置获取src ip的方式。
+ - 语法格式: `real_ip_header field | X-Real-IP | X-Forwarded-For | proxy_protocol;`
+ - 默认值: X-Real-IP
+ - Context: http, server, location。
+ - 说明：默认会根据请求头中的 X-Real-IP 字段来获取src ip，可以跟进自己的需求进行修改。
+
+**real_ip_recursive**
+
+ - 功能描述：是否开启递归realip查询。
+ - 语法格式: `real_ip_recursive on | off;`
+ - 默认值: off
+ - Context: http, server, location。
+ - 说明：默认是关闭的，如果开启后，且 real ip 的获取方式为 X-Forwarded-For 且 X-Forwarded-For 的最后一个IP 与 set_real_ip_from 匹配时，递归向前查询，直到找出不匹配的IP作为src ip。
 
 
+## rewrite 模块下的 return 指令与 error_page 指令
 
-## rewrite 模块下的 return 指令
+rewrite 模块本身可以出现在两个不同的阶段中，即 SERVER_REWRITE 和 REWRITE 阶段，需要来说，就是在 server 块下出现或者在 location 块下出现。
+它们可以使用的命令是一致的。
+
+rewrite 模块的主要作用其实是重新请求的 url。
+
+下面，我们先来了解一下 rewrite 模块下的 return 指令。
+
+**return**
+
+ - 功能描述: 用于返回请求指定的返回码和URL。
+ - 语法格式: 
+   - `return code [text];`
+   - `return code URL;`
+   - `return URL;`
+ - Context: server, location, if
+ - 说明：停止当前的处理逻辑，指定将指定的结果返回给客户端。
 
 
+其中，return 指令返回的 code 可以是：
 
+ - 444: Nginx 自定义 Code，用于直接关闭连接。
+ - 301: HTTP1.0 永久重定向。
+ - 302: 临时重定向。
+ - 303: 临时重定向且允许改变请求method。
+ - 307: 临时重定向且不允许改变请求method。
+ - 308: 永久重定向，且不允许改变请求method。
+
+
+了解了 return 指令后，我们再来看一下 error_page 指令。
+
+**error_page**
+
+ - 功能描述: 设置当返回指定错误码时，可以返回指定的uri或指定页面。
+ - 语法格式: `error_page code ... [=[response]] uri;`
+ - Context: http, server, location, if
+
+
+示例代码如下:
+
+```shell
+error_page 404             /404.html;
+error_page 500 502 503 504 /50x.html;
+```
+
+为什么要把 error_page 和 return 放在一起来说明呢？
+
+主要是 return 可以用于自主设置返回码，而 error_page 又是根据返回码的不同来设置特定的行为，那么，同时设置了 return 且匹配和 error_page 的条件后，行为会是什么样呢？
+
+同时试验一下的话，你会发现，return 命令结束后，会立刻进行结果返回，error_page 相关的操作其实是无法生效的。
+
+那么，我们也知道 return 指令可以同时出现在 server 块和 location 块中，那么如果同时出现时，它们的行为又是什么样的呢？
+
+正如我们之前学习到的 http 处理的 11 个阶段， server_rewrite 阶段其实是早于 rewrite 阶段的，因此，在 server 块中的 return 指令执行后，
+将会立即返回结果，location 下的 return 指令实际是没有机会执行的。
+
+不知道和你想的是否是一致的呢？
 
 ## rewrite 模块下的 rewrite 指令
 
