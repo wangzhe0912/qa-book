@@ -319,14 +319,113 @@ error_page 500 502 503 504 /50x.html;
 
 ## rewrite 模块下的 rewrite 指令
 
+rewrite 指令是专门针对 uri 进行处理的，具体来说，它可以通过正则匹配 uri，并将正则匹配到的 uri 提供成为一个新的 uri。
+
+**rewrite**
+
+ - 功能描述: 正则匹配原始访问的 uri 并替换称为新的 uri 访问。
+ - 语法格式: `rewrite regex replacement [flag];`
+ - Context: server, location, if
+
+
+其中，当 replacement 是以 http:// 或者 https:// 开头时，则等价于返回 302 重定向。
+
+可以看到，在 `rewrite` 指令中的，有一个 flag 参数，这个参数对于 rewrite 行为的影响至关重要，具体来说:
+
+ - last: 用 replacement 替换原始 URI 后再次进行新的 location 匹配。
+ - break: 停止当前脚本指令的执行，直接返回对应的结果。
+ - redirect: 适用于 http:// 或 https:// 开头，临时重定向。
+ - permanent: 适用于 http:// 或 https:// 开头，永久重定向。
+ - 不传递时: 继续向后正常执行。
+
+
+**rewrite_log**
+
+ - 功能描述: 将 rewrite 的行为接入 error 日志中。
+ - 语法格式: `rewrite_log on|off;`
+ - 默认值: off 
+ - Context: http, server, location, if
 
 
 ## rewrite 模块下的 if 指令
 
+rewrite 模块下提供了 if 指令，即可以使用 if 条件判断从而来进行相关行为的设置。
+
+**if**
+
+ - 功能描述: 引入条件判断，可以根据指定的条件来设置不同的行为。
+ - 语法格式: `if (condition) {...}`
+ - Context: server, location
+
+Ps: 当 condition 为真时，执行大括号内的指令；遵循值指令的继承规则。
+
+那么，if 指令中的条件表达式具体可以是哪些情况呢？
+
+1. 检查变量是否为空或者值是否为0，可以直接使用。
+2. 将变量与字符串进行完整匹配，使用 = 或者 !=
+3. 将变量与正则表达式进行匹配。
+    - 大小写敏感时，使用 ~ 或者 !~
+    - 大小写不敏感时，使用 ~* 或者 !~*
+4. 检查文件是否存在，使用 —f 或者 !-f 
+5. 检查目录是否存在，使用 —d 或者 !-d
+6. 检查文件、目录、软链是否存在，使用 —e 或者 !-e
+7. 检查是否为可执行文件，使用 —x 或者 !-x 
 
 
 ## find_config 阶段找到对应 location 块 - location 指令
 
+下面，我们来了解一下 FIND_CONFIG 阶段，Nginx 是如何找到对应的 location 块的。
+
+其中，涉及到两个指令，分别是 **merge_slashes** 和 **location**。
+
+其中， **merge_slashes** 相对简单，我们来简单介绍一下。
+
+**merge_slashes**
+
+ - 功能描述: 如果 uri 中包含两个连续的 / 符号，则对齐进行 merge，合并为一个。
+ - 语法格式: `merge_slashes on | off;`
+ - 默认值: on  
+ - Context: http, server
+
+通常，merge_slashes 配置我们都会默认开启。
+
+下面，我们来看一下核心的 **location** 指令。
+
+**location**
+
+ - 功能描述: 设置 location 条件，从而可以让nginx判断针对指定url时，应该执行哪个语法块的逻辑。
+ - 语法格式: 
+    - `location [=|~|~*|^~] uri {...}`
+    - `location @name {...}`
+ - Context: server, location
+
+需要说明的是，在 location 的匹配中，仅会匹配 URI，而不会对参数等进行相关的匹配。
+
+在 location 的匹配中，主要包含以下几种情况：
+
+1. 前缀字符串匹配
+    1. 默认情况下，不加任何符号时，则表示常规的前缀字符串匹配。
+    2. 如果增加了 = 符号，则表示精准匹配。
+    3. 如果增加了 ^~ 符号，且最长匹配前缀，则不检查正则表达式。
+2. 正则表达式匹配
+    1. ~ 表示大小写敏感的正则匹配。
+    2. ~* 表示大小写不敏感的正则匹配。
+3. 内部跳转的命令location
+
+那么，当一个 Server 块中包含很多 location 的时候，当一个 uri 访问时，可能会同时匹配到多个前缀匹配和正则匹配，
+此时具体应该会匹配到哪一个 location 块呢？
+
+这就涉及到了 find_config 的相关逻辑，我们来看一下下图：
+
+![http6](./picture/http6.png)
+
+ - 首先，最高优先级的就是 = 的精准匹配。
+ - 接下来，是 ^~ 的完整匹配。
+ - 再其次，是根据配置文件顺序的 regex 正则匹配。
+ - 最后，则是根据最长匹配的前缀字符串匹配。
+
+
+了解了这个规则，你应该就知道对于任意一个 uri 的访问，它预期会进入到哪个 location 块的执行逻辑中了。
 
 
 ## preaccess 阶段下的 limit_conn 模块
