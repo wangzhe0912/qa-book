@@ -430,14 +430,159 @@ Ps: 当 condition 为真时，执行大括号内的指令；遵循值指令的�
 
 ## preaccess 阶段下的 limit_conn 模块
 
+在 nginx 中，我们常常希望限制单个客户端的并发连接数目，这时，就会用到 Nginx 的 preaccess 阶段下的 limit_conn 模块。
+
+limit_conn 模块的生效范围是全部 worker 进程，它们基于共享内存实现共享数据。
+
+limit_conn 模块涉及到四个指令: limit_conn_zone 、 limit_conn 、limit_conn_log_level 、limit_conn_status ，下面，我们来依次进行讲解。
+
+**limit_conn_zone**
+
+ - 功能描述: 声明一个共享内存空间，用于存放限制连接数相关的信息。
+ - 语法格式: `limit_conn_zone key zone=name:size;`
+ - Context: http
+
+
+通过 limit_conn_zone 指令，我们可以自定义一个指定名称、指定大小的共享内存空间，同时，我们还可以设置根据哪个字段进行限制连接。
+
+示例如下：
+
+```shell
+limit_conn_zone $binary_remote_addr zone=addr:10m;
+```
+
+上述命令表示: 我们申请了一块10m大小的内存空间，并命名为addr。同时，在限制连接时，根据 binary_remote_addr 变量的值进行统计和限制。
+
+**limit_conn**
+
+ - 功能描述: 设置并发连接数的规则。
+ - 语法格式: `limit_conn zone number;`
+ - Context: http, server, location
+
+示例如下:
+
+```shell
+limit_conn addr 5;
+```
+
+上式表示我们使用名称为 addr 的共享内存空间进行限制并发判断，且最大的并发数为 5 。
+
+**limit_conn_log_level**
+
+ - 功能描述: 设置当限制并发连接拦截后，error 日志打印的级别。
+ - 语法格式: `limit_conn_log_level info|notice|warn|error;`
+ - 默认值: error   
+ - Context: http, server, location
+
+**limit_conn_status**
+
+ - 功能描述: 设置当限制并发连接拦截后，返回的返回码。
+ - 语法格式: `limit_conn_status code;`
+ - 默认值: 503
+ - Context: http, server, location
+
+limit_conn_log_level 和 limit_conn_status 相对比较简单，我们就不再举例了。
 
 
 ## preaccess 阶段下的 limit_req 模块
 
+在 limit_conn 模块中，我们可以限制的是单个客户端的并发连接数，然而，我们往往还有一种更加通用的需求，就是限制 QPS。
+
+而限制 QPS 的主要方式就是 limit_req 模块了。
+
+与 limit_conn 模块一样，limit_req 模块的生效范围也是全部 worker 进程，它们基于共享内存实现共享数据。
+
+我们先来了解一下 limit_req 模块的实现原理：
+
+![http7](./picture/http7.png)
+
+如上图为例，假设我们有一个漏盆，它可以接收上游发送过来的请求，而上游发送过来的请求可能突快突慢，但是对于下游发送出去的数据而言，它的最大速率是固定的。
+
+如果一个时间段请求流量非常多，过一阵请求流量很小的话，通过这个漏盆可以有效的均有下游的访问速率。
+
+但是这里面有一个问题，如果上游的请求流量始终大于下游的最大速率时，会持续向盆内积水，这样，最终总会导致盆内的水打满，造成一些水外露，这就是这个盆所能承载的最大容量了。
+
+而 limit_req 模块实现原理其实就是这样的。
+
+我们可以设置一个最大的请求速率，超过这个速率的上游请求我们暂时将其夯住，直到满足速率要求后再发送给下游。但是如果夯住的请求数量超过我们设置的阈值时，将会直接提示失败。
+
+下面，我们来看一下 limit_req 模块设置到几个指令：
+
+**limit_req_zone**
+
+ - 功能描述: 声明一个共享内存空间，用于存放限制QPS的相关信息。
+ - 语法格式: `limit_req_zone key zone=name:size rate=rate;`
+ - Context: http
+
+Ps：rate 的单位为 r/s 或者 r/m。
+
+通过 limit_req_zone 指令，我们可以自定义一个指定名称、指定大小的共享内存空间，同时，我们还可以设置根据哪个字段进行限制连接以及最大的QPS限制。
+
+示例如下：
+
+```shell
+limit_req_zone $binary_remote_addr zone=addr:10m rate=10r/s;
+```
+
+上述命令表示: 我们申请了一块10m大小的内存空间，并命名为addr。同时，在限制QPS时，根据 binary_remote_addr 变量的值进行统计和限制，且最大QPS为10。
+
+**limit_req**
+
+ - 功能描述: 设置QPS限速的规则。
+ - 语法格式: `limit_req zone=name [brust=number] [nodelay];`
+ - 默认值: brust 默认为 0。
+ - Context: http, server, location。
+
+示例如下:
+
+```shell
+limit_req zone=addr brust=20;
+```
+
+上式表示我们使用名称为 addr 的共享内存空间进行QPS速率限制，且最多waiting的请求数为20。
+
+**limit_req_log_level**
+
+ - 功能描述: 设置QPS速率拦截后，error 日志打印的级别。
+ - 语法格式: `limit_req_log_level info|notice|warn|error;`
+ - 默认值: error   
+ - Context: http, server, location
+
+**limit_req_status**
+
+ - 功能描述: 设置QPS速率拦截后，返回的返回码。
+ - 语法格式: `limit_req_status code;`
+ - 默认值: 503
+ - Context: http, server, location
+
+limit_req_log_level 和 limit_req_status 相对比较简单，我们就不再举例了。
 
 
 ## access 阶段下的 access 模块
 
+preaccess 阶段说完了，现在该继续讲解 access 阶段了。
+
+在 access 阶段，最常用的功能之一就是针对指定 IP/CIDR 增加黑白名单了。
+
+access 模块提供的指令包括 allow 和 deny 了，两个指令的使用方式和语法完全一样，只有语义正好相反。
+
+**allow/deny**
+
+ - 功能描述: 设置指定来源IP/CIDR为白名单或者黑名称。
+ - 语法格式: `allow address|CIDR|unix:|all;`
+ - Context: http, server, location, limit_except
+
+示例如下:
+
+```shell
+location / {
+    deny 192.168.1.1;
+    allow 192.169.1.0/24;
+    deny all;
+}
+```
+
+其中，需要注意的是，在整个匹配的过程中，一旦匹配到某个 deny / allow 指令后，就直接生效了，不会进行后续的 deny/allow 匹配了。
 
 
 ## access 阶段下的 auth_basic 模块 
