@@ -188,3 +188,48 @@ server {
 6. 全部不匹配时，且没有default块时，默认匹配第一个。
 
 
+## realip 模块
+
+
+
+
+
+
+## rewrite 模块下的 return 指令
+
+
+
+
+## rewrite 模块下的 rewrite 指令
+
+
+
+## rewrite 模块下的 if 指令
+
+
+
+## find_config 阶段找到对应 location 块 - location 指令
+
+
+
+## preaccess 阶段下的 limit_conn 模块
+
+
+
+## preaccess 阶段下的 limit_req 模块
+
+
+
+## access 阶段下的 access 模块
+
+
+
+## access 阶段下的 auth_basic 模块 
+
+
+
+
+
+
+
+
