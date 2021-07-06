@@ -587,7 +587,138 @@ location / {
 
 ## access 阶段下的 auth_basic 模块 
 
+除了按照 IP 黑白名单的访问控制外，另外一种常用的访问控制就是用户名/密码控制了。即在 Nginx 请求访问中，需要用户输入用户名/密码相关的信息。
 
+这种授权方式就对应到了 nginx 的 auth_basic 模块。
+
+auth_basic 模块涉及到如下两个指令：
+
+**auth_basic**
+
+ - 功能描述: 设置是否开启用户名/密码认证。
+ - 语法格式: `auth_basic string|off;`
+ - 默认值: off  
+ - Context: http, server, location, limit_except
+
+当 `auth_basic` 指令设置为 off 时，表示禁用用户名/密码认证，当设置为其他字符串时，表示启用用户名/密码认证，且设置的字符串作为平台标识。
+
+那么，具体访问的用户名和密码是什么呢？这就又涉及到了另一个指令。
+
+**auth_basic_user_file**
+
+ - 功能描述: 用户名/密码认证配置文件。
+ - 语法格式: `auth_basic_user_file file;`
+ - Context: http, server, location, limit_except
+
+那么，这个文件应该如何生成呢？
+
+生成这个文件需要用到一个命令行工具：`htpasswd`。
+
+```shell
+htpasswd -b -c ${filename} ${username} {password}
+```
+
+生成完成后，可以看一下生成的文件内容，格式还是比较清晰的，一行表示一个用户，密码是进行过一些简单的加密的。
+
+当然，如果你本地没有安装 `htpasswd` 工具的话，也可以直接用一些在线的 htpasswd 生成器，例如 [htpasswd](https://tool.oschina.net/htpasswd) ,
+它们可以帮助你无需安装命令行工具也可以快速生成对应的文件。
+
+当我们开启了 auth_basic 的功能后，如果你再次从浏览器访问对应的地址，浏览器会自动弹出一个输入框提示输入用户名和密码。
+
+
+## access 阶段下的 auth_request 模块
+
+上面讲到的 access 阶段的模块，无论是黑白名单或者是用户名/密码的鉴权，相对来说都是比较简单的鉴权方式。
+
+在很多企业里面，我们可以已经有了专门的鉴权中心，因此，很多时候我们需要将 Nginx 的鉴权阶段与其他的内部服务进行打通，也就是说由第三方服务来进行权限控制。
+
+这时，在 nginx 中我们就要用到了 auth_request 模块。
+
+需要注意的是，auth_request 模块默认是没有编译进 Nginx 的，需要在编译时增加 `--with-http_auth_request_module` 参数。
+
+我们先来简单的了解一下 auth_request 模块的实现原理:
+
+1. 首先，nginx 在接收到一个请求后，会生成一个子请求，并通过反向代理的方式把请求传递给上游的服务。
+2. 等待上游服务返回响应。
+3. 如果上游服务的返回码是2XX，表示权限认证通过，继续后续流程。
+4. 如果上游服务的返回码是401或者403，表示权限认证失败，直接将错误码返回给客户端。
+
+了解了 auth_request 模块的实现原理后，我们来看一下如何使用 auth_request 模块。
+
+**auth_request**
+
+ - 功能描述: 设置第三方服务地址用于权限控制。
+ - 语法格式: `auth_request uri|off;`
+ - 默认值: off
+ - Context: http, server, location
+
+
+当 auth_request 设置为 uri 字符串时，nginx会生成一个子请求，将原始请求信息发送给对应的uri进行鉴权。
+
+
+## access 阶段下的逻辑控制 satisfy 指令
+
+上面的内容中，我们已经讲解了 access 阶段下的三种访问控制手段: 黑白名单、用户名/密码以及第三方鉴权。
+
+那么，这三种鉴权的关系是什么呢？如果同时开启了这三个access阶段的模块，部分通过，部分失败后的行为又是什么样的呢？
+
+这就用到了一个 `satisfy` 的指令了。
+
+`satisfy` 的指令非常简单:
+
+**satisfy**
+
+ - 功能描述: 设置多个access相关指令的生效关系。
+ - 语法格式: `satisfy all|any;`
+ - 默认值: all
+ - Context: http, server, location
+
+
+可以看出，`satisfy` 指令仅可以设置为 all 或者 any，其中:
+
+ - all: 所有的 access 模块全部认证通过，才能够继续访问。
+ - any: 只要有一个 access 配置认证通过，就可以继续访问。
+
+可以看到，通过合理的利用 `satisfy` 指令，我们就可以组合生成兼容多种不同的认证方式的认证策略。
+
+## precontent 阶段的 try_files 指令
+
+了解完 access 阶段的一些常用指令后，下面我们继续来了解一些 precontent 阶段的一些指令。
+
+
+
+## precontent 阶段的 mirror 指令
+
+
+
+## content 阶段的 static 模块
+
+
+
+### root/alias 指令
+
+
+### 模块内置变量
+
+
+### nginx 的末尾补 / 机制
+
+
+## content 阶段的 index 和 autoindex 模块
+
+
+## content 阶段的 concat 模块
+
+
+## log 阶段
+
+
+## http 过滤机制
+
+### sub模块
+
+
+### addition 模块
 
 
 
