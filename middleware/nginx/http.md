@@ -966,13 +966,94 @@ log 模块包含如下一些命令，下面，我们来依次进行说明。
 
 ## http 过滤机制
 
+除了上面提到 HTTP 模块处理的 11 个阶段之外，在 Nginx 处理 HTTP 请求中，还有一个非常重要的机制，就是 HTTP 的过滤机制。
+
+HTTP 过滤机制是指对 HTTP 的 content 进行一些处理和过滤，并将处理后的结果返回给客户端。
+
+从执行时机来看，HTTP 的过滤机制通常会在 content 阶段之后，log 阶段之前执行，示例流程图如下所示:
+
+![http8](./picture/http8.png)
+
+例如上图所示中 gzip 、 image_filter 其实就都是 http 过滤机制来实现的。
+
+HTTP 的过滤机制的实现其实包含了非常多的模块，这些模块分别实现了不同的过滤功能，例如包含的模块如下图所示:
+
+![http9](./picture/http9.png)
+
+实际在执行的过程中，模块的执行顺序正好与上图相反，即从下向上依次进行执行。
+
+其中，有几个模块的执行时机非常重要，我们来重点关注一下:
+
+ - copy_filter: 读取复制包体的内容，如果想要对数据包内容进行解析，首先需要进行读取包体的信息。
+ - postpone_filter: 处理子请求。
+ - header_filter: 构造响应的头部信息。
+ - writer_filter: 发送响应体信息。
+
+
 ### sub模块
+
+下面，我们来看看第一个用于过滤的模块 - sub 模块。
+
+sub 模块默认没有编译进入 Nginx，需要增加 `--with-http_sub_module` 来启用该模块。
+
+sub 模块的功能是可以对响应中的指定字符串进行替换，替换成新的期望字符串。
+
+sub 模块涉及到如下4个指令，我们来依次看一下。
+
+**sub_filter**
+
+ - 功能描述: 对指定字符串进行替换，将指定string替换成为replacement。
+ - 语法格式: `sub_filter string replacement;`'
+ - Context: http, server, location
+
+**sub_filter_last_modified**
+
+ - 功能描述: 设置替换字符串后，是否需要在响应头部中传递last modified信息。
+ - 语法格式: `sub_filter_last_modified on|off;`'
+ - 默认值: off  
+ - Context: http, server, location
+
+**sub_filter_once**
+
+ - 功能描述: 设置替换字符串时，是否针对每个字符串最多仅替换一次。
+ - 语法格式: `sub_filter_once on|off;`'
+ - 默认值: on
+ - Context: http, server, location
+
+**sub_filter_types**
+
+ - 功能描述: 设置针对哪些响应格式的数据才进行替换。
+ - 语法格式: `sub_filter_types mime-type;`'
+ - 默认值: text/html
+ - Context: http, server, location
 
 
 ### addition 模块
 
+下面，我们再来看一下 addition 模块。
 
+addition 模块默认没有编译进入 Nginx，需要增加 `--with-http_addition_module` 来启用该模块。
 
+addition 模块的功能是可以在原始的响应前后分别通过请求新的url，并将新url的响应组装到原有响应的前后，得到一个新的响应结果。
 
+addition 模块的使用涉及到如下三个指令，下面我们来依次了解一下。
 
+**add_before_body**
+
+ - 功能描述: 在原有响应的前面追加body信息。
+ - 语法格式: `add_before_body uri;`
+ - Context: http, server, location
+
+**add_after_body**
+
+ - 功能描述: 在原有响应的后面追加body信息。
+ - 语法格式: `add_after_body uri;`
+ - Context: http, server, location
+
+**addition_types**
+
+ - 功能描述: 设置针对哪些响应格式的数据才进行前后请求和响应组装。
+ - 语法格式: `addition_types mime-type;`'
+ - 默认值: text/html
+ - Context: http, server, location
 
