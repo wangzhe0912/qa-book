@@ -806,13 +806,162 @@ mirror 模块主要包含如下两个指令：
  - Context: http, server, location
 
 
-## content 阶段的 index 和 autoindex 模块
+## content 阶段的 index 模块 
+
+在之前的试验中，我们其实已经知道了，当我们通过uri 映射到一个本地的目录时，如果该目录下有`index.html`文件时，会默认返回`index.html`文件的内容。
+
+而这个其实就是 index 模块发挥了作用，下面，我们来了解一下 index 模块。
+
+**index**
+
+ - 功能描述: 当访问指定目录的静态资源时，自动查找该目录下对应的index模块指定的文件。
+ - 语法格式: `index file`
+ - 默认值: index.html
+ - Context: http, server, location
+
+例如，我们也可以增加`index readme.md`指令，此时，再次访问指定目录时，将不会再去找`index.html`文件了，而是会去尝试找`readme.md`文件。
+
+## content 阶段的 autoindex 模块
+
+实际上，访问一个目录时，我们有时不仅仅希望访问指定名称的文件，而是希望查询该目录下包含了哪些文件。
+
+这个就要用到了 autoindex 模块了，autoindex 模块涉及如下指令。
+
+**autoindex**
+
+ - 功能描述: 是否开启URI以/结尾时，返回指定目录的结构。
+ - 语法格式: `autoindex on|off`
+ - 默认值: off
+ - Context: http, server, location
+
+**autoindex_format**
+
+ - 功能描述: 设置目录返回结构的格式。
+ - 语法格式: `autoindex_format html|xml|json|jsonp`
+ - 默认值: html
+ - Context: http, server, location
+
+**autoindex_localtime**
+
+ - 功能描述: 设置目录下文件的时间显示是否显示为本地时间。
+ - 语法格式: `autoindex_localtime on|off`
+ - 默认值: off
+ - Context: http, server, location
+
+Ps: 由于 index 模块的处理顺序早于 autoindex 模块，所以如果该目录下存在index模块指定的文件时，autoindex 模块将会失效，无法返回对应的目录。
 
 
 ## content 阶段的 concat 模块
 
+concat 模块是阿里巴巴贡献的第三方 Nginx 模块，专门用于在页面需要访问多个小文件时，可以将它们的文件内容合并到一次请求中完成，提升请求性能。
+
+由于 concat 模块不是 nginx 的内置模块，需要单独安装。
+
+具体来说，首先需要clone concat对应代码：
+
+```shell
+git clone https://github.com/alibaba/nginx-http-concat
+```
+
+然后在编译nginx时，引入对应的模块:
+
+```shell
+--add_module=../nginx-http-concat
+```
+
+那么，这个模块具体应该怎么使用呢？
+
+它可以帮助用户在访问uri的后面加上??，然后通过多个逗号来分隔多个文件。如果本身还有其他参数，可以在最后通过?追加参数。
+
+例如url如下：
+
+```
+https://g.alicdn.com/??kissy/k/6.2.4/seed-min.js,kg/global-util/1.0.7/indexmin.js,tb/tracker/4.3.5/index.js,kg/tb-nav/2.5.3/index-min.js,secdev/sufei_data/3.3.5/index.js
+```
+
+下面，我们来看一下 concat 模块相关的指令：
+
+**concat**
+
+ - 功能描述: 是否启用 concat 文件合并的功能。
+ - 语法格式: `concat on|off`
+ - 默认值: off
+ - Context: http, server, location
+
+**concat_types**
+
+ - 功能描述: 对哪些文件类型支持文件合并的功能。
+ - 语法格式: `concat_types MIME types`
+ - 默认值: text/css application/x-javascript
+ - Context: http, server, location
+
+**concat_delimiter**
+
+ - 功能描述: 当返回多个文件内容时，中间使用什么样的分隔符进行分隔。
+ - 语法格式: `concat_delimiter string`
+ - Context: http, server, location
+
+**concat_max_files**
+
+ - 功能描述: 当开启多文件合并请求时，最大请求的文件数量。
+ - 语法格式: `concat_max_files number`
+ - Context: http, server, location
+
 
 ## log 阶段
+
+最后，我们来看一下 http 模块 11 个阶段中最后一个阶段 - log 阶段。
+
+log 阶段的核心功能就是将 HTTP 请求相关的信息记录到日志中去，对应的就是 log 模块。
+
+log 模块包含如下一些命令，下面，我们来依次进行说明。
+
+首先是定义日志打印格式:
+
+**log_format**
+
+ - 功能描述: 定义日志打印的格式。
+ - 语法格式: `log_format name [escape=default|json|none] string;`
+ - 默认值: log_format combined '$remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer"'
+ - Context: http
+
+其中，name 是我们针对该定义的 log_format 设置的对应格式名称，在具体设置access log日志位置时，需要使用到。
+
+**access_log**
+
+ - 功能描述: 设置指定请求的 access log的配置路径等信息。
+ - 语法格式: 
+   - `access_log path [format [buffer=size] [gzip[=level]] [flush=time] [if=condition]];`'
+   - `access_log off;`
+ - 默认值: access_log logs/access.log combined;
+ - Context: http, server, location
+
+其中，需要说明的是：
+
+ - path 路径可以包含变量，但是为了避免每一行日志写入都需要打开、关闭日志文件，建议需要配置cache（见后续描述）
+ - if 可以通过条件来控制对应请求记录是否需要写入日志。
+ - buffer 可以将批量日志进行缓存，并统一写入磁盘，可以提升性能，写入磁盘的条件包括: 缓存中的日志大小达到buffer的配置、达到flush指定时间、worker进程执行reopen命令等。
+ - gzip 可以批量压缩内存中的日志，再写入磁盘，压缩的默认级别为1（1-9压缩率逐步增高）
+
+
+上面，我们提到了当 path 中包含变量时，我们需要配置 cache 来保证nginx日志写入的性能，下面，我们来看一下具体应该如何进行配置。
+
+**open_log_file_cache**
+
+ - 功能描述: 对log_file的句柄进行cache，避免重复打开、关闭文件。
+ - 语法格式: 
+   - `open_log_file_cache max=N [inactive=time] [min_uses=N] [valid=time];`'
+   - `open_log_file_cache off;`
+ - 默认值: off
+ - Context: http, server, location
+
+其中:
+
+ - max 表示缓存中最大的文件句柄数，超过该总数后，使用LRU算法淘汰。
+ - inactive: 文件访问完成后，超时关闭的时间，默认为10s。
+ - min_uses: 在inactive时间内，使用次数至少达到 min_uses 后才会继续在内存中保留，默认为1。
+ - valid: 超过 valid 时间后，将对缓存的日志文件进行检查是否存在，默认为60s。
+ - off: 表示关闭缓存文件句柄的功能。
 
 
 ## http 过滤机制
