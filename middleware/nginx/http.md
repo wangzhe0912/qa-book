@@ -685,23 +685,125 @@ htpasswd -b -c ${filename} ${username} {password}
 
 了解完 access 阶段的一些常用指令后，下面我们继续来了解一些 precontent 阶段的一些指令。
 
+首先来看一下 try_files 指令。
+
+**try_files**
+
+ - 功能描述: 依次访问多个指定的文件，如果找到了，则直接返回，如果所有文件都不存在，则返回最后一个 url 结果或者指定返回码。
+ - 语法格式: 
+   - `try_files file1 file2 ... uri;`
+   - `try_files file1 file2 ... =code;`
+ - Context: server, location
 
 
-## precontent 阶段的 mirror 指令
+try_files 指令常常可以用于一些反向代理的场景，在反向代理时，可能会有一些文件直接cache到本地，如果本地没有找到时，再转给业务服务器处理。
 
+## precontent 阶段的 mirror 模块
+
+mirror 模块可以用于复制流量。
+
+具体来说，nginx 在收到一个请求时，会生成一个子请求访问其他服务，但是需要注意的是，此处nginx对子请求的返回值不会进行任何处理。
+
+mirror 模块主要包含如下两个指令：
+
+**mirror**
+
+ - 功能描述: 复制请求流量到另外一个uri中，实现请求流量多写。
+ - 语法格式: `mirror uri | off`
+ - 默认值: off  
+ - Context: http, server, location
+
+**mirror_request_body**
+
+ - 功能描述: 设置在复制流量时，复制的请求流量是否需要传递body信息，默认是传递的。
+ - 语法格式: `mirror_request_body on | off`
+ - 默认值: on
+ - Context: http, server, location
 
 
 ## content 阶段的 static 模块
 
+在 content 阶段，有一个内置的核心模块 static 。
 
+在 static 模块中，提供了一系列的核心指令和变量。下面，我们来依次进行说明。
 
 ### root/alias 指令
+
+之前我们已经经常提到了 root/alias 指令，下面，我们来详细看一下二者的异同点。
+
+ - 二者在功能上是一致的，都是将 url 映射为文件路径，并返回静态文件的内容。
+ - 二者在使用上是有一些差异的，root 指令会将完整的请求url映射补充至文件路径中，而alias只会将location后url映射补充至文件路径中，不包含location匹配的前缀。
+
+**alias**
+
+ - 功能描述: 将 url 映射为文件路径，并返回静态文件的内容。
+ - 语法格式: `alias path`
+ - Context: location
+
+**root**
+
+ - 功能描述: 将 url 映射为文件路径，并返回静态文件的内容。
+ - 语法格式: `root path`
+ - 默认值: html  
+ - Context: http, server, location
+
+此外，我们也可以看到，root 是有默认值的，默认为 html; 另外，alias 仅能用于 location Context 中，而root的使用场景则更多。
+
+在通过 url 转化为本地文件访问时，可能会经常出现 url 映射的本地文件不存在的情况，针对这种情况，默认是会打印一条 error 日志的。
+
+如果我们不希望这种场景下打印 error 日志，则可以通过如下指令进行禁用：
+
+**log_not_found**
+
+ - 功能描述: 设置当静态资源找不到时，是否需要打印error日志。
+ - 语法格式: `log_not_found on|off`
+ - 默认值: on  
+ - Context: http, server, location
 
 
 ### 模块内置变量
 
+除了上述提到了 root 和 alias 指令外，static 模块还提供了一些变量，这些变量表示了对应的文件和目录信息等，下面我们来看一下：
+
+ - request_filename: 表示待访问文件的完整路径
+ - document_root: 由URI和root/alias规则生成的文件夹路径。
+ - realpath_root: 将 document_root 中的软链接替换中真实路径。
+
+那么，这些变量有什么用呢？
+
+例如，我们可以在 if 表达式中判断这些文件/目录的属性、存在性等，并针对不同的结果返回不同的内容。
+
 
 ### nginx 的末尾补 / 机制
+
+当我们访问一个 url 时，如果 url 的末尾不是以 `/` 结尾，但是 Nginx 映射到本地文件后，发现对应的内容是一个目录时，这时会自动触发一个 301 重定向操作。
+
+在该重定向中，nginx 会在 url 的末尾中追加一个 `/` 。
+
+此外，static 模块还提供了一些指令可以进一步控制重定向中的一些其他行为，例如是否需要重写 host, port 等信息。
+
+**absolute_redirect**
+
+ - 功能描述: 设置当uri没有以`/`结尾时，重定向时是否需要设置完整的uri地址（包含host等信息）。
+ - 语法格式: `absolute_redirect on|off`
+ - 默认值: on  
+ - Context: http, server, location
+
+默认情况下，absolute_redirect 配置是开启的，即当触发301重定向追加/时，重定向响应中会返回完整的重定向地址，该地址包含访问的host信息，并会尝试读取host的信息进行Host替换。
+
+**server_name_in_redirect**
+
+ - 功能描述: 设置当uri没有以`/`结尾时，重定向时是否是否配置中的server_name主域名进行替换。
+ - 语法格式: `server_name_in_redirect on|off`
+ - 默认值: off
+ - Context: http, server, location
+
+**port_in_redirect**
+
+ - 功能描述: 设置当uri没有以`/`结尾时，重定向时是否对port信息进行替换。
+ - 语法格式: `port_in_redirect on|off`
+ - 默认值: on
+ - Context: http, server, location
 
 
 ## content 阶段的 index 和 autoindex 模块
