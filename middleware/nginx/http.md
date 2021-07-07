@@ -1317,22 +1317,220 @@ secure_link_secret secret
 
 ## map 模块 - 基于已有变量来生成新的变量
 
+map 模块在 nginx 中作用是可以根据一个变量的不同条件，来创建一些新的变量，并对新的变量进行赋值。
 
+从功能上来看，map 模块的功能非常类似于很多编程语言中的 `switch {case ...  default ... }` 的语法结构。
 
+其中，map 模块涉及到如下变量，我们先来简单了解一下：
+
+**map**
+
+ - 功能描述: 根据一个变量的不同条件，来创建新的变量。
+ - 语法格式: `map string $var { ... };`'
+ - Context: http
+
+**map_hash_bucket_size**
+
+ - 功能描述: 设置存放map的buctet块大小。
+ - 语法格式: `map_hash_bucket_size size;`'
+ - 默认值: 32/64/128  
+ - Context: http
+
+**map_hash_max_size**
+
+ - 功能描述: 设置存放map的最大大小。
+ - 语法格式: `map_hash_max_size size;`'
+ - 默认值: 2048
+ - Context: http
+
+具体来说，map 模块基于 **已有变量** ，使用类似 `switch {case: ... default: ...}` 的语法创建新的变量。
+从而，可以为其他基于变量值实现功能的模块提供更多的可能性。
+
+下面，我们展开来对 map 模块的相关功能进行说明：
+
+1. 对于 map 中基于的已有变量，即语法中的 `string` ，它可以是字符串、也可以是一个或多个变量、还可以是字符串和变量的组合结果。
+2. 在 `{}` 内部的 Case 规则匹配中，存在如下多种情况：
+     - 如果是字符串时，则进行严格匹配。
+     - 如果 `{}` 内部使用了 hostnames 指令，则可以对域名使用前后缀泛域名匹配。
+     - ~ 和 ~* 表示正则表达式匹配，其中，后者表示忽略大小写。
+3. 当没有匹配到任何规则时，默认是否 default 对应的值，如果没有定义 default 时，则返回空字符串给新变量。
+4. 此外，我们来可以通过 include 语法来提升可读性、使用 volatile 禁止变量值缓存。
+
+在最后，我们来看一下示例吧：
+
+```shell
+map $http_host $name {
+  hostnames;
+  
+  default 0;
+  map.missshi.com 1;
+  map.missshi.* 2;
+  ~map\.miss\w+.com 3;
+}
+```
+
+上述表达式表示从 HTTP 请求头部中找出 host 字段的值，然后与下述选项进行匹配，并且将匹配项的对应值（0，1，2，3）赋予变量 name 。
 
 ## split_clients 模块 - 基于指定变量实现A/B测试（生成百分数变量）
 
+与 map 模块非常类似，split_clients 模块也提供了一个基于已有变量生成新变量的方法，区别在于它生成的变量是可以按照一定的概率来生成变量，
+因此天然适用于A/B测试的场景。
+
+下面，我们就来了解一下 split_clients 模块的原理和功能吧。
+
+具体来说：
+
+split_clients 模块对已有变量的值进行 MurmurHash2 算法进行处理，会得到一个 32 位的整型哈希数字。
+而对于一个无符号的 32 位的整型数字而言，它的取值区间为 [0, 2^32 - 1] ，记为 max 。
+
+那么，将得到的哈希数字 / 最大数字max，我们就可以得到一个 (0, 1) 区间的百分比数字。
+
+而 split_clients 模块就是针对该百分比数字进行分配变量，即我们可以在配置中，设置各个赋值的百分比概率，然后 split_clients 模块 
+针对指定输入进行百分比计算，并将计算得到的结果分配到对应的区间中，并将对应的值赋予新的变量。
+
+那么，对于 split_clients 模块的 Case 规则而言，需要满足如下条件:
+
+ - 百分比支持小数点后2位，且所有项的百分比相加不能超过100% 。
+ - 当各项之和加起来小于 100% 时，可以使用 * 来匹配剩余的百分比。
+
+我们来看一个示例配置:
+
+```shell
+split_clients "${http_testcli}" $varint {
+  10.51% one;
+  20%   two;
+  50%   three;
+  *     four;
+}
+```
+
+上述配置表示对于一个请求而言，我们会对它的请求 Header 中的 testcli 对应的值取 hash ，并计算其对应的百分比。
+
+其中:
+
+ - 有 10.51% 的概率将 varint 变量设置为 one;
+ - 有 20% 的概率将 varint 变量设置为 two; 
+ - 有 50% 的概率将 varint 变量设置为 three;
+ - 有 1 - 10.51% - 20% - 50% 的概率将 varint 变量设置为 four;
 
 
 ## geo 模块 - 基于 IP/CIDR 生成新的变量
 
+下面，我们又要认识一下 geo 模块了， geo 模块同样是基于已有变量来创建一个新的变量，区别在于它基于的是客户端的地址，如IP地址或CIDR信息。
 
+**geo**
+
+ - 功能描述: 基于客户端地址来设置新的变量。
+ - 语法格式: `geo [$address] $variable { ... };`'
+ - Context: http
+
+下面，我们来了解一下 geo 模块的匹配规则：
+
+ - geo 指令后如果没有传入 address 变量时，默认使用 $remote_addr 变量作为 IP 地址。
+ - 当 `{}` 中使用了 proxy 指令设置了可信地址，则此时 $remote_addr 的值为 X-Forwarded-For 头部值中最后一个 IP 地址。
+ - 当 `{}` 中使用了 proxy_recursive 时，可以进行循环地址搜索，即从 X-Forwarded-For 头部值中排除 server_name 匹配值。
+ - geo 指令在匹配时，可以通过 IP地址和子网掩码的方式进行匹配，多个项同时匹配时，优先匹配最大的地址。
+ - 当所有IP和子网掩码均没有匹配到时，则使用 default 的值设置为新变量的值。
+ - 为了代码的可读性，建议将 geo 指令块访问一个单独的文件中，通过 include 指令来引入即可。
+
+一个示例代码块如下：
+
+```shell
+geo $country {
+  default XX;
+  proxy 11.11.22.101
+  127.0.0.1/24 US;
+  127.0.0.1/32 RU;
+  10.1.10.0/16 RU;
+  192.168.1.9/24 UK;
+}
+```
 
 ## geoip 模块 -  根据指定 IP 找出对应的地理位置信息
 
+可以看出，在上面的例子中，我们尝试跟进不同的 IP 属于不同的 IP 来推断该客户端的来源，例如来源于哪个国家或者城市。
+
+但是，如果所有的国家和城市如果都需要我们一个个写到配置文件中，显然是成本很大且不现实的。
+
+那么，有没有现成的模块或者配置存储了各个国家和城市的IP段信息呢？那么，我们只要使用该模块就可以轻松的得到当前请求来源的国家和城市了。
+
+幸运的是，Nginx 中的确已经有了这么一个模块: geoip 。
+
+简单的说，geoip 模块基于 MaxMind 数据库，可以根据客户端地址从数据库中查询出该IP属于哪个国家和地区，并将相应信息赋予了对应的变量，从而让我们可以轻松的使用。
+
+geoip 模块默认并没有编译进入 Nginx 中，需要使用 --with-http_geoip_module 参数。
+
+然后，除了增加该参数外，我们还需要下载 MaxMind 里 [geoip 的 C 开发库](https://dev.maxmind.com/geoip/legacy/downloadable/) 。
+
+同时，在 nginx 配置文件中，我们还需要指定 geoip_country 和 geoip_city 对应的文件在本地的绝对路径。
+
+下面，我们来看一下 geoip 涉及到的指令：
+
+**geoip_country/geoip_city**
+
+ - 功能描述: 指定 geoip_country/geoip_city 文件在本机的绝对路径。
+ - 语法格式: `geoip_country/geoip_city file;`'
+ - Context: http
+
+**geoip_proxy**
+
+ - 功能描述: 设置信任地址，来源于信任地址的请求将会从 X-Forwwarded-For 中使用最后一个 IP 作为来源 IP。
+ - 语法格式: `geoip_proxy address/CIDR;`'
+ - Context: http
+
+对于 geoip_country 指令而言，我们可以得到如下变量：
+
+ - geoip_country_code: 两个字母的国家代码，例如CN或者US
+ - geoip_country_code3: 三个字母的国家代码，例如CHN或者USA
+ - geoip_country_name: 国家名称，例如 China 或者 United States
+
+对于 geoip_city 指令而言，还可以额外得到如下变量:
+
+ - geoip_city_continent_code: 属于全球哪个洲，例如EU或者AS等。
+ - geoip_region: 洲或者省的编码，例如02
+ - geoip_region_name: 洲或者省的名称
+ - geoip_city: 城市名称
+ - geoip_postal_code: 邮编号
+ - geoip_latitude: 纬度
+ - geoip_longitude: 经度
 
 
 ## Nginx 对客户端 Keep-Alive 的支持
 
+本文的最后，我们再来简单的聊一下 Nginx 如何对客户端进行 keep-alive。
 
+我们都知道，keep-alive 机制是指多个 HTTP 请求可以复用 TCP 连接，从而可以：
 
+ - 减少握手次数
+ - 减少并发连接数，降低服务器的资源消耗
+ - 降低TCP拥塞控制的影响
+
+那么，我们来看一下 HTTP 协议中对 keep-alive 机制有哪些定义。
+
+在 HTTP 协议中，对于请求头和响应头中，都包含一个 connection 字段，取值可以是 close 或者 keepalive，
+分别表示请求处理完成后立刻关闭连接、复用连接处理下一个请求。
+
+此外，在服务端返回客户端请求时，还可以返回一个 Keep-Alive 头部，其值是 timeout=n ，其中，n的单位是s，表示告诉客户端连接至少保留 n 秒。
+
+下面，我们来看一下 Nginx 中对于与客户端保持 keep-alive 涉及到哪些指令：
+
+**keepalive_disable**
+
+ - 功能描述: 针对指定浏览器类型禁用keep-alive机制。
+ - 语法格式: `keepalive_disable none | brower;`'
+ - 默认值: msie6  
+ - Context: http, server, location
+
+**keepalive_requests**
+
+ - 功能描述: 设置一个keep-alive 连接最多处理的 HTTP 请求数量。
+ - 语法格式: `keepalive_requests number;`'
+ - 默认值: 100  
+ - Context: http, server, location
+
+**keepalive_timeout**
+
+ - 功能描述: 设置 keep-alive 的超时断开时间。
+ - 语法格式: `keepalive_timeout timeout [header_timeout];`'
+ - 默认值: 75s  
+ - Context: http, server, location
