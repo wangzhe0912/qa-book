@@ -258,7 +258,9 @@ realip 模块的作用是从请求的Header中找出对应的真实客户端IP�
  - 说明：默认是关闭的，如果开启后，且 real ip 的获取方式为 X-Forwarded-For 且 X-Forwarded-For 的最后一个IP 与 set_real_ip_from 匹配时，递归向前查询，直到找出不匹配的IP作为src ip。
 
 
-## rewrite 模块下的 return 指令与 error_page 指令
+## rewrite 模块
+
+### return 指令与 error_page 指令
 
 rewrite 模块本身可以出现在两个不同的阶段中，即 SERVER_REWRITE 和 REWRITE 阶段，需要来说，就是在 server 块下出现或者在 location 块下出现。
 它们可以使用的命令是一致的。
@@ -317,7 +319,7 @@ error_page 500 502 503 504 /50x.html;
 
 不知道和你想的是否是一致的呢？
 
-## rewrite 模块下的 rewrite 指令
+### rewrite 模块下的 rewrite 指令
 
 rewrite 指令是专门针对 uri 进行处理的，具体来说，它可以通过正则匹配 uri，并将正则匹配到的 uri 提供成为一个新的 uri。
 
@@ -347,7 +349,7 @@ rewrite 指令是专门针对 uri 进行处理的，具体来说，它可以通�
  - Context: http, server, location, if
 
 
-## rewrite 模块下的 if 指令
+### rewrite 模块下的 if 指令
 
 rewrite 模块下提供了 if 指令，即可以使用 if 条件判断从而来进行相关行为的设置。
 
@@ -1056,4 +1058,106 @@ addition 模块的使用涉及到如下三个指令，下面我们来依次了�
  - 语法格式: `addition_types mime-type;`'
  - 默认值: text/html
  - Context: http, server, location
+
+
+## Nginx 变量
+
+变量是 Nginx 中最核心的功能之一，通过 nginx 变量，我们可以获取很多相关信息甚至是控制部分 Nginx 的行为。
+
+此外在 Nginx 中，很多模块存在的唯一作用就是去生成一些特定的变量供我们使用，因此，在继续后续的模块学习之前，我们需要先来了解一下 Nginx 中变量的基本机制。
+
+首先，Nginx的变量是有来源的，例如，各个模块甚至Nginx系统本身都会提供一些变量，而一旦这些变量被创建出来，就可以在后续nginx的其他流程中直接进行使用了。
+
+其次，Nginx的变量不是一成不变的，在各个模块的处理流程中都可能会有一些已经存在的 nginx 变量进行修改，而 Nginx 变量在具体使用时，则是以当前阶段的变量值为准。
+
+下面，我们来大致了解一下 Nginx 框架本身提供了哪些类型的变量:
+
+ - HTTP 请求相关的变量
+ - TCP 连接相关的变量
+ - Nginx 请求处理过程中的变量
+ - 发送 HTTP 响应时相关的变量
+ - Nginx 系统变量
+
+下面，我们依次来进行说明。
+
+### HTTP 请求相关的变量
+
+|变量名称|变量含义|
+|---|----|
+|arg_参数名|url中某个参数具体传递的值|
+|http_头key|返回Header中指定Key对应的值|
+|args|全部url参数|
+|query_string|同args|
+|is_args|判断请求url中是否包含参数，包含则返回?，否则返回空|
+|content_length| HTTP请求中标识包体长度的Content-Length头部的值|
+|content_type|标识请求包体类型的Content-Type头部的值|
+|uri|请求的URI（不包括?后的参数）|
+|document_uri|同uri|
+|request_uri|请求的url，包括?后的请求参数|
+|scheme|协议名称，例如http,https等|
+|request_method|请求方法，例如GET或者POST|
+|request_length|请求体的大小，包括请求行、头部、包体等|
+|remote_user|由HTTP Basic Auth协议传入的用户名|
+|request_body_file|临时存放请求包体的文件
+|request_body|请求中的包体，当且仅当在反向代理且使用内存暂存包体时有效|
+|request|原始请求行，包括方法，URL，协议版本等|
+|host|优先获取Host头部，找不到的话从请求行中获取，还找不到的话，返回Nginx中匹配的server_name|
+
+
+### TCP 连接相关的变量
+
+|变量名称|变量含义|
+|---|----|
+|server_addr|服务器端地址（Nginx侧）|
+|server_port|服务器端端口（Nginx侧）|
+|server_protocol|服务器端协议，例如HTTP/1.1|
+|binary_remote_addr|客户端地址的整型格式|
+|remote_addr|客户端地址|
+|remote_port|客户端端口|
+|proxy_protocol_addr|从proxy_protocol协议中返回的客户端地址|
+|proxy_protocol_port|从proxy_protocol协议中返回的客户端端口|
+|connection|递增的连接序号|
+|connection_requests|当前连接上执行过的请求数目，当且仅当keep-alive模式下有意义|
+|TCP_INFO|TCP内核层参数
+
+
+### Nginx 请求处理过程中的变量
+
+|变量名称|变量含义|
+|---|----|
+|request_time|请求处理到现在的耗时，单位为秒，精确到毫秒|
+|server_name|匹配到的Server块的server_name|
+|https|是否开始了TLS/SSL协议，开启返回 on ，否则返回空|
+|request_completion|请求处理完成，则返回 OK ，否则返回空|
+|request_id|以16进制输出的请求标识ID，随机生成|
+|request_filename|待访问文件的完整路径|
+|document_root|待访问文件的所属目录|
+|realpath_root|待访问文件的所属真实目录（软链对应的目录）|
+|limit_rate|客户端响应时的速度上限，单位为字节数/s，可以通过set 指令进行设置|
+
+
+### 发送 HTTP 响应时相关的变量
+
+|变量名称|变量含义|
+|---|----|
+|sent_http_头部key|响应头部中某个具体key对应的取值|
+|body_bytes_sent|响应中body包体的长度|
+|bytes_sent|全部http响应的长度|
+|status|http响应中的返回码|
+
+
+### Nginx 系统变量
+
+|变量名称|变量含义|
+|---|----|
+|time_local|以本地时间标准输出的当前时间，例如 14/Nov/2018:15:55:37 +0800|
+|time_iso8601|使用 ISO8601 标准输出的当前时间，例如 2018-11-14T15:55:37+08:00|
+|nginx_version|Nginx 版本号|
+|pid|所属 worker 进程的进程 id|
+|pipe|使用了管道则返回 p，否则返回 .|
+|hostname|所在服务器的主机名，与 hostname 命令输出一致|
+|msec|1970 年 1 月 1 日到现在的时间，单位为秒，小数点后精确到毫秒|
+
+
+
 
