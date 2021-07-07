@@ -1159,5 +1159,95 @@ addition 模块的使用涉及到如下三个指令，下面我们来依次了�
 |msec|1970 年 1 月 1 日到现在的时间，单位为秒，小数点后精确到毫秒|
 
 
+## referer 模块 - 简单的防盗链方式
+
+首先，我们来了解一下防盗链的场景是什么样的。
+
+例如，我们的网站内部有一些比较优质的资源，我们希望这些相对优质的资源只能给我们网站的用户单独使用。
+
+而可能有另外一些网站直接在它们的网站页面中嵌入了我们对应页面的url，从而希望可以直接从它们的网站中获取我们的资源，实现提升它们网站的流量。
+
+那么，我们应该怎么样拒绝这种非正常的网站跳转访问我们站点的资源呢？
+
+此处，我们需要先提及了一个各个浏览器中默认都包含的规则，即在浏览器发送 HTTP 给后端服务器时，会将当前浏览器所在的页面 url 带上加入 header 中，
+告诉服务器本地的请求是来自于哪些页面发起的。
+
+而正是由于浏览器可以帮助我们向服务器传送请求来源的url信息，因此，我们其实可以根据浏览器传送过来的信息，进行判断是否允许该请求访问。
+
+而这个过程中，浏览器用于传递来源信息的方式就是 header 中的 referer 字段，而 nginx 用于处理这一问题的模块名称同样是 referer 。
+
+下面，我们先来简单看一下 referer 涉及到的相关指令：
+
+**valid_referers**
+
+ - 功能描述: 设置允许哪些referer的头部信息状态访问。
+ - 语法格式: `valid_referers none | blocked | server_names | string;`'
+ - Context: server, location
+
+其中:
+
+ - none 表示允许缺失 referer 头部的请求访问
+ - block 表示允许 referer 头部的值为空时的请求访问
+ - server_names 表示当 referer 头部的值与我们 server_name 中设置的域名一致时允许访问
+ - string 表示可以是域名及URL的字符串或者正则表达式，匹配后允许访问，需要主要的是，对于域名而言，可以使用前后缀 * 做通配符。
+ - valid_referers 指令接收的参数可以是多个，多个参数之间用空格分隔，条件之间是 或 的关系。
+
+
+另外，需要注意的是，`valid_referers` 指令判断是否应该允许访问后，如果预期不允许访问，不是直接对请求进行拦截，而是会生成一个 invalid_referer 变量。
+
+ - 允许访问时，变量值为空
+ - 不允许访问时，变量值为1
+
+需要用户自行根据 invalid_referer 变量的值，来进行条件判断编写相应的行为。
+
+**referer_hash_bucket_size**
+
+ - 功能描述: 设置 referer Hash 缓存的 bucket 大小。
+ - 语法格式: `referer_hash_bucket_size size;`'
+ - 默认值: 64  
+ - Context: server, location
+
+**referer_hash_max_size**
+
+ - 功能描述: 设置 referer Hash 缓存的最大值。
+ - 语法格式: `referer_hash_max_size size;`'
+ - 默认值: 64  
+ - Context: server, location
+
+一个关于 referer 模块使用的示例代码如下:
+
+```shell
+server_name referer.missshi.cn
+
+location / {
+  valid_referer none blocked server_names *.missshi.com www.missshi.org/nianshi ~\.baidu\.;
+  if ($invalid_refer) {
+    return 403;
+  }
+  return 200 'valid';
+}
+```
+
+## secure_link 模块 - 更强大的防盗链工具
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
