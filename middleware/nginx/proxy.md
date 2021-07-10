@@ -40,7 +40,7 @@ proxy 模块中，包含了一个 **proxy_pass** 指令，这个也是反向代�
 **proxy_pass**
 
  - 功能描述: 指定反向代理的上游服务地址。
- - 语法格式: `proxy_pass URL;`'
+ - 语法格式: `proxy_pass URL;`
  - Context: location
 
 可以看到，看起来 proxy_pass 模块仅仅接收一个 URL 参数，比较简单，但是其实 URL 参数本身有着一些规则，使用中需要非常注意，下面我们来了解一下：
@@ -71,7 +71,7 @@ HTTP 反向代理中，生成发往上游服务请求行中，主要包含如下
 **proxy_method**
 
  - 功能描述: 设置/修改 HTTP 反向代理发往上游请求的请求方法。
- - 语法格式: `proxy_method method;`'
+ - 语法格式: `proxy_method method;`
  - Context: http, server, location
 
 在生成发往上游服务请求行时，默认会使用客户端发往 nginx 的请求方法，但是你也可以通过 `proxy_method` 指令进行修改。
@@ -79,7 +79,7 @@ HTTP 反向代理中，生成发往上游服务请求行中，主要包含如下
 **proxy_http_version**
 
  - 功能描述: 设置/修改 HTTP 反向代理发往上游请求的HTTP协议版本。
- - 语法格式: `proxy_http_version 1.0|1.1;`'
+ - 语法格式: `proxy_http_version 1.0|1.1;`
  - 默认值: 1.0 
  - Context: http, server, location
 
@@ -93,7 +93,7 @@ HTTP 反向代理中，生成发往上游服务请求行中，主要包含如下
 **proxy_set_header**
 
  - 功能描述: 设置/修改 HTTP 反向代理发往上游请求头部的指定字段。
- - 语法格式: `proxy_set_header field value;`'
+ - 语法格式: `proxy_set_header field value;`
  - 默认值: 
     - Host: $proxy_host;
     - Connection close;
@@ -104,7 +104,7 @@ Ps: 在上述 `proxy_set_header` 命令中，如果指令的 value 为空字符�
 **proxy_pass_request_headers**
 
  - 功能描述: 设置 HTTP 反向代理发往上游请求头部时是否将客户端发送过来的头部全部带过去。
- - 语法格式: `proxy_pass_request_headers on|off;`'
+ - 语法格式: `proxy_pass_request_headers on|off;`
  - 默认值: on
  - Context: http, server, location
 
@@ -117,7 +117,7 @@ Ps: 在上述 `proxy_set_header` 命令中，如果指令的 value 为空字符�
 **proxy_pass_request_body**
 
  - 功能描述: 设置 HTTP 反向代理发往上游请求包体时是否将客户端发送过来的包体全部带过去。
- - 语法格式: `proxy_pass_request_body on|off;`'
+ - 语法格式: `proxy_pass_request_body on|off;`
  - 默认值: on
  - Context: http, server, location
 
@@ -126,7 +126,7 @@ Ps: 在上述 `proxy_set_header` 命令中，如果指令的 value 为空字符�
 **proxy_set_body**
 
  - 功能描述: 手动设置 HTTP 反向代理发往上游的请求包体。
- - 语法格式: `proxy_set_body value;`'
+ - 语法格式: `proxy_set_body value;`
  - Context: http, server, location
 
 除了直接转发客户端发送过来的请求体之外，Nginx HTTP 反向代理中，也允许自定义请求包体发送给上游业务服务。
@@ -153,7 +153,7 @@ Ps: 在上述 `proxy_set_header` 命令中，如果指令的 value 为空字符�
 **proxy_request_buffering**
 
  - 功能描述: 设置 HTTP 反向代理时，接收客户端包体和发送服务端包体的先后依赖关系。
- - 语法格式: `proxy_request_buffering on|off;`'
+ - 语法格式: `proxy_request_buffering on|off;`
  - 默认值: on
  - Context: http, server, location
 
@@ -174,7 +174,7 @@ Ps: 在上述 `proxy_set_header` 命令中，如果指令的 value 为空字符�
 **client_body_buffer_size**
 
  - 功能描述: 设置 HTTP 反向代理时，使用内存接收包体的大小限制。
- - 语法格式: `client_body_buffer_size size;`'
+ - 语法格式: `client_body_buffer_size size;`
  - 默认值: 8k|16k
  - Context: http, server, location
 
@@ -183,7 +183,7 @@ Ps: 在上述 `proxy_set_header` 命令中，如果指令的 value 为空字符�
 **client_body_in_single_buffer**
 
  - 功能描述: 设置 HTTP 反向代理时，接收客户端包体时，设置是否在单一buffer块中保存包体。
- - 语法格式: `client_body_in_single_buffer on|off;`'
+ - 语法格式: `client_body_in_single_buffer on|off;`
  - 默认值: off
  - Context: http, server, location
 
@@ -194,7 +194,7 @@ Ps: 在上述 `proxy_set_header` 命令中，如果指令的 value 为空字符�
 **client_max_body_size**
 
  - 功能描述: 设置 HTTP 反向代理时，设置接收客户端包体的最大长度。
- - 语法格式: `client_max_body_size size;`'
+ - 语法格式: `client_max_body_size size;`
  - 默认值: 1m
  - Context: http, server, location
 
@@ -205,7 +205,7 @@ Nginx 中，会对请求头部中的 Content-Length 进行判断，如果超出�
 **client_body_timeout**
 
  - 功能描述: 设置 HTTP 反向代理时，设置接收客户端接收包体时包体发送的数据间隔超时时间。
- - 语法格式: `client_body_timeout time;`'
+ - 语法格式: `client_body_timeout time;`
  - 默认值: 60s
  - Context: http, server, location
 
@@ -215,14 +215,14 @@ Nginx 中，会对请求头部中的 Content-Length 进行判断，如果超出�
 **client_body_temp_path**
 
  - 功能描述: 设置 HTTP 反向代理时，接收客户端包体后，如果需要保存临时文件时，临时文件所在的路径。
- - 语法格式: `client_body_temp_path path;`'
+ - 语法格式: `client_body_temp_path path;`
  - 默认值: client_body_temp
  - Context: http, server, location
 
 **client_body_in_file_only**
 
  - 功能描述: 设置 HTTP 反向代理时，接收客户端包体后，是否需要保存在临时文件中。
- - 语法格式: `client_body_in_file_only on||clean|off;`'
+ - 语法格式: `client_body_in_file_only on||clean|off;`
  - 默认值: off
  - Context: http, server, location
 
@@ -285,13 +285,13 @@ Nginx 负载均衡可以提供一个统一的入口，并将请求转发给一�
 **upstream**
 
  - 功能描述: 设置上游服务的名称和对应的上游服务的配置。
- - 语法格式: `upstream name {...};`'
+ - 语法格式: `upstream name {...};`
  - Context: http
 
 **server**
 
  - 功能描述: 设置上游服务的具体地址和访问策略。
- - 语法格式: `server address [parameters];`'
+ - 语法格式: `server address [parameters];`
  - Context: upstream
 
 其中，address 可以是域名、IP地址或者unix socket地址，对于域名和IP而言，后面可以加端口，默认为80端口。
@@ -313,20 +313,20 @@ Ps: 在上一篇文章中，我们已经介绍过了Nginx如何与客户端建�
 **keepalive**
 
  - 功能描述: 设置与上游服务最多建立的长连接的数目。
- - 语法格式: `keepalive number;`'
+ - 语法格式: `keepalive number;`
  - Context: upstream
 
 **keepalive_requests**
 
  - 功能描述: 设置与上游服务建立的每个长连接最多处理的请求个数。
- - 语法格式: `keepalive_requests number;`'
+ - 语法格式: `keepalive_requests number;`
  - 默认值: 100
  - Context: upstream
 
 **keepalive_timeout**
 
  - 功能描述: 设置与上游服务建立的长连接的超时时间。
- - 语法格式: `keepalive timeout;`'
+ - 语法格式: `keepalive timeout;`
  - 默认值: 60s
  - Context: upstream
 
@@ -361,7 +361,7 @@ server {
 **ip_hash**
 
  - 功能描述: 启动根据客户端IP来进行负载均衡。
- - 语法格式: `ip_hash;`'
+ - 语法格式: `ip_hash;`
  - Context: upstream
 
 **upstream_ip_hash** 只能用于针对客户端IP进行哈希算法，而如果想要根据其他请求特征来进行，那么它就无能为力了。
@@ -373,7 +373,7 @@ server {
 **hash**
 
  - 功能描述: 启动根据自定义Key来进行哈希，从而实现负载均衡。
- - 语法格式: `hash key [consistent];`'
+ - 语法格式: `hash key [consistent];`
  - Context: upstream
 
 其中:
@@ -386,7 +386,7 @@ server {
 **least_conn**
 
  - 功能描述: 启动根据连接数选择当前连接最小的实例进行请求转发。
- - 语法格式: `ip_hash;`'
+ - 语法格式: `ip_hash;`
  - Context: upstream
 
 在上面我们所有的配置中，默认配置都仅仅在单个worker中单独生效，如果想要让所有worker共同生效时，就需要用到 **upstream_zone** 模块了。
@@ -397,7 +397,7 @@ upstream_zone 模块可以用于分配共享内存，将其他upstream模块定�
 **zone**
 
  - 功能描述: 分配共享内存，使得共享内存策略在所有worker中共同生效。
- - 语法格式: `zone name [size];`'
+ - 语法格式: `zone name [size];`
  - Context: upstream
 
 在负载均衡和上游实例选择的最后，我们再看看看 upstream 模块提供了哪些变量可以给我们使用，cache相关的暂时不再此处讨论，后续会有专门的内容来对cache进行说明。

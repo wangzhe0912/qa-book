@@ -933,7 +933,7 @@ log 模块包含如下一些命令，下面，我们来依次进行说明。
 
  - 功能描述: 设置指定请求的 access log的配置路径等信息。
  - 语法格式: 
-   - `access_log path [format [buffer=size] [gzip[=level]] [flush=time] [if=condition]];`'
+   - `access_log path [format [buffer=size] [gzip[=level]] [flush=time] [if=condition]];`
    - `access_log off;`
  - 默认值: access_log logs/access.log combined;
  - Context: http, server, location
@@ -952,7 +952,7 @@ log 模块包含如下一些命令，下面，我们来依次进行说明。
 
  - 功能描述: 对log_file的句柄进行cache，避免重复打开、关闭文件。
  - 语法格式: 
-   - `open_log_file_cache max=N [inactive=time] [min_uses=N] [valid=time];`'
+   - `open_log_file_cache max=N [inactive=time] [min_uses=N] [valid=time];`
    - `open_log_file_cache off;`
  - 默认值: off
  - Context: http, server, location
@@ -1005,27 +1005,27 @@ sub 模块涉及到如下4个指令，我们来依次看一下。
 **sub_filter**
 
  - 功能描述: 对指定字符串进行替换，将指定string替换成为replacement。
- - 语法格式: `sub_filter string replacement;`'
+ - 语法格式: `sub_filter string replacement;`
  - Context: http, server, location
 
 **sub_filter_last_modified**
 
  - 功能描述: 设置替换字符串后，是否需要在响应头部中传递last modified信息。
- - 语法格式: `sub_filter_last_modified on|off;`'
+ - 语法格式: `sub_filter_last_modified on|off;`
  - 默认值: off  
  - Context: http, server, location
 
 **sub_filter_once**
 
  - 功能描述: 设置替换字符串时，是否针对每个字符串最多仅替换一次。
- - 语法格式: `sub_filter_once on|off;`'
+ - 语法格式: `sub_filter_once on|off;`
  - 默认值: on
  - Context: http, server, location
 
 **sub_filter_types**
 
  - 功能描述: 设置针对哪些响应格式的数据才进行替换。
- - 语法格式: `sub_filter_types mime-type;`'
+ - 语法格式: `sub_filter_types mime-type;`
  - 默认值: text/html
  - Context: http, server, location
 
@@ -1055,7 +1055,7 @@ addition 模块的使用涉及到如下三个指令，下面我们来依次了�
 **addition_types**
 
  - 功能描述: 设置针对哪些响应格式的数据才进行前后请求和响应组装。
- - 语法格式: `addition_types mime-type;`'
+ - 语法格式: `addition_types mime-type;`
  - 默认值: text/html
  - Context: http, server, location
 
@@ -1181,7 +1181,7 @@ addition 模块的使用涉及到如下三个指令，下面我们来依次了�
 **valid_referers**
 
  - 功能描述: 设置允许哪些referer的头部信息状态访问。
- - 语法格式: `valid_referers none | blocked | server_names | string;`'
+ - 语法格式: `valid_referers none | blocked | server_names | string;`
  - Context: server, location
 
 其中:
@@ -1203,14 +1203,14 @@ addition 模块的使用涉及到如下三个指令，下面我们来依次了�
 **referer_hash_bucket_size**
 
  - 功能描述: 设置 referer Hash 缓存的 bucket 大小。
- - 语法格式: `referer_hash_bucket_size size;`'
+ - 语法格式: `referer_hash_bucket_size size;`
  - 默认值: 64  
  - Context: server, location
 
 **referer_hash_max_size**
 
  - 功能描述: 设置 referer Hash 缓存的最大值。
- - 语法格式: `referer_hash_max_size size;`'
+ - 语法格式: `referer_hash_max_size size;`
  - 默认值: 64  
  - Context: server, location
 
@@ -1260,13 +1260,13 @@ secure_link 默认是没有编译至 Nginx 中的，需要用户手动添加 `--
 **secure_link**
 
  - 功能描述: 设置 secure_link 的匹配方式。
- - 语法格式: `secure_link expression;`'
+ - 语法格式: `secure_link expression;`
  - Context: http, server, location
 
 **secure_link_md5**
 
  - 功能描述: 设置 secure_link md5值的构建方式。
- - 语法格式: `secure_link_md5 expression;`'
+ - 语法格式: `secure_link_md5 expression;`
  - Context: http, server, location
 
 
@@ -1300,7 +1300,7 @@ secure_link_md5 "$secure_link_expires$uri$remote_addr secret";
 **secure_link_secret**
 
  - 功能描述: 设置 secure_link 的密钥。
- - 语法格式: `secure_link_secret secret;`'
+ - 语法格式: `secure_link_secret secret;`
  - Context: http, server, location
 
 我们先来看一下方式二的基本原理，对于方式二而言，它认为任何一个安全的请求URL应该包括三个部分，分别是 /prefix/hash/link 。
@@ -1326,20 +1326,20 @@ map 模块在 nginx 中作用是可以根据一个变量的不同条件，来创
 **map**
 
  - 功能描述: 根据一个变量的不同条件，来创建新的变量。
- - 语法格式: `map string $var { ... };`'
+ - 语法格式: `map string $var { ... };`
  - Context: http
 
 **map_hash_bucket_size**
 
  - 功能描述: 设置存放map的buctet块大小。
- - 语法格式: `map_hash_bucket_size size;`'
+ - 语法格式: `map_hash_bucket_size size;`
  - 默认值: 32/64/128  
  - Context: http
 
 **map_hash_max_size**
 
  - 功能描述: 设置存放map的最大大小。
- - 语法格式: `map_hash_max_size size;`'
+ - 语法格式: `map_hash_max_size size;`
  - 默认值: 2048
  - Context: http
 
@@ -1421,7 +1421,7 @@ split_clients "${http_testcli}" $varint {
 **geo**
 
  - 功能描述: 基于客户端地址来设置新的变量。
- - 语法格式: `geo [$address] $variable { ... };`'
+ - 语法格式: `geo [$address] $variable { ... };`
  - Context: http
 
 下面，我们来了解一下 geo 模块的匹配规则：
@@ -1469,13 +1469,13 @@ geoip 模块默认并没有编译进入 Nginx 中，需要使用 --with-http_geo
 **geoip_country/geoip_city**
 
  - 功能描述: 指定 geoip_country/geoip_city 文件在本机的绝对路径。
- - 语法格式: `geoip_country/geoip_city file;`'
+ - 语法格式: `geoip_country/geoip_city file;`
  - Context: http
 
 **geoip_proxy**
 
  - 功能描述: 设置信任地址，来源于信任地址的请求将会从 X-Forwwarded-For 中使用最后一个 IP 作为来源 IP。
- - 语法格式: `geoip_proxy address/CIDR;`'
+ - 语法格式: `geoip_proxy address/CIDR;`
  - Context: http
 
 对于 geoip_country 指令而言，我们可以得到如下变量：
@@ -1517,20 +1517,20 @@ geoip 模块默认并没有编译进入 Nginx 中，需要使用 --with-http_geo
 **keepalive_disable**
 
  - 功能描述: 针对指定浏览器类型禁用keep-alive机制。
- - 语法格式: `keepalive_disable none | brower;`'
+ - 语法格式: `keepalive_disable none | brower;`
  - 默认值: msie6  
  - Context: http, server, location
 
 **keepalive_requests**
 
  - 功能描述: 设置一个keep-alive 连接最多处理的 HTTP 请求数量。
- - 语法格式: `keepalive_requests number;`'
+ - 语法格式: `keepalive_requests number;`
  - 默认值: 100  
  - Context: http, server, location
 
 **keepalive_timeout**
 
  - 功能描述: 设置 keep-alive 的超时断开时间。
- - 语法格式: `keepalive_timeout timeout [header_timeout];`'
+ - 语法格式: `keepalive_timeout timeout [header_timeout];`
  - 默认值: 75s  
  - Context: http, server, location
