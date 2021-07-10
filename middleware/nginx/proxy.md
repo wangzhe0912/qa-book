@@ -413,3 +413,252 @@ upstream_zone 模块可以用于分配共享内存，将其他upstream模块定�
  - upstream_cookie_名称: 从上游服务返回的响应头中的Cookie中取出对应的cookie值。
  - upstream_trailer_名称: 从上游服务的响应尾部取到的值。
 
+## Nginx 与上游服务建立连接和收发请求
+
+当Nginx均衡策略找到对应上上游服务实例后，接下来就可以与上游服务来建立连接并且收发请求了。
+
+### 与上游建立连接并发送数据
+
+与上游建立连接时，使用到了如下一些指令：
+
+**proxy_connect_timeout**
+
+ - 功能描述: 设置与上游服务建立连接的超时时间（三次握手时间），达到超时时间后，会返回客户端的响应码为502。
+ - 语法格式: `proxy_connect_timeout time;`
+ - 默认值: 60s
+ - Context: http, server, location
+
+**proxy_socket_keepalive**
+
+ - 功能描述: 设置使用与上游服务建立 TCP keep alive 机制。
+ - 语法格式: `proxy_socket_keepalive on|off;`
+ - 默认值: off
+ - Context: http, server, location
+
+![proxy6](./picture/proxy6.png)
+
+Ps: 如上图所示，此处表示的是 TCP 协议上的 keep-alive 机制，
+通过开启该 keep-alive 机制，可以定期扫描 TCP 连接对端是否已经服务停止等，从而及时释放连接。
+
+此外，在与上游建立连接并发送 TCP 请求时，我们还可以修改 TCP 连接中的 SourceIP 地址。
+
+**proxy_bind**
+
+ - 功能描述: 设置使用与上游服务 TCP 连接中的 SourceIP 地址。
+ - 语法格式: `proxy_bind address [transparent] | off;`
+ - Context: http, server, location
+
+Ps: address 可以使用 $remote_addr 来实现 SourceIP 的透传，这时也需要开启 transparent （当address非本地IP时）。
+
+此外，如果我们一台机器上有多块网卡时，也可以通过 `proxy_bind` 来指定对应的 IP。
+
+另外，当客户端与 Nginx 断开连接时，默认情况下 nginx 也会放弃与上游服务继续访问，但是，我们也可以通过如下配置强制保持与上游服务的交互：
+
+**proxy_ignore_client_abort**
+
+ - 功能描述: 设置当客户端断开连接时，是否需要与上游服务继续交互。
+ - 语法格式: `proxy_ignore_client_abort on|off;`
+ - 默认值: off 
+ - Context: http, server, location
+
+
+**proxy_send_timeout**
+
+ - 功能描述: 向上游发送请求时的超时时间。
+ - 语法格式: `proxy_send_timeout time;`
+ - 默认值: 60s
+ - Context: http, server, location
+
+### 接收上游的响应
+
+接收上游的响应并处理过程中涉及到了如下指令，我们来依次了解一下：
+
+**proxy_buffer_size**
+
+ - 功能描述: 设置接收上游的HTTP响应头部的最大大小。
+ - 语法格式: `proxy_buffer_size size;`
+ - 默认值: 4k|8k
+ - Context: http, server, location
+
+**proxy_buffers**
+
+ - 功能描述: 设置接收body时可用的内存大小空间，超过该大小时会进行IO操作临时文件保存。
+ - 语法格式: `proxy_buffers number size;`
+ - 默认值: 8 4k|8k
+ - Context: http, server, location
+
+**proxy_buffering**
+
+ - 功能描述: 设置接收body时是否先把上游响应全部接收下来再返回客户端还是边收边返回。
+ - 语法格式: `proxy_buffering on|off;`
+ - 默认值: on
+ - Context: http, server, location
+
+Ps: 只有开启全部接收后再返回时，我们才能对接收到的信息进行过滤再返回，否则无法进行响应处理。
+
+**proxy_max_temp_file_size**
+
+ - 功能描述: 设置接收body并保存到临时文件时的最大大小，即能接收上游响应的最大值。
+ - 语法格式: `proxy_max_temp_file_size size;`
+ - 默认值: 1024m
+ - Context: http, server, location
+
+**proxy_temp_file_write_size**
+
+ - 功能描述: 设置接收body并保存到临时文件时，每次写入的块大小。
+ - 语法格式: `proxy_temp_file_write_size size;`
+ - 默认值: 8k/16k
+ - Context: http, server, location
+
+**proxy_temp_path**
+
+ - 功能描述: 设置接收body并保存到临时文件时，临时文件存放的目录。
+ - 语法格式: `proxy_temp_path path;`
+ - 默认值: proxy_temp
+ - Context: http, server, location
+
+**proxy_busy_buffers_size**
+
+ - 功能描述: 设置接收body并达到指定大小时，就开始向客户端发送响应信息。
+ - 语法格式: `proxy_busy_buffers_size size;`
+ - 默认值: 8k/16k
+ - Context: http, server, location
+
+**proxy_read_timeout**
+
+ - 功能描述: 从上游服务中两次读数据的请求间隔时间。
+ - 语法格式: `proxy_read_timeout time;`
+ - 默认值: 60s
+ - Context: http, server, location
+
+**proxy_limit_rate**
+
+ - 功能描述: 从上游服务中读取响应中的网速限制。
+ - 语法格式: `proxy_limit_rate rate;`
+ - 默认值: 0
+ - Context: http, server, location
+
+**proxy_store**
+
+ - 功能描述: 是否开启上游响应包体的持久化并保存。
+ - 语法格式: `proxy_store on|off|string;`
+ - 默认值: off
+ - Context: http, server, location
+
+其中：
+
+ - on 表示开启上游响应包体的文件持久化，并保存在 root 目录下。
+ - off 表示关闭上游响应包体的文件持久化。
+ - string 表示开启上游响应包体的文件持久化，并保存在 string 指定的目录下。
+
+**proxy_store_access**
+
+ - 功能描述: 是否开启上游响应包体的持久化的文件所属用户和权限。
+ - 语法格式: `proxy_store_access users:permissions;`
+ - 默认值: user:rw
+ - Context: http, server, location
+
+### 加工和处理上游的响应
+
+在上一篇 http 模块的介绍中，我们已经知道了在 Nginx 中可以使用一些 HTTP 过滤模块对 HTTP 的响应结果进行处理。
+而这些过滤模块在反向代理的场景中同样也是有效的。例如：
+
+ - copy_filter: 复制包体内容
+ - postpone_filter: 处理子请求
+ - header_filter: 构造响应头部
+ - write_filter: 发送响应等
+
+在 HTTP 的响应头部中，有一些响应头部是有一些特殊功能的，我们可以使用 **proxy_ignore_headers** 指令来禁用相关的功能。
+
+**proxy_ignore_headers**
+
+ - 功能描述: 禁用上游返回的HTTP头部中的包含一些特殊含义的header信息。
+ - 语法格式: `proxy_ignore_headers field;`
+ - Context: http, server, location
+
+例如，可以被禁用的头部如下：
+
+ - X-Accel-Redirect: 由上游服务指定在 nginx 内部重定向，控制请求的执行。
+ - X-Accel-Limit-Rate: 由上游服务控制发往客户端的速度限制，等价于limit_rate。
+ - X-Accel-Buffering: 由上游控制是否缓存上游的响应。
+ - X-Accel-Charset: 由上游控制Content-Type中的Charset。
+ - X-Accel-Expires: 设置响应在 nginx 中的缓存时间。
+ - Expires: 控制nginx的缓存时间，优先级低于X-Accel-Expires。
+ - Cache-Control: 控制Nginx的缓存时间，优先级低于X-Accel-Expires。
+ - Set-Cookie: 响应中如果出现了Set-Cookie则不会触发缓存。
+ - Vary: 响应中出现Vary则不缓存。
+
+除了具体特殊功能影响的header之外，还有一些header在nginx中转发过程中会没有意义，因此，nginx在转发过程中，默认会忽略掉一些header信息。
+包括如下：
+
+ - Date: Nginx 会重写为Nginx发送给客户端响应头部的时间。
+ - Server: Nginx 会重写为Nginx对应的版本信息。
+ - X-Pad: 通常是Apache为避免浏览器BUG生成的头部，默认忽略。
+ - X-Accel-: 用户控制nginx行为的响应，无需向客户端发送。
+
+如果，我们希望强行保留如上的部分 header 时，可以使用如下指令：
+
+**proxy_pass_header**
+
+ - 功能描述: 强行把上游返回的HTTP头部中的一些header信息传递给客户端。
+ - 语法格式: `proxy_pass_header field;`
+ - Context: http, server, location
+
+当然，我们也可以主动忽略掉更多的header字段。例如：
+
+**proxy_hide_header**
+
+ - 功能描述: 忽略上游返回的HTTP头部中的一些header信息。
+ - 语法格式: `proxy_hide_header field;`
+ - Context: http, server, location
+
+此外，我们来可以修改上游服务返回的Cookie和Location信息，此处不再赘述了。
+
+### 上游失败下的容错策略
+
+当 Nginx 作为反向代理时，我们常常会通过负载均衡策略找到一个特定的实例进行请求转发。
+然而，在请求到特定的实例时，可能会由于网络问题或者是服务稳定性问题时，请求失败。
+
+这时，为了保证整体服务的高可用性时，我们可以设置在当请求失败时，增加一些重试的策略，例如重新选择其他的上游实例进行重试，这就要用到如下实例了。
+
+**proxy_next_upstream**
+
+ - 功能描述: 设置当上游实例在哪些情况下访问失败时，需要进行重试。
+ - 语法格式: `proxy_next_upstream error | timeout | invalid_header | http_500 | http_502 | http_xxx | off;`
+ - 默认值: error timeout
+ - Context: http, server, location
+
+其中:
+
+ - error: 表示连接建立失败。
+ - timeout: 表示连接访问超时。
+ - invalid_header: Header非法。
+ - http_: http返回指定的错误码。
+ - off: 禁用失败重试策略。
+
+**proxy_next_upstream_timeout**
+
+ - 功能描述: 设置当上游实例访问失败重试时的超时时间。
+ - 语法格式: `proxy_next_upstream_timeout time;`
+ - 默认值: 0
+ - Context: http, server, location
+
+**proxy_next_upstream_tries**
+
+ - 功能描述: 设置当上游实例访问失败重试时的最大重试次数。
+ - 语法格式: `proxy_next_upstream_tries number;`
+ - 默认值: 0
+ - Context: http, server, location
+
+**proxy_intercept_errors**
+
+ - 功能描述: 当上游响应的响应码大于300时，是否需要将响应码中对应的error_page指令进行对应的处理，默认没有生效error_page指令。
+ - 语法格式: `proxy_intercept_errors on|off;`
+ - 默认值: off
+ - Context: http, server, location
+
+
+## Nginx 的 HTTPS 协议
+
+
+
