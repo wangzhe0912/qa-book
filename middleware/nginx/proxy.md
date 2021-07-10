@@ -660,5 +660,23 @@ Ps: 只有开启全部接收后再返回时，我们才能对接收到的信息�
 
 ## Nginx 的 HTTPS 协议
 
+在 Nginx 中，我们既可以将其当做服务端，对外提供 https 协议，同时，我们还可以将其当做反向代理，用于客户端向上游服务器发起请求，如下图所示。
+
+![proxy7](./picture/proxy7.png)
+
+可以从上图看出，其中涉及到了如下一些指令：
+
+ - 指定自身使用的证书（客户端使用）:
+   - proxy_ssl_certificate
+   - proxy_ssl_certificate_key
+ - 验证服务器证书（客户端使用）:
+   - proxy_ssl_verify
+   - proxy_ssl_trusted_certificate
+ - 验证客户端证书（服务端使用）:
+   - ssl_verify_client
+   - ssl_client_certificate
+ - 指定自身使用的证书（服务端使用）:
+   - ssl_certificate
+   - ssl_certificate_key
 
 
