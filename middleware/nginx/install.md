@@ -4,7 +4,7 @@
 
 ## Linux下安装Nginx
 
-首先，第一步需要从官网下载nginx安装包：http://nginx.org/en/download.html。
+首先，第一步需要从官网下载nginx安装包：http://nginx.org/en/download.html 。
 
 目前的稳定版本是1.18。
 
