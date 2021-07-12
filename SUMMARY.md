@@ -221,6 +221,7 @@
   * [Kubernetes基本概述](./cloud-native/kubernetes/concept.md)
   * [Kubernetes架构](./cloud-native/kubernetes/artitecture.md)
   * [Kubernetes环境搭建](./cloud-native/kubernetes/setup_env.md)
+  * [Kubernetes ConfigMap 杂谈](./cloud-native/kubernetes/configmap.md)
 * [Helm](./cloud-native/helm/beginning.md)
 
 
