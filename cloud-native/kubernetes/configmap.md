@@ -183,7 +183,7 @@ kubelet 使用的是其本地的高速缓存来获得 ConfigMap 的当前值。
 高速缓存的类型可以通过 KubeletConfiguration 结构 的 ConfigMapAndSecretChangeDetectionStrategy 字段来配置。
 
 ConfigMap 既可以通过 watch 操作实现内容传播（默认形式），也可实现基于 TTL 的缓存，还可以直接经过所有请求重定向到 API 服务器。
-因此，从 ConfigMap 被更新的那一刻算起，到新的主键被投射到 Pod 中去，这一 时间跨度可能与 kubelet 的同步周期加上高速缓存的传播延迟相等。
+因此，从 ConfigMap 被更新的那一刻算起，到新的主键被投射到 Pod 中去，这一时间跨度可能与 kubelet 的同步周期加上高速缓存的传播延迟相等。
 这里的传播延迟取决于所选的高速缓存类型 （分别对应 watch 操作的传播延迟、高速缓存的 TTL 时长或者 0）。
 
 Ps: 以环境变量方式使用的 ConfigMap 数据不会被自动更新。 更新这些数据需要重新启动 Pod。
