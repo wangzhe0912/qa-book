@@ -587,7 +587,46 @@ Ps: 群集上最多只能有一个 默认存储类，否则无法创建没有明
 
 下面，我们通过一个示例来演示 PV、PVC 以及 StorageClass 的相关功能与使用。
 
+### local-path-provisioner 部署
+
+为了能够正常使用 PV 相关的功能，我们首先需要搭建一个 Provisioner 服务来给我们提供持久卷。
+
+此处，我们使用 local-path-provisioner 来提供持久卷，官方文档请参考 [local-path-provisioner](https://github.com/rancher/local-path-provisioner) 。
+
+```shell
+kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/master/deploy/local-path-storage.yaml
+```
+
+在该 yaml 中，定义了 local-path-provisioner 的 Namespace, ServiceAccount, ClusterRole, ClusterRoleBinding, 
+Deployment, ConfigMap 以及 StorageClass 。
+
+其中，我们重点关注一下 StorageClass 对象的配置信息：
+
+```yaml
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: local-path
+provisioner: rancher.io/local-path
+volumeBindingMode: WaitForFirstConsumer
+reclaimPolicy: Delete
+```
+
+根据之前的学习内容，我们可以知道，在这个 yaml 中，我们定义了一个 StorageClass ，名称是 local-path ，
+reclaimPolicy 为 Delete，volumeBindingMode为 PVC 被声明使用时才创建。
+
+接下来，我们可以查询 Pod 的状态，直到 Pod 成功运行：
+
+```shell
+kubectl -n local-path-storage get pod
+```
+
+### 使用 StorageClass 自动创建 PV 并绑定
+
+
+### 手动创建 PV 并绑定和使用
 
 
 https://kubernetes.io/zh/docs/tasks/configure-pod-container/configure-persistent-volume-storage/
 
+https://github.com/rancher/local-path-provisioner
