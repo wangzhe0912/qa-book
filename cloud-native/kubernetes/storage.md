@@ -621,12 +621,179 @@ reclaimPolicy 为 Delete，volumeBindingMode为 PVC 被声明使用时才创建�
 kubectl -n local-path-storage get pod
 ```
 
+此时，我们依赖的 provisioner 已经部署完成，同时 StorageClass 也已经创建好了，下面，我们就具体来演示一下如何使用吧！
+
 ### 使用 StorageClass 自动创建 PV 并绑定
 
+第一步，我们首先需要创建一个 PVC 用于申请一块磁盘资源，示例 yaml 文件如下：
+
+```yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wangzhe-pvc
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: local-path
+  volumeMode: Filesystem
+```
+
+接下来，我们可以 apply 该 yaml 文件使其生效:
+
+```shell
+kubectl apply -f pvc.yaml
+```
+
+此时，查询该对应的 pvc 的状态，可以发现该状态其实是 unbound 的。
+
+```shell
+kubectl get pvc
+```
+
+这时由于在安装 provisioner 时，对应创建的 StorageClass 中 volumeBindingMode 配置是 WaitForFirstConsumer 而不是 Immediate 导致的。
+
+下面，我们来创建一个 Deployment ，其中该 Pod 使用了刚刚创建的 PVC，yaml 文件内容如下:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flaskapp-pvc
+spec:
+  selector:
+    matchLabels:
+      app: flaskapp-pvc
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: flaskapp-pvc
+    spec:
+      containers:
+      - name: flaskapp
+        image: dustise/flaskapp
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: version
+          valueFrom:
+            configMapKeyRef:
+              name: game-demo
+              key: player_initial_lives
+        volumeMounts:
+        - name: config
+          mountPath: "/config"
+          readOnly: true
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: wangzhe-pvc
+```
+
+可以看到，在该 yaml 文件的 Pod spec 配置中，我们定义了一个 volumes，并关联到了我们刚才创建的 PVC 上。
+同时，我们还将该 Volume 挂载到了Container的指定目录下。
+
+下面，我们 apply 该 yaml 文件:
+
+```shell
+kubectl apply -f flask_deployments.yaml
+```
+
+此时，再次查询对应的 PVC 的状态，就可以发现对应的 PVC 的状态已经是 Bound 了，同样，进入容器后，你也可以看到对应的卷。
+
+Ps: 删除 Pod / Deployment 时，不会自动删除对应的 PV 和 PVC 。如果希望删除指定的 PV / PVC ，需要主动来指定并删除它们。
 
 ### 手动创建 PV 并绑定和使用
 
+除了通过 StorageClass 来自动动态生成 PV 之外，我们来可以主动申请 PV 并绑定 PVC 和使用。
 
-https://kubernetes.io/zh/docs/tasks/configure-pod-container/configure-persistent-volume-storage/
+首先，创建 `pv.yaml` 文件如下：
 
-https://github.com/rancher/local-path-provisioner
+```yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: wangzhe-pv
+spec:
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 10Gi
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    name: wangzhe-pvc-2
+    namespace: books
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - hostname1
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: ""
+  volumeMode: Filesystem
+  local:
+    path: /home/data/wangzhe-pv
+```
+
+Ps: 此时，我们需要在对应的机器上创建该目录 `/home/data/wangzhe-pv` 。
+
+接下来，查询对应的 PV 状态，预期状态应该会变为 Available 。
+
+下面，我们来创建一个 pvc 来绑定对应的 PV。
+
+```yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wangzhe-pvc-2
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: ""
+  volumeMode: Filesystem
+```
+
+此时，再次查询对应的 PV 、 PVC 状态，可以看到二者的状态都已经是 Bound 了。
+
+下面，我们来创建对应的 Deployment 来使用对应的 PVC:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flaskapp-pvc-3
+spec:
+  selector:
+    matchLabels:
+      app: flaskapp-pvc-3
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: flaskapp-pvc-3
+    spec:
+      containers:
+      - name: flaskapp
+        image: dustise/flaskapp
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - name: config
+          mountPath: "/config"
+          readOnly: true
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: wangzhe-pvc-2
+```
+
+下面，我们就可以进入该容器，并在目录中进行响应的操作啦~
