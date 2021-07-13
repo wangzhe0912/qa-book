@@ -823,3 +823,93 @@ If-Match 是一个条件式请求首部，它是通过带着 etag 信息去服�
 
 了解了浏览器的缓存和使用方式之后，我们再看来一下 Nginx 的缓存是怎么使用的吧。
 
+**proxy_cache_path**
+
+ - 功能描述: 设置一个目录用于存放 nginx 缓存数据。
+ - 语法格式: `proxy_cache_path path [levels=levels] [use_temp_path=on|off] keys_zone=name:size [inactive=time] [max_size=size] [manager_files=number] [manager_sleep=time] [manager_threshold=time] [loader_files=number] [loader_sleep=time] [loader_threshold=time] [purger=on|off] [purger_files=number] [purger_sleep=time] [purger_threshold=time];`
+ - Context: http
+
+
+proxy_cache_path 是 Nginx 配置缓存中最重要的指令之一了，它指定了 Cache 在本地存放的目录以及 cache 的相关属性。
+
+下面，我们来依次了解一下相关的参数的含义吧：
+
+ - path: 设置缓存文件存放的路径。
+ - levels: 定义缓存路径的目录层级，最多3级。
+ - use_temp_path: 支持 on|off 。 on 表示先使用 proxy_temp_path 定义的临时目录存放响应，off 表示直接使用 path 目录存放临时文件。建议 proxy_temp_path 和 path 在同一块磁盘上。
+ - keys_zone: 定义 zone 的名称和大小，名称在 proxy_cache 中指定，size 是共享内存大小，1MB 大约存放 8000 个 key。定义一个 zone 之后可以在多个 location 中使用。
+ - inactive: 在 inactive 中没有被访问的缓存会被淘汰，默认为 10min 。
+ - max_size: 最大缓存文件大小，超出后会按 LRU 链表淘汰。
+ - manager_files: cache_manager 进行在一次淘汰过程中，淘汰的最大文件数，默认为100。
+ - manager_threshold: cache_manager 进行在一次淘汰过程中，最大的耗时时间，默认为50ms。
+ - manager_sleep: cache_manager 进行在一次淘汰后的休眠时间，默认为200ms。
+ - loader_files: cache_loader 进程载入磁盘缓存文件至内存时，单次最多处理的文件数，默认为100。
+ - loader_threshold: cache_loader 进程载入磁盘缓存文件至内存时，单次最长耗时，默认为50ms。
+ - loader_sleep:cache_loader 进程载入磁盘缓存文件至内存一次后的休眠时间，默认为50ms。
+ 
+
+**proxy_cache**
+
+ - 功能描述: 指定缓存块名称。
+ - 语法格式: `proxy_cache zone|off;`
+ - 默认值: off 
+ - Context: http, server, location
+
+**proxy_cache_key**
+
+ - 功能描述: 指定缓存的key。
+ - 语法格式: `proxy_cache_key string;`
+ - 默认值: $scheme$proxy_host$request_uri 
+ - Context: http, server, location
+
+**proxy_cache_valid**
+
+ - 功能描述: 指定缓存什么样的响应。
+ - 语法格式: `proxy_cache_valid [code] time;`
+ - Context: http, server, location
+
+示例如下：
+
+```shell
+proxy_cache_valid 404 5min;
+```
+
+其中，如果不指定 code 时，默认仅对 200, 301, 302 响应码的请求进行缓存。
+
+另外，上游服务器中返回的响应头部也会影响缓存的时长：
+
+ - X-Accel-Expires: 单位为s，可以设置缓存时长，为0时表示禁用缓存，可以通过@设置缓存到一天中的某一时刻。
+ - 响应头中含有 Set-Cookies 时，不会缓存。
+ - 响应头中含有 Vary: * 则不会缓存。
+
+
+**proxy_no_cache**
+
+ - 功能描述: 设置什么场景下，响应不写入缓存。
+ - 语法格式: `proxy_no_cache string;`
+ - Context: http, server, location
+
+**proxy_cache_bypass**
+
+ - 功能描述: 设置什么场景下，不从缓存中读取数据。
+ - 语法格式: `proxy_cache_bypass string;`
+ - Context: http, server, location
+
+**proxy_cache_convert_head**
+
+ - 功能描述: 设置是否自动将 HEAD 请求转化为 GET 请求。
+ - 语法格式: `proxy_cache_convert_head on|off;`
+ - 默认值: on 
+ - Context: http, server, location
+
+除了上述指令之外，在 Nginx 的 Cache 使用中，还可以通过 **upstream_cache_status** 变量查询是否命中了缓存，它有如下取值：
+
+ - MISS: 未命中缓存。
+ - HIT: 命中缓存。
+ - EXPIRED: 缓存已经过期。
+ - STALE: 命中了陈旧的缓存。
+ - UPDATING: 命中的缓存内容已经过期，但是正在更新。
+ - REVALIDATED: Nginx 验证了过期的缓存仍然是有效的。
+ - BYPASS: 缓存被主动跳过，从上游服务器请求获取了响应。
+
+
