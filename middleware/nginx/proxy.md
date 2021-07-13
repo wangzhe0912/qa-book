@@ -682,6 +682,144 @@ Ps: 只有开启全部接收后再返回时，我们才能对接收到的信息�
 
 ## Nginx 缓存
 
+我们都知道，在一个项目中，Nginx 一般都是用作代理层，充当客户端与服务端的代理。
+
+因此，对于 Nginx 的缓存而言，其实也包含着两部分：
+
+ - 告知客户端（如浏览器）可以自行缓存相关内容，对于部分资源请求可以无需再次访问 Nginx 。
+ - 设置 Nginx 可以缓存部分服务端的响应信息，在下次请求 Nginx 时，无需再次访问上游业务服务器。
+
+下面，我们简单的来对比一下浏览器缓存和 Nginx 缓存：
+
+|缓存方式|优点|缺点|
+|------|----|----|
+|浏览器缓存|没有网络消耗、缓存最快|仅仅针对一个电脑用户生效|
+|客户端缓存|提升所有用户体验|用户侧依然需要一定的网络消耗|
+
+从上表中，我们可以看到，浏览器缓存和Nginx缓存各自有着它们的优缺点，不过幸运的是，这二者并不是冲突的，我们可以对它们组合使用，从而
+达到最好的效果。
+
+### 浏览器缓存
+
+下面，我们先来从浏览器缓存看起。
+你可能会问，我们为什么要看浏览器缓存呢？浏览器缓存不是浏览器做的工作么？和Nginx有什么关系呢？
+
+实际上，浏览器本身其实是不知道一个资源是否应该被缓存的，而具体的缓存策略，其实是可以在 nginx 中配置的，浏览器只是执行 nginx 响应中配置的缓存策略而已。
+
+![proxy8](./picture/proxy8.png)
+
+上图表示了在一次资源请求中，浏览器是如何来判断自身行为的。
+
+在上图中，我们可以看到一些 Etag, If-None-Match, If-Modified-Since, Last-Modified 的相关的关键词，
+下面，我们来对其中涉及的一些核心概念进行说明。
+
+#### Etag
+
+ETag 是 HTTP 响应头中设置资源的特定版本的标识符。
+通过 ETag，可以让缓存更加高效，例如在请求时，如果内容对应的标识符没有发生变化时，Web 服务器不需要发送完整的响应。
+而如果内容发生变化，使用 Etag 有助于防止资源同时更新相互覆盖。
+
+如果给定的 url 中资源发生更改，则一定要生成新的 Etag 的值，比较 etag 可以用于快速判断资源是否发生变化。
+
+**etag**
+
+ - 功能描述: 是否自动为响应生成etag头部。
+ - 语法格式: `etag on|off;`
+ - 默认值: on
+ - Context: http, server, location
+
+其中，Etag 的生成规则也比较简单，通常是使用 last_modified_time 与 response_content_length 拼接得到。
+
+#### If-None-Match
+
+If-None-Match 是一个条件式请求首部，它是通过带着 etag 信息去服务器请求，判断是否有新的资源更新。
+
+对于 GET 和 HEAD 请求而言，当服务器资源的 ETag 与请求中的 Headers 信息不匹配时，响应码为200并返回完整信息；
+否则服务器端会返回响应码 304 （Not Modified），且不会返回响应体。
+
+Ps: 对于Post等会引发服务器状态变化的请求，ETag 不匹配时，会发送412（前置条件失败）。
+
+#### If-Modified-Since
+
+If-Modified-Since 也是一个条件式请求首部，它是带着 Last-Modified 信息去服务器请求，判断是否有新变更的内容。
+
+只有当服务器对于所请求的资源在给定的日志时间之后，对内容有修改时，才会返回资源内容并返回码为200；
+否则，会返回一个不带Body体的304响应，并在 Last-Modified 中带有上次修改时间。
+
+Ps: 当 If-Modified-Since 与 If-None-Match 同时出现时，If-Modified-Since 会被忽略。
+
+了解了浏览器访问的过程之后，我们再来看一下对于 Nginx 而言，具体是如何实现针对浏览器的请求设置缓存策略的吧。
+
+对于 nginx 而言，在该场景中，最核心的就是 **not_modified 过滤模块** 了。
+
+它的功能是针对客户端不确定缓存是否过期时，在请求中传入了 If-Modified-Since 或 If-None-Match 头部时，
+通过将其值与响应中的Last-Modified值相互比较，决定是否通过200返回全部内容还是仅返回304响应码，让浏览器复用之前的缓存。
+
+下面，我们来看一下其中涉及到的一些指令。
+
+**expires**
+
+ - 功能描述: 告诉客户端该响应信息在多久之后失效。
+ - 语法格式: `expires max|off|epoch|time;`
+ - 默认值: off
+ - Context: http, server, location
+
+该指令表示告知浏览器该响应的内容可以在多长时间之后失效。
+
+其中，可选项如下：
+
+ - max: 返回 Expires 头部为 2037年12月31号，Cache-Control 为 10年。
+ - off: 不添加 Expires 和 Cache-Control 头部。
+ - epoch: Cache-Control 为 no-cache。
+ - time: 可是设置具体时间，可以携带单位 
+   - 一天内的指定时刻，例如 @18h30m
+   - 正数：设置该值为 Cache-Control 并自动计算 Expires。
+   - 负数：设置Cache-Control 为 no-cache，并自动计算 Expires。
+
+Ps: 你可能会好奇为什么会同时有 Expires 和 Cache-Control 呢？
+最早的时候其实时候的是 Expires 字段，但是考虑到服务器时间和浏览器时间可能有差异，因此使用绝对时间会导致缓存时间异常，
+因此，增加了一个相对时间的字段，Cache-Control。
+目前，优先选择为 Cache-Control 。
+
+了解了 nginx 如何给返回给客户端的响应设置缓存时间后，我们来看一下 Nginx not_modified 过滤模块的完整工作流程。
+
+![proxy9](./picture/proxy9.png)
+
+在上图中，我们又看到了两个我们之前没有接触过的 If-Unmodified-Since 和 If-Match 请求头，下面，我们先来了解一下这两个请求头吧。
+
+#### If-Unmodified-Since
+
+If-Unmodified-Since 也是一个条件式请求首部，它是带着 Last-Modified 信息去服务器请求，判断是否有新变更的内容并进行操作。
+
+只有当服务器对于所请求的资源在给定的日期时间之后，对内容没有修改时，才会返回资源内容或者接收POST之类的变更请求；
+否则，就会返回412错误。
+
+If-Unmodified-Since 常常在控制并发的场景中出现，例如避免多人同时编辑等问题中。
+
+#### If-Match
+
+If-Match 是一个条件式请求首部，它是通过带着 etag 信息去服务器请求，判断是否有新的资源更新。
+
+对于 GET 和 HEAD 请求而言，当服务器资源的 ETag 与请求中的 Headers 信息匹配时，响应码为200并返回完整信息；
+对于Post等会引发服务器状态变化的请求，ETag 不匹配时，会发送412（前置条件失败）。
+
+针对 modified_since 场景而言，nginx 还提供了一个指令可以控制相关行为：
+
+**if_modified_since**
+
+ - 功能描述: 设置修改时间与上次响应时间在不同条件下的行为。
+ - 语法格式: `if_modified_since off|exact|before;`
+ - 默认值: exact
+ - Context: http, server, location
+
+其中：
+
+ - off: 忽略请求中的 if_modified_since 头部。
+ - exact: 精确匹配 if_modified_since 头部与 last_modified 的值。
+ - before: 如果 if_modified_since 大于等于 last_modified 的值，则均返回 304 。
 
 
+### Nginx 缓存上游响应
+
+了解了浏览器的缓存和使用方式之后，我们再看来一下 Nginx 的缓存是怎么使用的吧。
 
