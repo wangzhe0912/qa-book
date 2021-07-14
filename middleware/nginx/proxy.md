@@ -582,7 +582,7 @@ Ps: 只有开启全部接收后再返回时，我们才能对接收到的信息�
  - X-Accel-Limit-Rate: 由上游服务控制发往客户端的速度限制，等价于limit_rate。
  - X-Accel-Buffering: 由上游控制是否缓存上游的响应。
  - X-Accel-Charset: 由上游控制Content-Type中的Charset。
- - X-Accel-Expires: 设置响应在 nginx 中的缓存时间。
+ - X-Accel-Expires: 由上游控制上游响应响应在 nginx 中的缓存时间，单位为s。
  - Expires: 控制nginx的缓存时间，优先级低于X-Accel-Expires。
  - Cache-Control: 控制Nginx的缓存时间，优先级低于X-Accel-Expires。
  - Set-Cookie: 响应中如果出现了Set-Cookie则不会触发缓存。
@@ -902,6 +902,13 @@ proxy_cache_valid 404 5min;
  - 默认值: on 
  - Context: http, server, location
 
+**proxy_cache_methods**
+
+ - 功能描述: 针对哪些方法的请求进行缓存。
+ - 语法格式: `proxy_cache_methods GET|HEAD|POST;`
+ - 默认值: GET HEAD
+ - Context: http, server, location
+
 除了上述指令之外，在 Nginx 的 Cache 使用中，还可以通过 **upstream_cache_status** 变量查询是否命中了缓存，它有如下取值：
 
  - MISS: 未命中缓存。
@@ -911,5 +918,129 @@ proxy_cache_valid 404 5min;
  - UPDATING: 命中的缓存内容已经过期，但是正在更新。
  - REVALIDATED: Nginx 验证了过期的缓存仍然是有效的。
  - BYPASS: 缓存被主动跳过，从上游服务器请求获取了响应。
+
+
+### Nginx 缓存处理流程
+
+只了解 Nginx 缓存相关的指令，但是不了解 Nginx 在缓存中的处理流程的话，其实很难用好 Nginx 缓存的功能。
+
+下面，我们来看一下 Nginx 接收到客户端的请求后，Nginx 是如何处理这个请求中是否可以从缓存中获取响应的流程的吧。
+
+![proxy10](./picture/proxy10.png)
+
+可以看到，Nginx 有自己的一套机制并结合配置信息判断是否读取缓存。
+如果当 Nginx 如果没有查询到现成可用的缓存数据时，会继续向上游发送请求，此时，接收到上游的响应后，会尝试将其缓存下来，
+其主体流程如下图所示：
+
+![proxy11](./picture/proxy11.png)
+
+需要注意的是，在上游的响应中，其中有一些响应头部是可以控制 Nginx 的缓存行为的，我们来依次了解一下。
+
+ - X-Accel-Expires: 由上游服务定义缓存多长时间，单位为s，@开头时表示缓存到当天的某个时间。
+ - Vary: *: 表明该响应不会被缓存。
+ - Set-Cookie: 上游响应头部中包含 Set-Cookie 时，不会对响应进行缓存。
+
+### 避免缓存穿透
+
+当新增 Nginx 实例后，Nginx 初始状态是没有缓存的，此时，为了避免大量的并发请求全部打到上游服务器，导致压垮上游服务器，我们可以在 Nginx 中一些
+策略，从而避免更多的请求转发至上游服务器中。
+
+#### 合并回源请求
+
+合并回源请求是一种常用的避免缓存穿透的方法。
+
+它的主要解决场景是同一时刻有多个请求请求相同资源时，可以通过加锁的状态，只放一个请求去请求上游服务，其他请求在nginx侧等待，直到上游服务返回响应后，
+其他请求全部使用同样的响应结果进行返回，并 cache 响应结果。
+
+![proxy12](./picture/proxy12.png)
+
+其中涉及到的一些指令如下：
+
+**proxy_cache_lock**
+
+ - 功能描述: 是否开启合并回源请求，开启后同一时间，仅第1个请求发向上游，其他请求等待第1个响应返回或者超时后，使用缓存响应客户端。
+ - 语法格式: `proxy_cache_lock on|off;`
+ - 默认值: off
+ - Context: http, server, location
+
+**proxy_cache_lock_timeout**
+
+ - 功能描述: 等待第1个请求返回响应的最大时间，到达后直接向上游发送请求，但不缓存响应。
+ - 语法格式: `proxy_cache_lock_timeout time;`
+ - 默认值: 5s
+ - Context: http, server, location
+
+**proxy_cache_lock_age**
+
+ - 功能描述: 上一个请求反向响应的超时时间，到达后再放行一个请求发向上游。
+ - 语法格式: `proxy_cache_lock_age time;`
+ - 默认值: 5s
+ - Context: http, server, location
+
+#### 使用 stale 陈旧的缓存
+
+除了使用回源请求之外，Nginx 还允许在缓存过期后，一定时间段内继续使用陈旧的缓存来进行响应，从而减少回源请求。
+
+![proxy13](./picture/proxy13.png)
+
+**proxy_cache_use_stale**
+
+ - 功能描述: 设置在什么情况下，暂时使用过期的缓存。
+ - 语法格式: `proxy_cache_use_stale error | timeout | invalid_header | updating | http_500 | http_502 | http_503 | http_504 | http_403 | http_404 | http_429 | off;`
+ - 默认值: off
+ - Context: http, server, location
+
+其中，各个配置的含义如下：
+
+ - updating: 当缓存内容过期时，有一个请求正在访问上游试图更新缓存时，其他请求直接使用过期的内容返回客户端。此外，上游返回的响应头的也可以定制缓存行为：
+   - stale-while-revalidate: 缓存过期后，定义一段时间，在这段时间内updating设置有效，否则请求依然访问上游服务，例如 Cache-Control: max-age=600, stale-while-revalidate=30
+   - stale-if-error: 缓存过期后，定义一段时间，在这段时间内如果上游服务出错后继续使用缓存，否则请求依然访问上游服务，例如 Cache-Control: max-age=600, stale-if-error=1200
+ - error: 当与上游建立连接、发送请求、读取响应头部等情况出错时，使用缓存。
+ - timeout: 当与上游建立连接、发送请求、读取响应头部等情况超时时，使用缓存。
+ - http_${code}: 缓存指定错误码信息。
+
+**proxy_cache_background_update**
+
+ - 功能描述: 当使用的 proxy_cache_use_stale 允许使用过期响应时，将同步生成一个子请求，通过访问上游服务更新过期的缓存。
+ - 语法格式: `proxy_cache_background_update on|off;`
+ - 默认值: off
+ - Context: http, server, location
+
+**proxy_cache_revalidate**
+
+ - 功能描述: 更新缓存时，是否开启If-Modified-Since和If-None-Match作为请求头部，从而可以接收304响应码减少body传输。
+ - 语法格式: `proxy_cache_revalidate on|off;`
+ - 默认值: off
+ - Context: http, server, location
+
+### 手动立即清除缓存
+
+除了定时删除缓存之外，Nginx 还可以通过第三方模块的方式来支持立即清除缓存。
+
+其中，第三方模块的地址为 [ngx_cache_purge](https://github.com/FRiCKLE/ngx_cache_purge) 。
+
+可以在编译 Nginx 时，使用 `--add-module` 的方式将对应模块加入到 nginx 中。
+
+其功能是通过接收 HTTP 请求后立即清除缓存。
+
+ngx_cache_purge 模块支持两种使用方式。
+
+方式一: 在已有的 location 中，针对某些 method 请求时，可以触发释放缓存的操作。
+
+**proxy_cache_purge**
+
+ - 功能描述: 该在指定IP通过指定方法访问对应的请求时，会触发缓存释放的操作。
+ - 语法格式: `proxy_cache_purge on|off|<method> [from all|<ip> [.. <ip>]];`
+ - 默认值: off
+ - Context: http, server, location
+
+方式二: 定义一个单独的 location 块，即提供一个 url ，当访问该 url 时，触发对应的缓存删除操作。
+
+**proxy_cache_purge**
+
+ - 功能描述: 当访问对应的location块时，能够触发立即删除缓存的操作。
+ - 语法格式: `proxy_cache_purge zone_name key;`
+ - 默认值: none
+ - Context: location
 
 
