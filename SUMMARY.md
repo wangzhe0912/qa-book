@@ -68,6 +68,7 @@
   * [if、for、switch语句](./language/go/if_for_switch.md)
   * [Go语言中的异常处理](./language/go/exception.md)
   * [panic、recover、defer语句使用](./language/go/panic.md)
+  * [Go开发环境搭建](./language/go/develop_env.md)
 * [Cmake快速入门](./language/cmake/beginning.md)
   * [Cmake入门教程](./language/cmake/tutorial.md)
 * [C++快速入门](./language/cpp/beginning.md)
