@@ -340,7 +340,7 @@ upstream upskeepalive {
 }
 
 server {
-	server_name rrups.taohui.tech;
+	server_name rrups.missshi.com;
 	error_log myerror.log info;
 
 	location /{
@@ -920,6 +920,25 @@ proxy_cache_valid 404 5min;
  - BYPASS: 缓存被主动跳过，从上游服务器请求获取了响应。
 
 
+此外，我们再来介绍两个指令，它们也可以有效提升系统的响应速度。
+
+**slice**
+
+ - 功能描述: 通过range协议将大文件分解为多个小文件，更好的用缓存为客户端的range协议服务。
+ - 语法格式: `slice size;`
+ - 默认值: 0
+ - Context: http, server, location
+
+Ps: 该模块默认没有编译进入 nginx 中，需要使用 `--with-http_slice_module` 来启用。
+
+**open_file_cache**
+
+ - 功能描述: 缓存文件句柄，避免每次读写都需要打开和关闭文件句柄。
+ - 语法格式: `open_file_cache off|max=N [inactive=time];`
+ - 默认值: off
+ - Context: http, server, location
+
+
 ### Nginx 缓存处理流程
 
 只了解 Nginx 缓存相关的指令，但是不了解 Nginx 在缓存中的处理流程的话，其实很难用好 Nginx 缓存的功能。
@@ -1044,3 +1063,153 @@ ngx_cache_purge 模块支持两种使用方式。
  - Context: location
 
 
+## memcached 反向代理
+
+虽然 HTTP 是 Nginx 反向代理中支持的核心协议，但其实，Nginx 远远不仅仅支持 HTTP 协议。
+
+下面，我们就来看一下 Nginx 支持的其他协议吧，首先来看一下 memcached 反向代理。
+
+memcached 反向代理仅处的场景是指客户端向 Nginx 发送 HTTP 协议，而 Nginx 与 memcached 进行交互，并将结果返回给 HTTP 客户端。
+
+具体来说：
+
+ - 将 HTTP 请求转化为 memcached 协议中的 get 请求，转发请求至上游 memcached 服务。
+ - get 命令: get <key>*\r\n
+ - 通过 memcached_key 变量来构造 key 键。
+
+其中涉及到的一些指令如下，并且与 http 指令进行了对比：
+
+![proxy14](./picture/proxy14.png)
+
+示例配置如下：
+
+```shell
+server {
+	server_name memcached.missshi.com;
+	#root html/;
+	default_type text/plain;
+
+	location /get {
+		set            $memcached_key "$arg_key";
+		memcached_pass localhost:11211;
+	}
+}
+```
+
+即将所有访问 `/get` 地址的请求，读取其中 key 的参数，并将该key的查询转发至memcached中。
+
+## websocket 反向代理
+
+websocket 其实是一种基于 HTTP 1.1 的一种支持双向通信的协议。
+
+Nginx 想要支持 websocket 协议非常简单，仅需要增加如下配置即可：
+
+```shell
+proxy_http_version 1.1;
+proxy_set_header Upgrade $http_upgrade;
+proxy_set_header Connection "upgrade";
+```
+
+## HTTP 2.0 协议反向代理
+
+HTTP 2.0 是 HTTP 1.1 协议的升级版本。
+
+它的主要特性包括：
+
+ - 通过二进制传输和标头压缩的方式，使得传输的数据量大幅度减少。
+ - 支持多路复用。
+ - 支持服务器消息推送。
+
+Nginx 中 http 2.0 支持的模块默认没有编译进入 nginx 中，需要使用 `--with-http_v2_module` 来编译 nginx ，从而支持 http 2.0 协议。
+
+此外，HTTP 2.0 要求必须在 TLS/SSL 协议之上工作，即必须开启 TLS/SSL 协议。
+
+使用方法是：
+
+```shell
+listen 443 ssl http2;
+```
+
+同时，如果想要从 Nginx 向客户端主动推送资源时，可以用到如下两个指令。
+
+**http2_push_preload**
+
+ - 功能描述: 根据上游返回的头部信息，推送指定文件到客户端。
+ - 语法格式: `http2_push_preload on|off;`
+ - 默认值: off
+ - Context: http, server, location
+
+**http2_push**
+
+ - 功能描述: 根据指定uri，推送指定文件到客户端。
+ - 语法格式: `http2_push uri|off;`
+ - 默认值: off
+ - Context: http, server, location
+
+示例配置如下:
+
+```shell
+server {
+	server_name http2.missshi.com;
+
+	root html;
+	location / {
+		http2_push /mirror.txt;
+		http2_push /video.mp4;
+	}
+
+	location /test {
+		add_header Link "</style.css>; as=style; rel=preload";
+		http2_push_preload on;
+	}
+
+    listen 4430 ssl http2; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/http2.missshi.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/http2.missshi.com/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+}
+```
+
+此外，http 2.0 还支持各种相关配置指令，此处不再一一介绍。
+
+## GRPC 反向代理
+
+GRPC 是 google 提出的一种基于 HTTP 2.0 的RPC通信协议。
+
+![proxy15](./picture/proxy15.png)
+
+其主要指令如上表所示，与 HTTP 协议比较类似。
+
+## stream 四层反向代理
+
+在上面的所有内容中，都还是将对于应用层（7层）是如何进行反向代理的。
+
+下面的内容中，我们也会简单来看一下对于传输层（4层）协议而言，Nginx 可以如何帮助我们实现反向代理。
+
+在传输层的反向代理中，主要涉及到如下7个阶段：
+
+1. POST_ACCEPT: realip
+2. PREACCESS: limit_conn
+3. ACCESS: access
+4. SSL: ssl
+5. PREPEAD: ssl_preread
+6. CONTENT: return, stream_proxy
+7. LOG: access_log
+
+关于每个模块中具体的指令，此处我们不再细讲了，大家有需要的话可以去 Nginx 官网进行查询。
+
+其中，有一些变量在 Nginx 反向代理的配置中，我们可能会用到，我们也来大致了解一下：
+
+ - binary_remote_addr: 客户端地址的整型格式。
+ - connection: 递增的连接序号。
+ - remote_addr: 客户端地址。
+ - remote_port: 客户端端口。
+ - proxy_protocol_addr: proxy_protocol 协议中的地址。
+ - proxy_protocol_port: proxy_protocol 协议中的端口。
+ - protocol: 传输层协议，TCP/UDP。
+ - server_addr: 服务器地址。
+ - server_port: 服务器端口。
+ - status: 返回码，200/400/403/500/502/503
+ - bytes_received: 客户端收到的字节数。
+ - bytes_sent: 发送到客户端的字节数。
