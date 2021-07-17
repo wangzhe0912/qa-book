@@ -39,9 +39,10 @@ git clone https://github.com/alibaba/virtual-environment.git
 cd virtual-environment/examples
 ```
 
-Step3: 设置 default namespace 自动注入 sidecar 。
+Step3: 设置 default namespace 自动注入 sidecar 并使得 webhook 能够为 Envoy 自动注入环境变量。
 
 ```shell
+kubectl label namespace default environment-tag-injection=enabled
 kubectl label namespace default istio-injection=enabled
 ```
 
