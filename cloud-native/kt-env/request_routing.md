@@ -155,7 +155,7 @@ spec:
   http:
   - route:
     - destination:
-        host: flaskapp
+        host: flaskapp.books.svc.cluster.local
         subset: subset-v2
     match:
     - headers:
@@ -163,7 +163,7 @@ spec:
           exact: jason
   - route:
     - destination:
-        host: flaskapp
+        host: flaskapp.books.svc.cluster.local
         subset: subset-v1
 ```
 
