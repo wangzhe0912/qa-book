@@ -84,17 +84,23 @@ Istiod 还充当证书授权（CA），并生成证书以允许在数据平面�
 
 ## Istio 请求路由控制
 
+Istio 提供的核心功能之一就是 **服务发现** 。
 
+Istio 简单的规则配置和流量路由允许您控制服务之间的流量和 API 调用过程。
+Istio 简化了服务级属性（如熔断器、超时和重试）的配置，并且让它轻而易举的执行重要的任务（如 A/B 测试、金丝雀发布和按流量百分比划分的分阶段发布）。
 
+例如，在 Istio 中，有两个非常重要的概念，**VirtualService** 和 **DestinationRule**。
 
+通过合理的 **VirtualService** 和 **DestinationRule** 的配置，可以实现根据指定 uri, 指定的 headers 信息等等来配置对应的下游地址。
 
+可以参考如下示例: [Istio 请求路由](https://istio.missshi.com/chap03/request_routing.html)
 
+### VirtualService 、 Service 、 DestinationRule 关系介绍
 
-
-
-
-
-
+VirtualService 故名思义就是虚拟服务，VirtualService 中定义了一系列针对指定服务的流量路由规则。
+每个路由规则都是针对特定协议的匹配规则。
+如果流量符合这些特征，就会根据规则发送到服务注册表中的目标服务（或者目标服务的子集或版本）。
+VirtualService 的详细定义和配置请参考通信路由。
 
 
 
