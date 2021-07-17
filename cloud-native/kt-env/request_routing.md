@@ -127,7 +127,7 @@ DestinationRule 是基于已有的 K8s Service 进行 Pod 下的细粒度的分�
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
-  name: flaskapp.books.svc.cluster.local
+  name: flaskapp
 spec:
   host: flaskapp.books.svc.cluster.local
   subsets:
