@@ -7,6 +7,8 @@
 
 ## QuickStart
 
+**如果是一个新的 namespace，需要在新的 namespace 下部署 operator 和 role 相关信息，参考 [deploy](./deploy.md)** 。
+
 Step1: 创建虚拟环境。
 
 创建一个`virtual-environment-cr.yaml` 文件：
