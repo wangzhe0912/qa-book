@@ -70,6 +70,7 @@
   * [panic、recover、defer语句使用](./language/go/panic.md)
 * [Go实战开发](./language/go_action/beginning.md)
   * [Go开发环境搭建](./language/go_action/go_action_env.md)
+  * [Go Web框架gin快速上手](./language/go_action/gin.md)
 * [Cmake快速入门](./language/cmake/beginning.md)
   * [Cmake入门教程](./language/cmake/tutorial.md)
 * [C++快速入门](./language/cpp/beginning.md)
