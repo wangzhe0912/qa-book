@@ -49,3 +49,5 @@ from request_wrapper import instrument
 
 instrument()
 ```
+
+此外，另外一种相关的实现也可以参考 [Flask+requests headers 透传](https://github.com/AminoApps/context-propagation-python) 。
