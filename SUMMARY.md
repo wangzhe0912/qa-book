@@ -231,6 +231,9 @@
   * [KT-env部署](./cloud-native/kt-env/deploy.md)  
   * [KT-env实战](./cloud-native/kt-env/action.md)
   * [KT-env源码解读](./cloud-native/kt-env/source_code.md)
+* [全链路追踪实战](./cloud-native/tracing/beginning.md)
+  * [基于Python Flask框架的http headers透传](./cloud-native/tracing/flask.md)
+  * [基于Go gin框架的http headers透传](./cloud-native/tracing/gin.md)
 
 
 ## 工具杂谈篇
