@@ -14,3 +14,9 @@
 除了强大的整体分布式追踪方案 Zipkin, Jaegar, OpenTracing 之外，如果仅仅是想要实现 headers 透传方案的话，可以有一些更加轻量化的方案。
 
 在本系列的文章中，我们除了会介绍 Zipkin, Jaegar, OpenTracing 等方案外，也会介绍一些常用框架的简单的 headers 透传方案。
+
+
+**参考资料**
+
+ - [分布式上下文实战](https://www.dozer.cc/2020/03/distributed-context.html)
+
