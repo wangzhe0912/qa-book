@@ -233,6 +233,20 @@ require github.com/spf13/cobra v1.2.1 // indirect
 go get -u -v github.com/spf13/cobra
 ```
 
+此外，如果我们想要下载指定版本的第三方依赖时，下载的方式如下：
+
+```shell
+go get -v knative.dev/pkg@v0.0.0-20191024051936-4befa47ec54b
+```
+
+即可以在依赖模块名称后使用@追加版本号下载。
+
+如果是对于一个已有的项目（已经存在对应的 `go.mod` 文件），我们想要本地安装全部依赖的话其实非常简单，只要执行如下命令即可：
+
+```shell
+go mod download
+```
+
 ## 获取 gitlab 私有库包
 
 如果是私有的git库怎么获取呢？比如在公司使用gitlab搭建的git仓库，设置的都是private权限的。
