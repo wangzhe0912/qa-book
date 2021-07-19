@@ -154,7 +154,6 @@ func main() {
 		client := cphttp.WrapClient(&http.Client{})
 		resp, err := ctxhttp.Get(c.Request.Context(), client, "http://127.0.0.1:8080/test")
 		println("resp: ", resp, err)
-		// Will output  :   x({\"foo\":\"bar\"})
 		c.JSON(http.StatusOK, resp)
 	})
 
