@@ -150,7 +150,6 @@ func main() {
 	r.GET("/JSON", func(c *gin.Context) {
 		value := cp.GetValueFromContext(c.Request.Context(), "easyenv")
 		println("token: ", value)
-		//callback is x
 		client := cphttp.WrapClient(&http.Client{})
 		resp, err := ctxhttp.Get(c.Request.Context(), client, "http://127.0.0.1:8080/test")
 		println("resp: ", resp, err)
