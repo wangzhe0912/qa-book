@@ -27,7 +27,8 @@
   * [DjangoAdmin高级用法](./language/django/admin.md)
   * [DjangoRestFramework快速入门](./language/django/rest.md)
   * [DjangoCelery快速入门](./language/django/celery.md)
-* [Spring快速入门](./language/spring/beginning.md)
+
+[comment]: <> (* [Spring快速入门]&#40;./language/spring/beginning.md&#41;)
 * [Shell快速入门](./language/shell/beginning.md)
   * [Shell 变量详解](./language/shell/variable.md)
   * [Shell 函数详解](./language/shell/function.md)
@@ -43,31 +44,51 @@
   * [Kotlin基本数据类型](./language/kotlin/basic_data_type.md)
   * [Kotlin条件控制](./language/kotlin/condition_control.md)
   * [Kotlin循环语句](./language/kotlin/loop.md)
-  * [Kotlin类和对象](./language/kotlin/object.md)
-  * [Kotlin继承](./language/kotlin/inherit.md)
-  * [Kotlin接口](./language/kotlin/interface.md)
-  * [Kotlin扩展](./language/kotlin/extension.md)
-  * [Kotlin数据类与密封类](./language/kotlin/data_type.md)
-  * [Kotlin泛型](./language/kotlin/generic.md)
-  * [Kotlin枚举类](./language/kotlin/enum.md)
-  * [Kotlin对象表达式/声明](./language/kotlin/object_express.md)
-  * [Kotlin委托](./language/kotlin/commission.md)
+
+[comment]: <> (  * [Kotlin类和对象]&#40;./language/kotlin/object.md&#41;)
+
+[comment]: <> (  * [Kotlin继承]&#40;./language/kotlin/inherit.md&#41;)
+
+[comment]: <> (  * [Kotlin接口]&#40;./language/kotlin/interface.md&#41;)
+
+[comment]: <> (  * [Kotlin扩展]&#40;./language/kotlin/extension.md&#41;)
+
+[comment]: <> (  * [Kotlin数据类与密封类]&#40;./language/kotlin/data_type.md&#41;)
+
+[comment]: <> (  * [Kotlin泛型]&#40;./language/kotlin/generic.md&#41;)
+
+[comment]: <> (  * [Kotlin枚举类]&#40;./language/kotlin/enum.md&#41;)
+
+[comment]: <> (  * [Kotlin对象表达式/声明]&#40;./language/kotlin/object_express.md&#41;)
+
+[comment]: <> (  * [Kotlin委托]&#40;./language/kotlin/commission.md&#41;)
 * [go语言快速入门](./language/go/beginning.md)
   * [Go的工作区与GOPATH](./language/go/gopath.md)
   * [命令源码文件](./language/go/command_source_file.md)
   * [库源码文件](./language/go/lib_source_file.md)
   * [程序实体概述](./language/go/entity.md)
-  * [Go语言的数组与切片](./language/go/array.md)
-  * [Go语言的Container Package](./language/go/container.md)
-  * [Go语言的字典](./language/go/dict.md)
-  * [Go语言的Channel](./language/go/channel.md)
-  * [Go语言的结构体](./language/go/struct.md)
-  * [Go语言的接口](./language/go/interface.md)
-  * [Go语言的指针](./language/go/point.md)
-  * [Go语句的执行规则](./language/go/rule.md)
-  * [if、for、switch语句](./language/go/if_for_switch.md)
-  * [Go语言中的异常处理](./language/go/exception.md)
-  * [panic、recover、defer语句使用](./language/go/panic.md)
+
+[comment]: <> (  * [Go语言的数组与切片]&#40;./language/go/array.md&#41;)
+
+[comment]: <> (  * [Go语言的Container Package]&#40;./language/go/container.md&#41;)
+
+[comment]: <> (  * [Go语言的字典]&#40;./language/go/dict.md&#41;)
+
+[comment]: <> (  * [Go语言的Channel]&#40;./language/go/channel.md&#41;)
+
+[comment]: <> (  * [Go语言的结构体]&#40;./language/go/struct.md&#41;)
+
+[comment]: <> (  * [Go语言的接口]&#40;./language/go/interface.md&#41;)
+
+[comment]: <> (  * [Go语言的指针]&#40;./language/go/point.md&#41;)
+
+[comment]: <> (  * [Go语句的执行规则]&#40;./language/go/rule.md&#41;)
+
+[comment]: <> (  * [if、for、switch语句]&#40;./language/go/if_for_switch.md&#41;)
+
+[comment]: <> (  * [Go语言中的异常处理]&#40;./language/go/exception.md&#41;)
+
+[comment]: <> (  * [panic、recover、defer语句使用]&#40;./language/go/panic.md&#41;)
 * [Go实战开发](./language/go_action/beginning.md)
   * [Go开发环境搭建](./language/go_action/go_action_env.md)
   * [Go Web框架gin快速上手](./language/go_action/gin.md)
@@ -152,37 +173,67 @@
 
 ## AI篇
 
-* [算法与数据结构入门](./ai/algorithm_and_data_structure/beginning.md)
-  * [数组与链表](./ai/algorithm_and_data_structure/linked_list.md)
-  * [堆栈和队列](./ai/algorithm_and_data_structure/stack_and_queue.md)
-  * [优先队列](./ai/algorithm_and_data_structure/priority_queue.md)
-  * [哈希表](./ai/algorithm_and_data_structure/dict_and_set.md)
-  * [二叉数](./ai/algorithm_and_data_structure/binary_tree.md)
-  * [递归和分治](./ai/algorithm_and_data_structure/rcursion.md)
-  * [贪心算法](./ai/algorithm_and_data_structure/greedy.md)
-  * [深度优先/广度优先搜索](./ai/algorithm_and_data_structure/DFS_BFS.md)
-  * [剪枝](./ai/algorithm_and_data_structure/pruning.md)
-  * [二分查找](./ai/algorithm_and_data_structure/binary_search.md)
-  * [字典树](./ai/algorithm_and_data_structure/dict_tree.md)
-  * [位运算](./ai/algorithm_and_data_structure/bit.md)
-  * [动态规划](./ai/algorithm_and_data_structure/dynamic_programming.md)
-  * [并查集](./ai/algorithm_and_data_structure/disjoint_set.md)
-  * [LRU Cache](./ai/algorithm_and_data_structure/lru.md)
-  * [布隆过滤器](./ai/algorithm_and_data_structure/bloom_filter.md)
-* [浅谈AI数学基础](./ai/math/beginning.md)
-  * [计算机的源头: 二进制](./ai/math/binary.md)
-  * [原来取余操作本身就是个哈希函数: 余数](./ai/math/remainder.md)
-  * [自己来计算平方根: 迭代法](./ai/math/iterative.md)
-  * [提升代码运行效率的利器: 数学归纳法](./ai/math/mathematical_induction.md)
-  * [浅谈递归算法](./ai/math/rcursion.md)
-  * [浅谈排列组合](./ai/math/arrangement_and_combination.md)
-  * [浅谈动态规划](./ai/math/dynamic_programming.md)
-* [Python科学计算实用库入门](./ai/python/beginning.md)
-  * [Numpy](./ai/python/numpy.md)
-  * [Pandas](./ai/python/pandas.md)
-  * [Matplotlib](./ai/python/matplotlib.md)
-  * [Seaborn](./ai/python/seaborn.md)
-  * [Scipy](./ai/python/scipy.md)
+[comment]: <> (* [算法与数据结构入门]&#40;./ai/algorithm_and_data_structure/beginning.md&#41;)
+
+[comment]: <> (  * [数组与链表]&#40;./ai/algorithm_and_data_structure/linked_list.md&#41;)
+
+[comment]: <> (  * [堆栈和队列]&#40;./ai/algorithm_and_data_structure/stack_and_queue.md&#41;)
+
+[comment]: <> (  * [优先队列]&#40;./ai/algorithm_and_data_structure/priority_queue.md&#41;)
+
+[comment]: <> (  * [哈希表]&#40;./ai/algorithm_and_data_structure/dict_and_set.md&#41;)
+
+[comment]: <> (  * [二叉数]&#40;./ai/algorithm_and_data_structure/binary_tree.md&#41;)
+
+[comment]: <> (  * [递归和分治]&#40;./ai/algorithm_and_data_structure/rcursion.md&#41;)
+
+[comment]: <> (  * [贪心算法]&#40;./ai/algorithm_and_data_structure/greedy.md&#41;)
+
+[comment]: <> (  * [深度优先/广度优先搜索]&#40;./ai/algorithm_and_data_structure/DFS_BFS.md&#41;)
+
+[comment]: <> (  * [剪枝]&#40;./ai/algorithm_and_data_structure/pruning.md&#41;)
+
+[comment]: <> (  * [二分查找]&#40;./ai/algorithm_and_data_structure/binary_search.md&#41;)
+
+[comment]: <> (  * [字典树]&#40;./ai/algorithm_and_data_structure/dict_tree.md&#41;)
+
+[comment]: <> (  * [位运算]&#40;./ai/algorithm_and_data_structure/bit.md&#41;)
+
+[comment]: <> (  * [动态规划]&#40;./ai/algorithm_and_data_structure/dynamic_programming.md&#41;)
+
+[comment]: <> (  * [并查集]&#40;./ai/algorithm_and_data_structure/disjoint_set.md&#41;)
+
+[comment]: <> (  * [LRU Cache]&#40;./ai/algorithm_and_data_structure/lru.md&#41;)
+
+[comment]: <> (  * [布隆过滤器]&#40;./ai/algorithm_and_data_structure/bloom_filter.md&#41;)
+
+[comment]: <> (* [浅谈AI数学基础]&#40;./ai/math/beginning.md&#41;)
+
+[comment]: <> (  * [计算机的源头: 二进制]&#40;./ai/math/binary.md&#41;)
+
+[comment]: <> (  * [原来取余操作本身就是个哈希函数: 余数]&#40;./ai/math/remainder.md&#41;)
+
+[comment]: <> (  * [自己来计算平方根: 迭代法]&#40;./ai/math/iterative.md&#41;)
+
+[comment]: <> (  * [提升代码运行效率的利器: 数学归纳法]&#40;./ai/math/mathematical_induction.md&#41;)
+
+[comment]: <> (  * [浅谈递归算法]&#40;./ai/math/rcursion.md&#41;)
+
+[comment]: <> (  * [浅谈排列组合]&#40;./ai/math/arrangement_and_combination.md&#41;)
+
+[comment]: <> (  * [浅谈动态规划]&#40;./ai/math/dynamic_programming.md&#41;)
+
+[comment]: <> (* [Python科学计算实用库入门]&#40;./ai/python/beginning.md&#41;)
+
+[comment]: <> (  * [Numpy]&#40;./ai/python/numpy.md&#41;)
+
+[comment]: <> (  * [Pandas]&#40;./ai/python/pandas.md&#41;)
+
+[comment]: <> (  * [Matplotlib]&#40;./ai/python/matplotlib.md&#41;)
+
+[comment]: <> (  * [Seaborn]&#40;./ai/python/seaborn.md&#41;)
+
+[comment]: <> (  * [Scipy]&#40;./ai/python/scipy.md&#41;)
 * [tensorflow快速入门](./ai/tensorflow/beginning.md)
   * [tensorflow环境搭建](./ai/tensorflow/install.md)
   * [tensorflow架构介绍](./ai/tensorflow/artitecture.md)
@@ -190,7 +241,8 @@
   * [tensorflow初体验之房价预测](./ai/tensorflow/predict_house_price.md)
   * [TensorBoard快速入门](./ai/tensorflow/tensorboard.md)
   * [Keras实战之手写数字识别](./ai/tensorflow/mnist_practice.md)
-* [keras快速入门](./ai/keras/beginning.md)
+
+[comment]: <> (* [keras快速入门]&#40;./ai/keras/beginning.md&#41;)
 * [paddle快速入门](./ai/paddle/beginning.md)
   * [Paddle 核心概念 Tensor 详解](./ai/paddle/tensor.md)
 
@@ -202,9 +254,9 @@
   * [rtsp协议杂谈与实战](./auvideo/stream_practice/rtsp.md)
 
 
-## 移动端开发
+[comment]: <> (## 移动端开发)
 
-* [android快速入门](./mobile/android/beginning.md)
+[comment]: <> (* [android快速入门]&#40;./mobile/android/beginning.md&#41;)
 
 
 ## 嵌入式开发
@@ -219,20 +271,22 @@
 
 ## 云原生篇
 
-* [docker杂谈](./cloud-native/docker/beginning.md)
+[comment]: <> (* [docker杂谈]&#40;./cloud-native/docker/beginning.md&#41;)
 * [Kubernetes](./cloud-native/kubernetes/beginning.md)
   * [Kubernetes基本概述](./cloud-native/kubernetes/concept.md)
   * [Kubernetes架构](./cloud-native/kubernetes/artitecture.md)
   * [Kubernetes环境搭建](./cloud-native/kubernetes/setup_env.md)
   * [Kubernetes ConfigMap 杂谈](./cloud-native/kubernetes/configmap.md)
   * [Kubernetes PV/PVC/StorageClass 杂谈](./cloud-native/kubernetes/storage.md)
-* [Helm](./cloud-native/helm/beginning.md)
+
+[comment]: <> (* [Helm]&#40;./cloud-native/helm/beginning.md&#41;)
 * [KT-env实战](./cloud-native/kt-env/beginning.md)
   * [Mesh基础知识及请求路由](./cloud-native/kt-env/request_routing.md)
   * [KT-env目标及功能](./cloud-native/kt-env/basic.md)
   * [KT-env部署](./cloud-native/kt-env/deploy.md)  
   * [KT-env实战](./cloud-native/kt-env/action.md)
-  * [KT-env源码解读](./cloud-native/kt-env/source_code.md)
+
+[comment]: <> (  * [KT-env源码解读]&#40;./cloud-native/kt-env/source_code.md&#41;)
 * [全链路追踪实战](./cloud-native/tracing/beginning.md)
   * [基于Python Flask框架的http headers透传](./cloud-native/tracing/flask.md)
   * [基于Go gin框架的http headers透传](./cloud-native/tracing/gin.md)
@@ -240,8 +294,9 @@
 
 ## 工具杂谈篇
 
-* [PyCharm](./tools/pycharm/beginning.md)
-  * [Ubuntu 20.04下解决Pyharm无法输入中文的问题](./tools/pycharm/chinese_input.md)
+[comment]: <> (* [PyCharm]&#40;./tools/pycharm/beginning.md&#41;)
+
+[comment]: <> (  * [Ubuntu 20.04下解决Pyharm无法输入中文的问题]&#40;./tools/pycharm/chinese_input.md&#41;)
   * [PyCharm远程调试](./tools/pycharm/remote_debug.md)
 * [Wireshark](./tools/Wireshark/beginning.md)
   * [Wireshark快速入门](./tools/Wireshark/tutorial.md)
@@ -253,20 +308,26 @@
 
 ## 测试杂谈篇
 
-* [性能测试原理剖析](./test/performance/beginning.md)
-* [Jmeter](./test/jmeter/beginning.md)
-* [Locust](./test/locust/beginning.md)
+[comment]: <> (* [性能测试原理剖析]&#40;./test/performance/beginning.md&#41;)
+
+[comment]: <> (* [Jmeter]&#40;./test/jmeter/beginning.md&#41;)
+
+[comment]: <> (* [Locust]&#40;./test/locust/beginning.md&#41;)
 * [接口自动化测试](./test/interface/beginning.md)
   * [JSONSchema在接口测试中的应用](./test/interface/json_schema.md)
-* [UI自动化测试](./test/ui/beginning.md)
+
+[comment]: <> (* [UI自动化测试]&#40;./test/ui/beginning.md&#41;)
 
 
-## 测试服务篇
+[comment]: <> (## 测试服务篇)
 
-* [一站式自动化测试平台](./service/function/beginning.md)
-* [分布式性能测试平台](./service/performance/beginning.md)
-* [通用Mock服务管理平台](./service/mock/beginning.md)
-* [混沌工程实践平台](./service/chaos/beginning.md)
+[comment]: <> (* [一站式自动化测试平台]&#40;./service/function/beginning.md&#41;)
+
+[comment]: <> (* [分布式性能测试平台]&#40;./service/performance/beginning.md&#41;)
+
+[comment]: <> (* [通用Mock服务管理平台]&#40;./service/mock/beginning.md&#41;)
+
+[comment]: <> (* [混沌工程实践平台]&#40;./service/chaos/beginning.md&#41;)
 
 
 
