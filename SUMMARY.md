@@ -112,6 +112,9 @@
   * [在Python中使用ETCD](./databases/etcd/etcd_in_python.md)
 * [redis](./databases/redis/beginning.md)
   * [redis的安装](./databases/redis/install.md)
+* [neo4j](./databases/neo4j/beginning.md)
+  * [neo4j的安装](./databases/neo4j/install.md)
+  * [neo4j的快速使用](./databases/neo4j/quick_start.md)
 
 
 ## 持续集成篇
