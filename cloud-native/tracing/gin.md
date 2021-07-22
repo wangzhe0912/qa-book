@@ -117,7 +117,8 @@ func (s *roundTripper) RoundTrip(r *http.Request) (*http.Response, error) {
 
 具体到使用中，其实非常简单，只需要对 http.Client 进行一次 Wrap 即可：
 
-```gopackage main
+```go
+package main
 import cphttp "github.com/AminoApps/context-propagation-go/module/context-propagation-http"
 import "golang.org/x/net/context/ctxhttp"
 
