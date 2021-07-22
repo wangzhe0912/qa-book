@@ -135,3 +135,43 @@ RETURN p
 ![quick_start_5](./pictures/quick_start_5.png)
 
 上述命令表示查询 Kevin Bacon 到 Meg Ryan 之间的最短路径。
+
+### 推荐
+
+图数据库常常还可以用于推荐场景，例如，我们可以找出一些推荐和 Tom Hanks 合作的演员。
+
+```
+MATCH (tom:Person {name:"Tom Hanks"})-[:ACTED_IN]->(m)<-[:ACTED_IN]-(coActors),
+  (coActors)-[:ACTED_IN]->(m2)<-[:ACTED_IN]-(cocoActors)
+WHERE NOT (tom)-[:ACTED_IN]->()<-[:ACTED_IN]-(cocoActors) AND tom <> cocoActors
+RETURN cocoActors.name AS Recommended, count(*) AS Strength ORDER BY Strength DESC
+```
+
+我们来看一下上述指令的作用：
+
+1. 首先，我们需要找的演员是没有和 Tom Hanks 直接合作过的演员，但是其实是和 Tom Hanks 间接合作过的演员。
+2. 同时，按照间接合作的次数进行排序。
+
+```
+MATCH (tom:Person {name:"Tom Hanks"})-[:ACTED_IN]->(m)<-[:ACTED_IN]-(coActors),
+  (coActors)-[:ACTED_IN]->(m2)<-[:ACTED_IN]-(cruise:Person {name:"Tom Cruise"})
+RETURN tom, m, coActors, m2, cruise
+```
+
+上述命令表示找出 Tom Hanks 和 Tom Cruise 间接合作过的完整的链路。
+
+### 删除数据
+
+当我们完成上述实验之后，就可以删除相关的数据了：
+
+```
+MATCH (n) DETACH DELETE n
+```
+
+删除完成之后，可以使用如下指令验证数据是否已经删除干净了：
+
+```
+MATCH (n) RETURN n
+```
+
+此时，我们关于对 Neo4j 的初步的了解就先告一段落了。
