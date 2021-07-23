@@ -115,6 +115,7 @@
 * [neo4j](./databases/neo4j/beginning.md)
   * [neo4j的安装](./databases/neo4j/install.md)
   * [neo4j的快速使用](./databases/neo4j/quick_start.md)
+  * [使用Python操作Neo4j数据库](./databases/neo4j/python_driver.md)
 
 
 ## 持续集成篇
