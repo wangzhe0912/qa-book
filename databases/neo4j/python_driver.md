@@ -101,6 +101,8 @@ driver.close()
 
 虽然我们还没有详细学习 Cypher 的语法，但是我们其实也已经可以了解到，上述命令其实就是先向数据库中写入了几条数据，然后进行了依次进行了查询。
 
+关于 Neo4j Driver 更多的介绍可以参考 [官方文档](https://neo4j.com/docs/driver-manual/1.7/#driver-get-the-driver) 。
+
 至此，我们基本就可以了解到 Neo4j 的 Python Driver 的使用也非常简单，其核心是需要我们了解 Cypher 的相关的语法。
 
 接下来的文章中，我们将会详细介绍 Cypher 的相关语法。
