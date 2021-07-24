@@ -282,6 +282,7 @@
   * [Kubernetes环境搭建](./cloud-native/kubernetes/setup_env.md)
   * [Kubernetes ConfigMap 杂谈](./cloud-native/kubernetes/configmap.md)
   * [Kubernetes PV/PVC/StorageClass 杂谈](./cloud-native/kubernetes/storage.md)
+  * [Kubernetes RBAC 杂谈](./cloud-native/kubernetes/rbac.md)
 
 [comment]: <> (* [Helm]&#40;./cloud-native/helm/beginning.md&#41;)
 * [KT-env实战](./cloud-native/kt-env/beginning.md)
