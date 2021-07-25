@@ -3,7 +3,7 @@
 ## RBAC 背景概述
 
 了解 K8s 的同学都知道，Kubernetes 中所有的 API 对象都保存在 etcd 里。
-而在 K8s 中，我们想要通过自己内插件来实现对 API 对象进行操作时，一定需要通过访问 kube-apiserver 来实现。
+而在 K8s 中，我们想要通过自己的插件来实现对 API 对象进行操作时，一定需要通过访问 kube-apiserver 来实现。
 
 在 kube-apiserver  的调用中，首先需要来完成授权相关的工作。
 
