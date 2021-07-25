@@ -167,30 +167,66 @@ Ps: 不过这套颁发的证书在互联网上（各个浏览器）并没有内�
 
 客户端与服务器进行 HTTPS 协议通信的流程如上图所示。
 
+## HTTPS 实战
 
+了解了 HTTPS 相关的原理之后，我们来进行一些相关的 HTTPS 实战吧！
 
+### 创建相关证书
 
+首先，我们需要使用 OpenSSL 二进制程序来制作相关程序用到的公钥证书、私钥等。
 
+Step1: 生成 CA 的证书和私钥
 
+```sh
+openssl req -nodes -new -x509 -days 3650 -keyout ca.key -out ca.crt -subj "/CN=Virtual Environment Admission Controller Webhook CA"
+```
 
+其中：`ca.key` 表示 CA 私钥，`ca.crt` 表示 CA 证书。
 
+Step2: 生成服务器私钥
 
+```sh
+openssl genrsa -out webhook-server-tls.key 2048
+```
 
+其中: `webhook-server-tls.key` 表示服务器私钥
 
+Step3: 为私钥生成证书签名请求 (CSR)，并使用 CA 的私钥对其进行签名。
 
+```sh
+openssl req -new -key webhook-server-tls.key -subj "/CN=webhook-server.kt-virtual-environment.svc" \
+    | openssl x509 -req -days 3650 -CA ca.crt -CAkey ca.key -CAcreateserial -out webhook-server-tls.crt
+```
 
+其中: 
 
+1. `webhook-server-tls.crt` 表示服务器公钥证书（包含公钥和CA私钥签名）。
+2. `webhook-server.kt-virtual-environment.svc` 表示了服务器的访问地址，客户端验证证书时，会验证访问地址是否与证书中的地址一致。
 
+### 搭建 HTTPS 服务
 
+下面，我们编写一个简单的 Flask WEB 服务来实现一个 HTTPS 服务的搭建：
 
+```python
+from flask import Flask
+app = Flask(__name__)
 
+@app.route("/")
+def hello():
+    return "Hello World!"
 
+if __name__ == "__main__":
+    app.run(ssl_context=('webhook-server-tls.crt', 'webhook-server-tls.key'))
+```
 
+### 编写 HTTPS 客户端
 
+下面，我们还是使用 python requests 客户端来发送 HTTPS 请求。
 
+```python
+import requests
 
-
-
-
-
-
+url = "https://webhook-server.kt-virtual-environment.svc:5000/"
+response = requests.get(url, verify="ca.crt")
+print(response.content)
+```
