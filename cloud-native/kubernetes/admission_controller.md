@@ -56,8 +56,8 @@ kube-apiserver -h | grep enable-admission-plugins
 
 我们可以定义两种类型的准入 webhook:
 
- - "验证"性质的准入 Webhook
- - "修改"性质的准入 Webhook
+ - "验证"性质的准入 Webhook: ValidatingWebhookConfiguration 
+ - "修改"性质的准入 Webhook: MutatingWebhookConfiguration
 
 修改性质的准入 Webhook 会先被调用。
 它们可以更改发送到 API 服务器的对象以执行自定义的设置默认值操作。
@@ -196,7 +196,7 @@ response 至少必须包含以下字段：
 
 一个最简单允许请求的示例如下:
 
-```
+```json
 {
   "apiVersion": "admission.k8s.io/v1",
   "kind": "AdmissionReview",
@@ -209,7 +209,7 @@ response 至少必须包含以下字段：
 
 Webhook 禁止请求的最简单响应示例：
 
-```
+```json
 {
   "apiVersion": "admission.k8s.io/v1",
   "kind": "AdmissionReview",
@@ -222,7 +222,7 @@ Webhook 禁止请求的最简单响应示例：
 
 当拒绝请求时，Webhook 可以使用 status 字段自定义 http 响应码和返回给用户的消息。示例如下：
 
-```
+```json
 {
   "apiVersion": "admission.k8s.io/v1",
   "kind": "AdmissionReview",
