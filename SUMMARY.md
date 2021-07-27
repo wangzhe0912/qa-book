@@ -16,6 +16,7 @@
   * [Python HTTP请求重试机制](./language/python/requests.md)
 * [常用Python第三方库](./language/python-thirdparty/beginning.md)
   * [python-nmap进行端口扫描](./language/python-thirdparty/python-nmap.md)
+  * [APScheduler实现Python定时任务管理](./language/python-thirdparty/apscheduler.md)
   * [使用ijson解析超大JSON文件](./language/python-thirdparty/ijson.md)
   * [Python实战websocket协议](./language/python-thirdparty/websockets.md)
   * [Flask websocket协议实战](./language/python-thirdparty/flask_sockets.md)
