@@ -128,6 +128,7 @@
 
 * [RabbitMQ](./middleware/rabbitmq/beginning.md)
   * [RabbitMQ的安装](./middleware/rabbitmq/install.md)
+  * [RabbitMQ的配置详解](./middleware/rabbitmq/config.md)  
   * [RabbitMQ的Demo示例](./middleware/rabbitmq/demo.md)
   * [RabbitMQ的工作队列（均匀分配模式）](./middleware/rabbitmq/work_queue.md)
   * [RabbitMQ的Fanout类型的Exchange（发布订阅模式）](./middleware/rabbitmq/publish_subscribe.md)
