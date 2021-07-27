@@ -25,3 +25,20 @@ import time
 print(time.strftime("%Y-%m-%d", time.localtime()))
 ```
 
+## 对时间日期做加减操作
+
+```python
+import datetime
+
+current_datetime = datetime.datetime.now()
+tomorrow_datetime = current_datetime + datetime.timedelta(days=1, hours=0, minutes=0, seconds=0)
+```
+
+## datetime 转化为字符串格式
+
+```python
+import datetime
+
+current_datetime = datetime.datetime.now()
+print(current_datetime.strftime("%Y-%m-%d %H:%S:%M"))
+```
