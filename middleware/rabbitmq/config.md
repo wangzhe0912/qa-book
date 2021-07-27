@@ -70,7 +70,7 @@ RabbitMQ 的配置文件指的是上述环境变量`RABBITMQ_CONFIG_FILE`对应�
 
 上述配置的含义是将 RabbitMQ 的端口由默认的 5672 修改为了 5673。
 
-关于 RabbitMQ 的详细配置文件可以参考[官方文档](https://www.rabbitmq.com/configure.html#configuration-files) ，此处不再一一罗列了。
+关于 RabbitMQ 的详细配置文件可以参考[官方文档](https://www.rabbitmq.com/configure.html#config-file) ，此处不再一一罗列了。
 
 ## 运行时参数和策略配置
 
