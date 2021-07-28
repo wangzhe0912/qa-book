@@ -25,6 +25,18 @@ import time
 print(time.strftime("%Y-%m-%d", time.localtime()))
 ```
 
+## 将字符串转化为时间戳
+
+```python
+import time
+
+time_str = "2019-5-10 23:40:00"
+# 先转换为时间数组
+timeArray = time.strptime(time_str, "%Y-%m-%d %H:%M:%S")
+# 转换为时间戳
+timeStamp = int(time.mktime(timeArray))
+```
+
 ## 对时间日期做加减操作
 
 ```python
