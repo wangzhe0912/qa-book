@@ -147,7 +147,8 @@
   * [Nginx HTTP模块详解](./middleware/nginx/http.md)
   * [Nginx 反向代理详解](./middleware/nginx/proxy.md)
   * [解决nginx中文乱码问题](./middleware/nginx/chinese.md)
-* [openresty](./middleware/openresty/beginning.md)
+* [OpenResty](./middleware/openresty/beginning.md)
+  * [openresty的安装](./middleware/openresty/install.md)
 * [zookeeper](./middleware/zookeeper/beginning.md)
 * [sentry](./middleware/sentry/beginning.md)
 
