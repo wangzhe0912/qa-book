@@ -42,11 +42,11 @@ sudo yum --disablerepo="*" --enablerepo="openresty" list available
 Step1: 安装 pcre
 
 ```sh
-wget ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.42.tar.bz2
+wget http://www.missshi.cn:8089/pcre-8.42.tar.bz2
 tar xjf pcre-8.42.tar.bz2
 cd pcre-8.42
 ./configure --prefix=/home/work/openresty-dependency/pcre --disable-cpp --enable-jit --enable-utf --enable-unicode-properties
-make -j24 V=1 > /dev/stderr
+make -j24 V=1
 make install
 
 rm -rf /home/work/openresty-dependency/pcre/bin
@@ -63,10 +63,10 @@ Step2: 安装 zlib
 wget http://www.zlib.net/zlib-1.2.11.tar.xz
 tar xf zlib-1.2.11.tar.xz
 cd zlib-1.2.11
- ./configure --prefix=/home/work/openresty-dependency/zlib
+./configure --prefix=/home/work/openresty-dependency/zlib
 make -j24 \
 CFLAGS='-O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN -g' \
-SFLAGS='-O3 -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN -g' > /dev/stderr
+SFLAGS='-O3 -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN -g'
 make install
 rm -rf /home/work/openresty-dependency/zlib/share/
 rm -f /home/work/openresty-dependency/zlib/lib/*.la
@@ -77,8 +77,8 @@ Step3: 安装 openssl
 
 ```sh
 wget https://www.openssl.org/source/openssl-1.1.0j.tar.gz
-wget https://raw.githubusercontent.com/openresty/openresty/master/patches/openssl-1.1.0d-sess_set_get_cb_yield.patch --no-check-certificate
-wget https://raw.githubusercontent.com/openresty/openresty/master/patches/openssl-1.1.0j-parallel_build_fix.patch --no-check-certificate
+wget http://www.missshi.cn:8089/openssl-1.1.0d-sess_set_get_cb_yield.patch --no-check-certificate
+wget http://www.missshi.cn:8089/openssl-1.1.0j-parallel_build_fix.patch --no-check-certificate
 tar zxf openssl-1.1.0j.tar.gz
 cd openssl-1.1.0j
 
@@ -148,4 +148,4 @@ make install
 
 至此，我们的 OpenResty 就已经成功安装完成了，快来试试吧！
 
-Ps: 上述用到源码包如果下载不下来，可以访问 [package](../../package/openresty) 下载。
+Ps: 上述用到源码包如果下载不下来，可以访问 [package](https://github.com/wangzhe0912/qa-book/tree/master/package/openresty) 下载。
