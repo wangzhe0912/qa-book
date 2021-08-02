@@ -147,3 +147,5 @@ make install
 ```
 
 至此，我们的 OpenResty 就已经成功安装完成了，快来试试吧！
+
+Ps: 上述用到源码包如果下载不下来，可以访问 [package](../../package/openresty) 下载。
