@@ -149,6 +149,7 @@
   * [解决nginx中文乱码问题](./middleware/nginx/chinese.md)
 * [OpenResty](./middleware/openresty/beginning.md)
   * [openresty的安装](./middleware/openresty/install.md)
+  * [Hello OpenResty](./middleware/openresty/hello_openresty.md)
 * [zookeeper](./middleware/zookeeper/beginning.md)
 * [sentry](./middleware/sentry/beginning.md)
 

@@ -79,3 +79,9 @@ make install
 启动成功后，访问localhost，可以看到如下页面：
 
 ![install3](./picture/install3.png)
+
+最后，为了能够高亮 vim 编辑器，我们可以将 Nginx 提供的配置拷贝到对应的目录下:
+
+```sh
+cp -R ${NGINX_HOME}/contrib/vim ~/.vim
+```
