@@ -3,6 +3,13 @@
 * [Welcome](./README.md)
 
 
+----
+* [Helm学习手册](https://helm.missshi.cn)
+* [Istio学习手册](https://istio.missshi.cn)
+* [Jaeger学习手册](https://jaeger.missshi.cn)
+----
+
+
 ## 编程语言篇
 
 * [python基础](./language/python/beginning.md)
