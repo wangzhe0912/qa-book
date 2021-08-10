@@ -1,4 +1,4 @@
-# 使用Python操作Neo4j数据库
+# 使用Python操作Neo4j数据库 - neo4j
 
 ## 概述
 
@@ -12,7 +12,7 @@
    和 Python 的驱动程序。
  - 此外， [社区](https://neo4j.com/developer/language-guides/) 还提供了一些 PHP, Ruby, Go, Haskell 等编程语言的驱动。
 
-下面，我们就以 Python 为例，还演示如何使用 Python 调用 Neo4j 数据库。
+下面，我们就以 Python 的官方驱动为例，还演示如何使用 Python 调用 Neo4j 数据库。
 
 ## Python 驱动安装
 
