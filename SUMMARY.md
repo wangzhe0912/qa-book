@@ -125,6 +125,9 @@
   * [neo4j的快速使用](./databases/neo4j/quick_start.md)
   * [使用Python操作Neo4j数据库 - neo4j](./databases/neo4j/python_driver_neo4j.md)
   * [使用Python操作Neo4j数据库 - py2neo](./databases/neo4j/python_driver_py2neo.md)
+  * [cypher概述及基本语法](./databases/neo4j/cypher_basic.md)
+  * [cypher语句](./databases/neo4j/cypher_language.md)
+  * [cypher函数及模式](./databases/neo4j/cypher_function_and_schema.md)
 
 
 ## 持续集成篇
