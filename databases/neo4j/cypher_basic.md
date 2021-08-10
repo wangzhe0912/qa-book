@@ -317,11 +317,101 @@ Cypher 支持的运算符包括:
 
 ### Cypher List 与 Map 说明
 
+Cypher 对 List 有很好的支持。
 
+Cypher 中 List 的表达方式与 Python 一致，用方括号包括一组以逗号分隔的元素来表示一个列表。
 
+例如:
 
+```
+RETURN [0, 1, 2, 3, 4] AS list
+```
+
+和 Python 类似，Cypher 也可以用 range 函数来生成一个数组，与 Python 不一样的是，在 Cypher 中 range 函数生成的 list 是包含收尾元素的。
+
+```
+RETURN range(1, 10)
+```
+
+对于一个 list 而言，支持通过 [index] 来访问元素，例如:
+
+```
+RETURN range(1, 10)[4]
+```
+
+其中，索引也可以是负数，即从末尾元素倒数。
+
+```
+RETURN range(1, 10)[-1]
+```
+
+此外，数组也支持分片的方式截取子数组:
+
+```
+RETURN range(1, 10)[2..-1]
+```
+
+其中，分片截取时，包含索引头元素，不包含索引尾元素。
+
+Cypher 中提供了一个 size() 函数可以用于计算数组的长度:
+
+```
+RETURN size(range(1, 10))
+```
+
+在 Cypher 中，还支持了 List 推导式：
+
+```
+RETURN [x IN range(1,10) WHERE x % 2 = 0 | x^3] AS result
+```
+
+上述表达式的含义是将 1-10 的列表中，找出 % 2 为 0 的元素，并对每个元素计算三次方并返回。
+
+其中，WHERE 条件过滤和 `|` 过滤计算都是可选的。
+
+将列表推导式应用到模式中，可以产生有意思的效果:
+
+```
+MATCH (a:Person {name:"Wangzhe"})
+RETURN [(a)-->(b) WHERE b:Movie | b.year]
+AS years
+```
+
+其中，返回的 years 是一个列表，它表示的是与 Wangzhe 有关的所有的电影上映时间。
+
+除了 LIST 之外， Cepher 还支持了 MAP 类型。
+
+示例如下:
+
+```
+RETURN {key: "Value", listKey: [{inner: "Map1"}, {inner: "Map2"}]}
+```
+
+此外，基于 MAP 类型，Cypher 还支持了 map 映射的功能：
+
+例如:
+
+```
+MATCH (actor:Person {name: "Wangzhe"})-->(movie:Movie)
+RETURN actor { .name, .realName, movies: collect(movie { .title, .year })} 
+```
+
+上述 Cypher 语法的含义是指：
+
+找出 Wangzhe 所有关联的电影，并按照人员粒度进行聚合，并返回人员的 name, realName 字段以及所有的关联的电影中的 title 和 year 字段。
+
+在这个 map 映射中，除了上述我们介绍到的可以使用 .key 来表示返回字典中的指定字段外，还可以:
+
+ - variable_name: 表示key是变量名，value是变量对应的值，key对应的变量不存在时，设置的属性为 null。
+ - *： 表示当前对象的全部属性。
 
 ### Cypher NULL 说明
 
+在 Cypher 中，NULL 是一个比较特殊的值，需要注意如下:
 
-
+ - null = null 返回的是 null ，不是 true
+ - null 参数的逻辑运算返回均为 null
+ - 索引越界的 LIST 时返回的是 null
+ - 包含 null 的算术运算结果均为 null
+ - 包含 null 的函数调用结果均为 null
+ - 访问不存在的关系或属性时，得到的结果为 null
