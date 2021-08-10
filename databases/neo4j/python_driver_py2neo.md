@@ -38,8 +38,114 @@ graph.run("UNWIND range(1, 3) AS n RETURN n, n * n as n_sq")
 
 ## 常用操作
 
+### 创建一个节点
 
+```python
+from py2neo import Graph, Node
+graph = Graph("bolt://localhost:7687", auth=("neo4j", "password"))
+node = Node("Book", name="Neo4j权威指南", version="1.1")
+graph.create(node)
+```
 
+### 根据属性查询一个节点
 
+```python
+from py2neo import Graph
+graph = Graph("bolt://localhost:7687", auth=("neo4j", "password"))
+node = graph.nodes.match("Book", name="Neo4j权威指南").first()
+```
 
+### 根据节点ID查询节点信息
 
+```python
+from py2neo import Graph
+graph = Graph("bolt://localhost:7687", auth=("neo4j", "password"))
+node = graph.nodes.get(38)
+print(dict(node))  # 将节点属性转为dict格式
+```
+
+### 查询属性全部匹配的节点
+
+```python
+from py2neo import Graph
+graph = Graph("bolt://localhost:7687", auth=("neo4j", "password"))
+node = graph.nodes.match("Book", name="Neo4j权威指南").all()
+```
+
+### 根据关系查询关系
+
+```python
+from py2neo import Graph
+graph = Graph("bolt://localhost:7687", auth=("neo4j", "password"))
+node = graph.nodes.get(38)
+current_subtopo_relations = graph.match((node,), r_type="write").all()
+for relation in current_subtopo_relations:
+    print(relation, relation.end_node)
+```
+
+### 创建两个节点并添加对应的关系
+
+```python
+from py2neo import Graph, Node, Relationship
+graph = Graph("bolt://localhost:7687", auth=("neo4j", "password"))
+node1 = Node("Book", name="Neo4j权威指南", version="1.1")
+node2 = Node("Person", name="张帜", gender="man")
+relation = Relationship(node1, "write", node2)
+graph.create(relation)
+```
+
+### 修改一个节点的属性
+
+```python
+from py2neo import Graph
+graph = Graph("bolt://localhost:7687", auth=("neo4j", "password"))
+node = graph.nodes.get(38)
+node["age"] = 53
+graph.push(node)
+```
+
+### 删除节点
+
+```python
+from py2neo import Graph
+graph = Graph("bolt://localhost:7687", auth=("neo4j", "password"))
+node = graph.nodes.get(38)
+graph.delete(node)
+```
+
+### 删除关系
+
+```python
+from py2neo import Graph
+graph = Graph("bolt://localhost:7687", auth=("neo4j", "password"))
+node = graph.nodes.get(38)
+current_subtopo_relations = graph.match((node,), r_type="write").all()
+for relation in current_subtopo_relations:
+    graph.separate(relation)   # 仅删除关系
+```
+
+### 执行 Cypher 语句
+
+```python
+from py2neo import Graph
+graph = Graph("bolt://localhost:7687", auth=("neo4j", "password"))
+cypher = 'MATCH (resource:Book {name: "Neo4j权威指南"})<-[write]-(:Person) RETURN resource'
+data = graph.run(cypher).data()
+for item in data:
+    print(item["resource"])
+```
+
+### 事务性操作
+
+```python
+from py2neo import Graph
+graph = Graph("bolt://localhost:7687", auth=("neo4j", "password"))
+tx = graph.begin()
+try:
+    node = graph.nodes.get(38)
+    graph.delete(node)
+    tx.commit()
+except Exception as e:
+    tx.rollback()
+    raise Exception(e)
+```
