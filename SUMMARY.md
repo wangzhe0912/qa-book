@@ -16,6 +16,7 @@
   * [Python多线程中daemon属性的作用](./language/python/daemon.md)
   * [Python正则表达式详解](./language/python/re.md)
   * [Python时间日期详解](./language/python/datetime.md)
+  * [Python自动检测文件编码格式并打开文件](./language/python/operate_file.md)  
   * [Python判断当前操作系统](./language/python/os_system.md)
   * [Python目录相关操作总结](./language/python/directory.md)
   * [Python import详解](./language/python/import.md)
