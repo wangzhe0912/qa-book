@@ -22,6 +22,7 @@
   * [Python import详解](./language/python/import.md)
   * [Python程序中判断当前Python版本](./language/python/python_version.md)
   * [Python HTTP请求重试机制](./language/python/requests.md)
+  * [Python 装饰器实战](./language/python/decorate.md)
 * [常用Python第三方库](./language/python-thirdparty/beginning.md)
   * [python-nmap进行端口扫描](./language/python-thirdparty/python-nmap.md)
   * [APScheduler实现Python定时任务管理](./language/python-thirdparty/apscheduler.md)
