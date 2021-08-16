@@ -1,0 +1,5 @@
+node_modules
+.idea/*
+_book
+cmake-build-debug
+.DS_Store

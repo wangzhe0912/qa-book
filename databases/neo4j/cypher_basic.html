@@ -1,0 +1,3053 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>cypher概述及基本语法 · title</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-search-pro/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-prism/prism-solarizedlight.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-bibtex-indexed-cite/style.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-anchor-navigation-ex/style/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-page-footer-ex/style/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-splitter/splitter.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-expandable-chapters-small/expandable-chapters-small.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-donate/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-katex/katex.min.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="cypher_language.html" />
+    
+    
+    <link rel="prev" href="python_driver_py2neo.html" />
+    
+
+    <style>
+    @media only screen and (max-width: 640px) {
+        .book-header .hidden-mobile {
+            display: none;
+        }
+    }
+    </style>
+    <script>
+        window["gitbook-plugin-github-buttons"] = {"buttons":[{"user":"wangzhe0912","repo":"qa-book","type":"star","size":"small","count":true}]};
+    </script>
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../../">
+            
+                <a href="../../">
+            
+                    
+                    Welcome
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="divider"></li>
+        
+        
+    
+        <li class="chapter " data-level="2.1" >
+            
+                <a target="_blank" href="https://helm.missshi.cn">
+            
+                    
+                    Helm学习手册
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2" >
+            
+                <a target="_blank" href="https://istio.missshi.cn">
+            
+                    
+                    Istio学习手册
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.3" >
+            
+                <a target="_blank" href="https://jaeger.missshi.cn">
+            
+                    
+                    Jaeger学习手册
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">编程语言篇</li>
+        
+        
+    
+        <li class="chapter " data-level="3.1" data-path="../../language/python/beginning.html">
+            
+                <a href="../../language/python/beginning.html">
+            
+                    
+                    python基础
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="3.1.1" data-path="../../language/python/daemon.html">
+            
+                <a href="../../language/python/daemon.html">
+            
+                    
+                    Python多线程中daemon属性的作用
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.1.2" data-path="../../language/python/re.html">
+            
+                <a href="../../language/python/re.html">
+            
+                    
+                    Python正则表达式详解
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.1.3" data-path="../../language/python/datetime.html">
+            
+                <a href="../../language/python/datetime.html">
+            
+                    
+                    Python时间日期详解
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.1.4" data-path="../../language/python/operate_file.html">
+            
+                <a href="../../language/python/operate_file.html">
+            
+                    
+                    Python自动检测文件编码格式并打开文件
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.1.5" data-path="../../language/python/os_system.html">
+            
+                <a href="../../language/python/os_system.html">
+            
+                    
+                    Python判断当前操作系统
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.1.6" data-path="../../language/python/directory.html">
+            
+                <a href="../../language/python/directory.html">
+            
+                    
+                    Python目录相关操作总结
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.1.7" data-path="../../language/python/import.html">
+            
+                <a href="../../language/python/import.html">
+            
+                    
+                    Python import详解
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.1.8" data-path="../../language/python/python_version.html">
+            
+                <a href="../../language/python/python_version.html">
+            
+                    
+                    Python程序中判断当前Python版本
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.1.9" data-path="../../language/python/requests.html">
+            
+                <a href="../../language/python/requests.html">
+            
+                    
+                    Python HTTP请求重试机制
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.1.10" data-path="../../language/python/decorate.html">
+            
+                <a href="../../language/python/decorate.html">
+            
+                    
+                    Python 装饰器实战
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2" data-path="../../language/python-thirdparty/beginning.html">
+            
+                <a href="../../language/python-thirdparty/beginning.html">
+            
+                    
+                    常用Python第三方库
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="3.2.1" data-path="../../language/python-thirdparty/python-nmap.html">
+            
+                <a href="../../language/python-thirdparty/python-nmap.html">
+            
+                    
+                    python-nmap进行端口扫描
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2.2" data-path="../../language/python-thirdparty/apscheduler.html">
+            
+                <a href="../../language/python-thirdparty/apscheduler.html">
+            
+                    
+                    APScheduler实现Python定时任务管理
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2.3" data-path="../../language/python-thirdparty/ijson.html">
+            
+                <a href="../../language/python-thirdparty/ijson.html">
+            
+                    
+                    使用ijson解析超大JSON文件
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2.4" data-path="../../language/python-thirdparty/websockets.html">
+            
+                <a href="../../language/python-thirdparty/websockets.html">
+            
+                    
+                    Python实战websocket协议
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2.5" data-path="../../language/python-thirdparty/flask_sockets.html">
+            
+                <a href="../../language/python-thirdparty/flask_sockets.html">
+            
+                    
+                    Flask websocket协议实战
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2.6" data-path="../../language/python-thirdparty/scikit-image-1.html">
+            
+                <a href="../../language/python-thirdparty/scikit-image-1.html">
+            
+                    
+                    scikit-image快速入门
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3" data-path="../../language/django/beginning.html">
+            
+                <a href="../../language/django/beginning.html">
+            
+                    
+                    熟练掌握Django
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="3.3.1" data-path="../../language/django/quickstart.html">
+            
+                <a href="../../language/django/quickstart.html">
+            
+                    
+                    Django快速上手
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3.2" data-path="../../language/django/settings.html">
+            
+                <a href="../../language/django/settings.html">
+            
+                    
+                    Django配置文件详解
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3.3" data-path="../../language/django/frontend.html">
+            
+                <a href="../../language/django/frontend.html">
+            
+                    
+                    Django自定义页面编写
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3.4" data-path="../../language/django/admin.html">
+            
+                <a href="../../language/django/admin.html">
+            
+                    
+                    DjangoAdmin高级用法
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3.5" data-path="../../language/django/rest.html">
+            
+                <a href="../../language/django/rest.html">
+            
+                    
+                    DjangoRestFramework快速入门
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3.6" data-path="../../language/django/celery.html">
+            
+                <a href="../../language/django/celery.html">
+            
+                    
+                    DjangoCelery快速入门
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+        
+        <li class="divider"></li>
+        
+        
+    
+        <li class="chapter " data-level="4.1" data-path="../../language/shell/beginning.html">
+            
+                <a href="../../language/shell/beginning.html">
+            
+                    
+                    Shell快速入门
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="4.1.1" data-path="../../language/shell/variable.html">
+            
+                <a href="../../language/shell/variable.html">
+            
+                    
+                    Shell 变量详解
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.1.2" data-path="../../language/shell/function.html">
+            
+                <a href="../../language/shell/function.html">
+            
+                    
+                    Shell 函数详解
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.1.3" data-path="../../language/shell/operators.html">
+            
+                <a href="../../language/shell/operators.html">
+            
+                    
+                    Shell 基本运算符
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.1.4" data-path="../../language/shell/string.html">
+            
+                <a href="../../language/shell/string.html">
+            
+                    
+                    Shell 文本处理
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.1.5" data-path="../../language/shell/condition.html">
+            
+                <a href="../../language/shell/condition.html">
+            
+                    
+                    Shell 条件语句
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.1.6" data-path="../../language/shell/loop.html">
+            
+                <a href="../../language/shell/loop.html">
+            
+                    
+                    Shell 循环语句
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.1.7" data-path="../../language/shell/execute_method.html">
+            
+                <a href="../../language/shell/execute_method.html">
+            
+                    
+                    Shell 脚本的执行方式
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.1.8" data-path="../../language/shell/redirect.html">
+            
+                <a href="../../language/shell/redirect.html">
+            
+                    
+                    Shell 重定向
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.1.9" data-path="../../language/shell/script_control.html">
+            
+                <a href="../../language/shell/script_control.html">
+            
+                    
+                    Shell 脚本控制
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="4.2" data-path="../../language/kotlin/beginning.html">
+            
+                <a href="../../language/kotlin/beginning.html">
+            
+                    
+                    Kotlin快速入门
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="4.2.1" data-path="../../language/kotlin/basic_grammer.html">
+            
+                <a href="../../language/kotlin/basic_grammer.html">
+            
+                    
+                    Kotlin基本语法
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.2.2" data-path="../../language/kotlin/basic_data_type.html">
+            
+                <a href="../../language/kotlin/basic_data_type.html">
+            
+                    
+                    Kotlin基本数据类型
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.2.3" data-path="../../language/kotlin/condition_control.html">
+            
+                <a href="../../language/kotlin/condition_control.html">
+            
+                    
+                    Kotlin条件控制
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.2.4" data-path="../../language/kotlin/loop.html">
+            
+                <a href="../../language/kotlin/loop.html">
+            
+                    
+                    Kotlin循环语句
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+        
+        <li class="divider"></li>
+        
+        
+    
+        <li class="chapter " data-level="5.1" data-path="../../language/go/beginning.html">
+            
+                <a href="../../language/go/beginning.html">
+            
+                    
+                    go语言快速入门
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="5.1.1" data-path="../../language/go/gopath.html">
+            
+                <a href="../../language/go/gopath.html">
+            
+                    
+                    Go的工作区与GOPATH
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.1.2" data-path="../../language/go/command_source_file.html">
+            
+                <a href="../../language/go/command_source_file.html">
+            
+                    
+                    命令源码文件
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.1.3" data-path="../../language/go/lib_source_file.html">
+            
+                <a href="../../language/go/lib_source_file.html">
+            
+                    
+                    库源码文件
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.1.4" data-path="../../language/go/entity.html">
+            
+                <a href="../../language/go/entity.html">
+            
+                    
+                    程序实体概述
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+        
+        <li class="divider"></li>
+        
+        
+    
+        <li class="chapter " data-level="6.1" data-path="../../language/go_action/beginning.html">
+            
+                <a href="../../language/go_action/beginning.html">
+            
+                    
+                    Go实战开发
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="6.1.1" data-path="../../language/go_action/go_action_env.html">
+            
+                <a href="../../language/go_action/go_action_env.html">
+            
+                    
+                    Go开发环境搭建
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.1.2" data-path="../../language/go_action/gin.html">
+            
+                <a href="../../language/go_action/gin.html">
+            
+                    
+                    Go Web框架gin快速上手
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="6.2" data-path="../../language/cmake/beginning.html">
+            
+                <a href="../../language/cmake/beginning.html">
+            
+                    
+                    Cmake快速入门
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="6.2.1" data-path="../../language/cmake/tutorial.html">
+            
+                <a href="../../language/cmake/tutorial.html">
+            
+                    
+                    Cmake入门教程
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="6.3" data-path="../../language/cpp/beginning.html">
+            
+                <a href="../../language/cpp/beginning.html">
+            
+                    
+                    C++快速入门
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">数据库篇</li>
+        
+        
+    
+        <li class="chapter " data-level="7.1" data-path="../mongo/beginning.html">
+            
+                <a href="../mongo/beginning.html">
+            
+                    
+                    mongodb
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="7.1.1" data-path="../mongo/install.html">
+            
+                <a href="../mongo/install.html">
+            
+                    
+                    MongoDB的安装
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.1.2" data-path="../mongo/install_package.html">
+            
+                <a href="../mongo/install_package.html">
+            
+                    
+                    MongoDB安装包剖析
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.1.3" data-path="../mongo/tool_package.html">
+            
+                <a href="../mongo/tool_package.html">
+            
+                    
+                    MongoDB工具包剖析
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.1.4" data-path="../mongo/server_args.html">
+            
+                <a href="../mongo/server_args.html">
+            
+                    
+                    MongoDB Server命令行与配置文件解析
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.1.5" data-path="../mongo/mongo_charts.html">
+            
+                <a href="../mongo/mongo_charts.html">
+            
+                    
+                    MongoCharts的安装与使用
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="7.2" data-path="../elasicsearch/beginning.html">
+            
+                <a href="../elasicsearch/beginning.html">
+            
+                    
+                    Elasticsearch
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.3" data-path="../etcd/beginning.html">
+            
+                <a href="../etcd/beginning.html">
+            
+                    
+                    etcd
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="7.3.1" data-path="../etcd/install.html">
+            
+                <a href="../etcd/install.html">
+            
+                    
+                    etcd的安装
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.3.2" data-path="../etcd/quickstart.html">
+            
+                <a href="../etcd/quickstart.html">
+            
+                    
+                    etcd的快速入门
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.3.3" data-path="../etcd/etcd_in_python.html">
+            
+                <a href="../etcd/etcd_in_python.html">
+            
+                    
+                    在Python中使用ETCD
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="7.4" data-path="../redis/beginning.html">
+            
+                <a href="../redis/beginning.html">
+            
+                    
+                    redis
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="7.4.1" data-path="../redis/install.html">
+            
+                <a href="../redis/install.html">
+            
+                    
+                    redis的安装
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="7.5" data-path="beginning.html">
+            
+                <a href="beginning.html">
+            
+                    
+                    neo4j
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="7.5.1" data-path="install.html">
+            
+                <a href="install.html">
+            
+                    
+                    neo4j的安装
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.5.2" data-path="quick_start.html">
+            
+                <a href="quick_start.html">
+            
+                    
+                    neo4j的快速使用
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.5.3" data-path="python_driver_neo4j.html">
+            
+                <a href="python_driver_neo4j.html">
+            
+                    
+                    使用Python操作Neo4j数据库 - neo4j
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.5.4" data-path="python_driver_py2neo.html">
+            
+                <a href="python_driver_py2neo.html">
+            
+                    
+                    使用Python操作Neo4j数据库 - py2neo
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="7.5.5" data-path="cypher_basic.html">
+            
+                <a href="cypher_basic.html">
+            
+                    
+                    cypher概述及基本语法
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.5.6" data-path="cypher_language.html">
+            
+                <a href="cypher_language.html">
+            
+                    
+                    cypher语句
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.5.7" data-path="cypher_function_and_schema.html">
+            
+                <a href="cypher_function_and_schema.html">
+            
+                    
+                    cypher函数及模式
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+        
+        <li class="header">持续集成篇</li>
+        
+        
+    
+        <li class="chapter " data-level="8.1" data-path="../../ci/teamcity/beginning.html">
+            
+                <a href="../../ci/teamcity/beginning.html">
+            
+                    
+                    TeamCity
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="8.1.1" data-path="../../ci/teamcity/install.html">
+            
+                <a href="../../ci/teamcity/install.html">
+            
+                    
+                    TeamCity的安装
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+        
+        <li class="header">中间件篇</li>
+        
+        
+    
+        <li class="chapter " data-level="9.1" data-path="../../middleware/rabbitmq/beginning.html">
+            
+                <a href="../../middleware/rabbitmq/beginning.html">
+            
+                    
+                    RabbitMQ
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="9.1.1" data-path="../../middleware/rabbitmq/install.html">
+            
+                <a href="../../middleware/rabbitmq/install.html">
+            
+                    
+                    RabbitMQ的安装
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="9.1.2" data-path="../../middleware/rabbitmq/config.html">
+            
+                <a href="../../middleware/rabbitmq/config.html">
+            
+                    
+                    RabbitMQ的配置详解
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="9.1.3" data-path="../../middleware/rabbitmq/demo.html">
+            
+                <a href="../../middleware/rabbitmq/demo.html">
+            
+                    
+                    RabbitMQ的Demo示例
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="9.1.4" data-path="../../middleware/rabbitmq/work_queue.html">
+            
+                <a href="../../middleware/rabbitmq/work_queue.html">
+            
+                    
+                    RabbitMQ的工作队列（均匀分配模式）
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="9.1.5" data-path="../../middleware/rabbitmq/publish_subscribe.html">
+            
+                <a href="../../middleware/rabbitmq/publish_subscribe.html">
+            
+                    
+                    RabbitMQ的Fanout类型的Exchange（发布订阅模式）
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="9.1.6" data-path="../../middleware/rabbitmq/direct_mode.html">
+            
+                <a href="../../middleware/rabbitmq/direct_mode.html">
+            
+                    
+                    RabbitMQ的Direct类型的Exchange（选择性订阅）
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="9.1.7" data-path="../../middleware/rabbitmq/topic_mode.html">
+            
+                <a href="../../middleware/rabbitmq/topic_mode.html">
+            
+                    
+                    RabbitMQ的Topic类型的Exchange（高级选择性订阅）
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="9.1.8" data-path="../../middleware/rabbitmq/rpc.html">
+            
+                <a href="../../middleware/rabbitmq/rpc.html">
+            
+                    
+                    利用RabbitMQ实现远程服务调用
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="9.2" data-path="../../middleware/mqtt/beginning.html">
+            
+                <a href="../../middleware/mqtt/beginning.html">
+            
+                    
+                    MQTT
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="9.2.1" data-path="../../middleware/mqtt/install.html">
+            
+                <a href="../../middleware/mqtt/install.html">
+            
+                    
+                    MQTT的安装
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="9.3" data-path="../../middleware/nginx/beginning.html">
+            
+                <a href="../../middleware/nginx/beginning.html">
+            
+                    
+                    nginx
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="9.3.1" data-path="../../middleware/nginx/getting_to_know.html">
+            
+                <a href="../../middleware/nginx/getting_to_know.html">
+            
+                    
+                    初识Nginx
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="9.3.2" data-path="../../middleware/nginx/install.html">
+            
+                <a href="../../middleware/nginx/install.html">
+            
+                    
+                    nginx的安装
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="9.3.3" data-path="../../middleware/nginx/quick_start.html">
+            
+                <a href="../../middleware/nginx/quick_start.html">
+            
+                    
+                    nginx的快速上手
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="9.3.4" data-path="../../middleware/nginx/https.html">
+            
+                <a href="../../middleware/nginx/https.html">
+            
+                    
+                    nginx与HTTPS协议
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="9.3.5" data-path="../../middleware/nginx/architecture.html">
+            
+                <a href="../../middleware/nginx/architecture.html">
+            
+                    
+                    浅谈nginx架构
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="9.3.6" data-path="../../middleware/nginx/http.html">
+            
+                <a href="../../middleware/nginx/http.html">
+            
+                    
+                    Nginx HTTP模块详解
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="9.3.7" data-path="../../middleware/nginx/proxy.html">
+            
+                <a href="../../middleware/nginx/proxy.html">
+            
+                    
+                    Nginx 反向代理详解
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="9.3.8" data-path="../../middleware/nginx/chinese.html">
+            
+                <a href="../../middleware/nginx/chinese.html">
+            
+                    
+                    解决nginx中文乱码问题
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="9.4" data-path="../../middleware/openresty/beginning.html">
+            
+                <a href="../../middleware/openresty/beginning.html">
+            
+                    
+                    OpenResty
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="9.4.1" data-path="../../middleware/openresty/install.html">
+            
+                <a href="../../middleware/openresty/install.html">
+            
+                    
+                    openresty的安装
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="9.4.2" data-path="../../middleware/openresty/hello_openresty.html">
+            
+                <a href="../../middleware/openresty/hello_openresty.html">
+            
+                    
+                    Hello OpenResty
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="9.5" data-path="../../middleware/zookeeper/beginning.html">
+            
+                <a href="../../middleware/zookeeper/beginning.html">
+            
+                    
+                    zookeeper
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="9.6" data-path="../../middleware/sentry/beginning.html">
+            
+                <a href="../../middleware/sentry/beginning.html">
+            
+                    
+                    sentry
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">操作系统与内核篇</li>
+        
+        
+    
+        <li class="chapter " data-level="10.1" data-path="../../linux/basic/beginning.html">
+            
+                <a href="../../linux/basic/beginning.html">
+            
+                    
+                    Linux基础
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="10.1.1" data-path="../../linux/basic/ssh.html">
+            
+                <a href="../../linux/basic/ssh.html">
+            
+                    
+                    Ubuntu系统开启远程ssh访问
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="10.1.2" data-path="../../linux/basic/ftp.html">
+            
+                <a href="../../linux/basic/ftp.html">
+            
+                    
+                    Ubuntu系统下搭建FTP服务器
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="10.1.3" data-path="../../linux/basic/file_server.html">
+            
+                <a href="../../linux/basic/file_server.html">
+            
+                    
+                    使用Python搭建简单的文件服务器
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="10.1.4" data-path="../../linux/basic/expect.html">
+            
+                <a href="../../linux/basic/expect.html">
+            
+                    
+                    通过expect实现无交互式的远程命令执行与远程文件传输
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="10.1.5" data-path="../../linux/basic/supervisor.html">
+            
+                <a href="../../linux/basic/supervisor.html">
+            
+                    
+                    Supervisor实现程序管理与保活
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="10.1.6" data-path="../../linux/basic/crontab.html">
+            
+                <a href="../../linux/basic/crontab.html">
+            
+                    
+                    Linux 下添加定时任务
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="10.1.7" data-path="../../linux/basic/find.html">
+            
+                <a href="../../linux/basic/find.html">
+            
+                    
+                    Linux文本搜索
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="10.1.8" data-path="../../linux/basic/sed.html">
+            
+                <a href="../../linux/basic/sed.html">
+            
+                    
+                    Linux文本处理之sed
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="10.1.9" data-path="../../linux/basic/awk.html">
+            
+                <a href="../../linux/basic/awk.html">
+            
+                    
+                    Linux文本处理之awk
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="10.2" data-path="../../linux/network/beginning.html">
+            
+                <a href="../../linux/network/beginning.html">
+            
+                    
+                    网络协议相关
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="10.2.1" data-path="../../linux/network/ports.html">
+            
+                <a href="../../linux/network/ports.html">
+            
+                    
+                    端口存活查询与验证
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="10.2.2" data-path="../../linux/network/dhcp.html">
+            
+                <a href="../../linux/network/dhcp.html">
+            
+                    
+                    DHCP服务搭建
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="10.2.3" data-path="../../linux/network/nfs.html">
+            
+                <a href="../../linux/network/nfs.html">
+            
+                    
+                    NFS网络文件系统搭建
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="10.2.4" data-path="../../linux/network/ntp.html">
+            
+                <a href="../../linux/network/ntp.html">
+            
+                    
+                    NTP服务搭建
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="10.2.5" data-path="../../linux/network/rtsp.html">
+            
+                <a href="../../linux/network/rtsp.html">
+            
+                    
+                    rtsp协议与实战
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="10.2.6" data-path="../../linux/network/dhcp.html">
+            
+                <a href="../../linux/network/dhcp.html">
+            
+                    
+                    DHCP服务搭建
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="10.2.7" data-path="../../linux/network/snmp.html">
+            
+                <a href="../../linux/network/snmp.html">
+            
+                    
+                    Linux上如何扫描同一网段内的所有设备
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="10.2.8" data-path="../../linux/network/network_priority.html">
+            
+                <a href="../../linux/network/network_priority.html">
+            
+                    
+                    Linux多网卡优先级配置
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="10.2.9" data-path="../../linux/network/https.html">
+            
+                <a href="../../linux/network/https.html">
+            
+                    
+                    HTTPS 协议实战
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="10.3" data-path="../../linux/git/beginning.html">
+            
+                <a href="../../linux/git/beginning.html">
+            
+                    
+                    git杂谈
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="10.3.1" data-path="../../linux/git/gitignore.html">
+            
+                <a href="../../linux/git/gitignore.html">
+            
+                    
+                    Git忽略已加入版本控制系统中的文件
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="10.3.2" data-path="../../linux/git/mirror.html">
+            
+                <a href="../../linux/git/mirror.html">
+            
+                    
+                    Git mirror实现飞速上传/下载
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+        
+        <li class="header">AI篇</li>
+        
+        
+    
+        <li class="chapter " data-level="11.1" data-path="../../ai/tensorflow/beginning.html">
+            
+                <a href="../../ai/tensorflow/beginning.html">
+            
+                    
+                    tensorflow快速入门
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="11.1.1" data-path="../../ai/tensorflow/install.html">
+            
+                <a href="../../ai/tensorflow/install.html">
+            
+                    
+                    tensorflow环境搭建
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="11.1.2" data-path="../../ai/tensorflow/artitecture.html">
+            
+                <a href="../../ai/tensorflow/artitecture.html">
+            
+                    
+                    tensorflow架构介绍
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="11.1.3" data-path="../../ai/tensorflow/concept.html">
+            
+                <a href="../../ai/tensorflow/concept.html">
+            
+                    
+                    tensorflow核心概念
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="11.1.4" data-path="../../ai/tensorflow/predict_house_price.html">
+            
+                <a href="../../ai/tensorflow/predict_house_price.html">
+            
+                    
+                    tensorflow初体验之房价预测
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="11.1.5" data-path="../../ai/tensorflow/tensorboard.html">
+            
+                <a href="../../ai/tensorflow/tensorboard.html">
+            
+                    
+                    TensorBoard快速入门
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="11.1.6" data-path="../../ai/tensorflow/mnist_practice.html">
+            
+                <a href="../../ai/tensorflow/mnist_practice.html">
+            
+                    
+                    Keras实战之手写数字识别
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+        
+        <li class="divider"></li>
+        
+        
+    
+        <li class="chapter " data-level="12.1" data-path="../../ai/paddle/beginning.html">
+            
+                <a href="../../ai/paddle/beginning.html">
+            
+                    
+                    paddle快速入门
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="12.1.1" data-path="../../ai/paddle/tensor.html">
+            
+                <a href="../../ai/paddle/tensor.html">
+            
+                    
+                    Paddle 核心概念 Tensor 详解
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+        
+        <li class="header">音视频技术篇</li>
+        
+        
+    
+        <li class="chapter " data-level="13.1" data-path="../../auvideo/stream_practice/beginning.html">
+            
+                <a href="../../auvideo/stream_practice/beginning.html">
+            
+                    
+                    流媒体协议实战
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="13.1.1" data-path="../../auvideo/stream_practice/rtsp.html">
+            
+                <a href="../../auvideo/stream_practice/rtsp.html">
+            
+                    
+                    rtsp协议杂谈与实战
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+        
+        <li class="header">嵌入式开发</li>
+        
+        
+    
+        <li class="chapter " data-level="14.1" data-path="../../embedded-system/micro-python/beginning.html">
+            
+                <a href="../../embedded-system/micro-python/beginning.html">
+            
+                    
+                    micro-python快速入门
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="14.1.1" data-path="../../embedded-system/micro-python/environment.html">
+            
+                <a href="../../embedded-system/micro-python/environment.html">
+            
+                    
+                    micro-python环境搭建
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="14.1.2" data-path="../../embedded-system/micro-python/network.html">
+            
+                <a href="../../embedded-system/micro-python/network.html">
+            
+                    
+                    micro-python环境联网与HTTP请求
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="14.2" data-path="../../embedded-system/raspberry/beginning.html">
+            
+                <a href="../../embedded-system/raspberry/beginning.html">
+            
+                    
+                    树莓派快速入门
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="14.2.1" data-path="../../embedded-system/raspberry/gladys_assistant.html">
+            
+                <a href="../../embedded-system/raspberry/gladys_assistant.html">
+            
+                    
+                    树莓派Gladys Assistant环境搭建
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="14.2.2" data-path="../../embedded-system/raspberry/speech.html">
+            
+                <a href="../../embedded-system/raspberry/speech.html">
+            
+                    
+                    树莓派语音处理实战
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+        
+        <li class="header">云原生篇</li>
+        
+        
+    
+        <li class="chapter " data-level="15.1" data-path="../../cloud-native/kubernetes/beginning.html">
+            
+                <a href="../../cloud-native/kubernetes/beginning.html">
+            
+                    
+                    Kubernetes
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="15.1.1" data-path="../../cloud-native/kubernetes/concept.html">
+            
+                <a href="../../cloud-native/kubernetes/concept.html">
+            
+                    
+                    Kubernetes基本概述
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="15.1.2" data-path="../../cloud-native/kubernetes/artitecture.html">
+            
+                <a href="../../cloud-native/kubernetes/artitecture.html">
+            
+                    
+                    Kubernetes架构
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="15.1.3" data-path="../../cloud-native/kubernetes/setup_env.html">
+            
+                <a href="../../cloud-native/kubernetes/setup_env.html">
+            
+                    
+                    Kubernetes环境搭建
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="15.1.4" data-path="../../cloud-native/kubernetes/configmap.html">
+            
+                <a href="../../cloud-native/kubernetes/configmap.html">
+            
+                    
+                    Kubernetes ConfigMap 杂谈
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="15.1.5" data-path="../../cloud-native/kubernetes/storage.html">
+            
+                <a href="../../cloud-native/kubernetes/storage.html">
+            
+                    
+                    Kubernetes PV/PVC/StorageClass 杂谈
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="15.1.6" data-path="../../cloud-native/kubernetes/rbac.html">
+            
+                <a href="../../cloud-native/kubernetes/rbac.html">
+            
+                    
+                    Kubernetes RBAC 杂谈
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="15.1.7" data-path="../../cloud-native/kubernetes/admission_controller.html">
+            
+                <a href="../../cloud-native/kubernetes/admission_controller.html">
+            
+                    
+                    Kubernetes 准入控制
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+        
+        <li class="divider"></li>
+        
+        
+    
+        <li class="chapter " data-level="16.1" data-path="../../cloud-native/kt-env/beginning.html">
+            
+                <a href="../../cloud-native/kt-env/beginning.html">
+            
+                    
+                    KT-env实战
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="16.1.1" data-path="../../cloud-native/kt-env/request_routing.html">
+            
+                <a href="../../cloud-native/kt-env/request_routing.html">
+            
+                    
+                    Mesh基础知识及请求路由
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="16.1.2" data-path="../../cloud-native/kt-env/basic.html">
+            
+                <a href="../../cloud-native/kt-env/basic.html">
+            
+                    
+                    KT-env目标及功能
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="16.1.3" data-path="../../cloud-native/kt-env/deploy.html">
+            
+                <a href="../../cloud-native/kt-env/deploy.html">
+            
+                    
+                    KT-env部署
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="16.1.4" data-path="../../cloud-native/kt-env/action.html">
+            
+                <a href="../../cloud-native/kt-env/action.html">
+            
+                    
+                    KT-env实战
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="16.1.5" data-path="../../cloud-native/kt-env/source_code.html">
+            
+                <a href="../../cloud-native/kt-env/source_code.html">
+            
+                    
+                    KT-env源码解读
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="16.2" data-path="../../cloud-native/tracing/beginning.html">
+            
+                <a href="../../cloud-native/tracing/beginning.html">
+            
+                    
+                    全链路追踪实战
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="16.2.1" data-path="../../cloud-native/tracing/flask.html">
+            
+                <a href="../../cloud-native/tracing/flask.html">
+            
+                    
+                    基于Python Flask框架的http headers透传
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="16.2.2" data-path="../../cloud-native/tracing/gin.html">
+            
+                <a href="../../cloud-native/tracing/gin.html">
+            
+                    
+                    基于Go gin框架的http headers透传
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+        
+        <li class="header">工具杂谈篇</li>
+        
+        
+    
+        <li class="chapter " data-level="17.1" data-path="../../tools/pycharm/remote_debug.html">
+            
+                <a href="../../tools/pycharm/remote_debug.html">
+            
+                    
+                    PyCharm远程调试
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="17.1.1" data-path="../../tools/Wireshark/beginning.html">
+            
+                <a href="../../tools/Wireshark/beginning.html">
+            
+                    
+                    Wireshark
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="17.2" data-path="../../tools/Wireshark/tutorial.html">
+            
+                <a href="../../tools/Wireshark/tutorial.html">
+            
+                    
+                    Wireshark快速入门
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="17.3" data-path="../../tools/Wireshark/practice.html">
+            
+                <a href="../../tools/Wireshark/practice.html">
+            
+                    
+                    Wireshark上手使用
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="17.4" data-path="../../tools/Wireshark/capture_filter.html">
+            
+                <a href="../../tools/Wireshark/capture_filter.html">
+            
+                    
+                    Wireshark捕获过滤器
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="17.5" data-path="../../tools/Wireshark/show_filter.html">
+            
+                <a href="../../tools/Wireshark/show_filter.html">
+            
+                    
+                    Wireshark显示过滤器
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="17.5.1" data-path="../../tools/proxy/beginning.html">
+            
+                <a href="../../tools/proxy/beginning.html">
+            
+                    
+                    国内快速下载github等国外资源秘籍
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+        
+        <li class="header">测试杂谈篇</li>
+        
+        
+    
+        <li class="chapter " data-level="18.1" data-path="../../test/interface/beginning.html">
+            
+                <a href="../../test/interface/beginning.html">
+            
+                    
+                    接口自动化测试
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="18.1.1" data-path="../../test/interface/json_schema.html">
+            
+                <a href="../../test/interface/json_schema.html">
+            
+                    
+                    JSONSchema在接口测试中的应用
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+        
+        <li class="header">个人成长篇</li>
+        
+        
+    
+        <li class="chapter " data-level="19.1" data-path="../../person/open_source/beginning.html">
+            
+                <a href="../../person/open_source/beginning.html">
+            
+                    
+                    开源项目
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="19.1.1" data-path="../../person/open_source/learn.html">
+            
+                <a href="../../person/open_source/learn.html">
+            
+                    
+                    如何高效的学习开源项目
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="../.." >cypher概述及基本语法</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <div id="anchor-navigation-ex-navbar"><i class="fa fa-navicon"></i><ul><li><span class="title-icon "></span><a href="#cypher&#x6982;&#x8FF0;&#x53CA;&#x57FA;&#x672C;&#x8BED;&#x6CD5;"><b></b>cypher&#x6982;&#x8FF0;&#x53CA;&#x57FA;&#x672C;&#x8BED;&#x6CD5;</a></li><ul><li><span class="title-icon "></span><a href="#cypher-&#x6982;&#x8FF0;"><b></b>Cypher &#x6982;&#x8FF0;</a></li><li><span class="title-icon "></span><a href="#cypher-&#x6A21;&#x5F0F;"><b></b>Cypher &#x6A21;&#x5F0F;</a></li><li><span class="title-icon "></span><a href="#cypher-&#x67E5;&#x8BE2;&#x548C;&#x66F4;&#x65B0;&#x6570;&#x636E;"><b></b>Cypher &#x67E5;&#x8BE2;&#x548C;&#x66F4;&#x65B0;&#x6570;&#x636E;</a></li><ul><li><span class="title-icon "></span><a href="#&#x67E5;&#x8BE2;&#x6570;&#x636E;"><b></b>&#x67E5;&#x8BE2;&#x6570;&#x636E;</a></li><li><span class="title-icon "></span><a href="#&#x66F4;&#x65B0;&#x6570;&#x636E;"><b></b>&#x66F4;&#x65B0;&#x6570;&#x636E;</a></li></ul><li><span class="title-icon "></span><a href="#cypher-&#x4E8B;&#x52A1;"><b></b>Cypher &#x4E8B;&#x52A1;</a></li><li><span class="title-icon "></span><a href="#cypher-&#x7684;&#x552F;&#x4E00;&#x6027;"><b></b>Cypher &#x7684;&#x552F;&#x4E00;&#x6027;</a></li><li><span class="title-icon "></span><a href="#cypher-&#x57FA;&#x672C;&#x8BED;&#x6CD5;"><b></b>Cypher &#x57FA;&#x672C;&#x8BED;&#x6CD5;</a></li><ul><li><span class="title-icon "></span><a href="#cypher-&#x7C7B;&#x578B;"><b></b>Cypher &#x7C7B;&#x578B;</a></li><li><span class="title-icon "></span><a href="#cypher-&#x8868;&#x8FBE;&#x5F0F;"><b></b>Cypher &#x8868;&#x8FBE;&#x5F0F;</a></li><li><span class="title-icon "></span><a href="#cypher-&#x53D8;&#x91CF;"><b></b>Cypher &#x53D8;&#x91CF;</a></li><li><span class="title-icon "></span><a href="#cypher-&#x53C2;&#x6570;"><b></b>Cypher &#x53C2;&#x6570;</a></li><li><span class="title-icon "></span><a href="#cypher-&#x8FD0;&#x7B97;&#x7B26;"><b></b>Cypher &#x8FD0;&#x7B97;&#x7B26;</a></li><li><span class="title-icon "></span><a href="#cypher-&#x6CE8;&#x91CA;"><b></b>Cypher &#x6CE8;&#x91CA;</a></li><li><span class="title-icon "></span><a href="#&#x6A21;&#x5F0F;"><b></b>&#x6A21;&#x5F0F;</a></li><li><span class="title-icon "></span><a href="#cypher-list-&#x4E0E;-map-&#x8BF4;&#x660E;"><b></b>Cypher List &#x4E0E; Map &#x8BF4;&#x660E;</a></li><li><span class="title-icon "></span><a href="#cypher-null-&#x8BF4;&#x660E;"><b></b>Cypher NULL &#x8BF4;&#x660E;</a></li></ul></ul></ul></div><a href="#cypher&#x6982;&#x8FF0;&#x53CA;&#x57FA;&#x672C;&#x8BED;&#x6CD5;" id="anchorNavigationExGoTop"><i class="fa fa-arrow-up"></i></a><h1 id="cypher&#x6982;&#x8FF0;&#x53CA;&#x57FA;&#x672C;&#x8BED;&#x6CD5;"><a name="cypher&#x6982;&#x8FF0;&#x53CA;&#x57FA;&#x672C;&#x8BED;&#x6CD5;" class="anchor-navigation-ex-anchor" href="#cypher&#x6982;&#x8FF0;&#x53CA;&#x57FA;&#x672C;&#x8BED;&#x6CD5;"><i class="fa fa-link" aria-hidden="true"></i></a>cypher&#x6982;&#x8FF0;&#x53CA;&#x57FA;&#x672C;&#x8BED;&#x6CD5;</h1>
+<h2 id="cypher-&#x6982;&#x8FF0;"><a name="cypher-&#x6982;&#x8FF0;" class="anchor-navigation-ex-anchor" href="#cypher-&#x6982;&#x8FF0;"><i class="fa fa-link" aria-hidden="true"></i></a>Cypher &#x6982;&#x8FF0;</h2>
+<p>Cypher &#x662F;&#x4E00;&#x79CD;&#x58F0;&#x660E;&#x5F0F;&#x7684;&#x56FE;&#x6570;&#x636E;&#x5E93;&#x67E5;&#x8BE2;&#x8BED;&#x8A00;&#xFF0C;&#x5177;&#x6709;&#x4E30;&#x5BCC;&#x7684;&#x8868;&#x73B0;&#x529B;&#xFF0C;&#x80FD;&#x591F;&#x9AD8;&#x6548;&#x7684;&#x67E5;&#x8BE2;&#x548C;&#x66F4;&#x65B0;&#x56FE;&#x6570;&#x636E;&#x3002;</p>
+<p>Cypher &#x501F;&#x9274;&#x4E86; SQL &#x8BED;&#x8A00;&#x7684;&#x7ED3;&#x6784;&#xFF0C;&#x53EF;&#x4EE5;&#x7EC4;&#x5408;&#x5404;&#x79CD;&#x8BED;&#x53E5;&#x6765;&#x5B9E;&#x73B0;&#x76F8;&#x5173;&#x7684;&#x529F;&#x80FD;&#x3002;</p>
+<p>&#x6700;&#x5E38;&#x7528;&#x7684;&#x8BED;&#x53E5;&#x5305;&#x62EC;&#xFF1A;</p>
+<ul>
+<li>MATCH: &#x5339;&#x914D;&#x56FE;&#x6A21;&#x5F0F;&#xFF0C;Cypher &#x4E2D;&#x6700;&#x6838;&#x5FC3;&#x7684;&#x8BED;&#x53E5;&#x3002;</li>
+<li>WHERE: &#x6DFB;&#x52A0;&#x989D;&#x5916;&#x7684;&#x7EA6;&#x675F;&#x6761;&#x4EF6;&#x3002;</li>
+<li>RETURN: &#x5B9A;&#x4E49;&#x8FD4;&#x56DE;&#x7684;&#x7ED3;&#x679C;&#x3002;</li>
+</ul>
+<p>&#x4E00;&#x4E2A;&#x7B80;&#x5355;&#x7684;&#x793A;&#x4F8B;&#x5982;&#x4E0B;:</p>
+<pre class="language-"><code>MATCH (john {name: &apos;John&apos;})-[:friend]-&gt;()-[:friend]-&gt;(fof)
+RETURN john.name, fof.name
+</code></pre><p>&#x4E0A;&#x8FF0;&#x8BED;&#x53E5;&#x7684;&#x542B;&#x4E49;&#x662F;&#x627E;&#x51FA; John &#x7684;&#x670B;&#x53CB;&#x7684;&#x670B;&#x53CB;&#x5217;&#x8868;&#x3002;</p>
+<p>&#x6B64;&#x5916;&#xFF0C;&#x6211;&#x4EEC;&#x8FD8;&#x53EF;&#x4EE5;&#x5F15;&#x5165; WHERE &#x8BED;&#x53E5;&#x8FDB;&#x884C;&#x4E00;&#x4E9B;&#x8FC7;&#x6EE4;:</p>
+<pre class="language-"><code>MATCH (user)-[:friend]-&gt;(follower)
+WHERE user.name IN [&apos;Joe&apos;, &apos;John&apos;] AND follower.name =~ &apos;S.*&apos;
+RETURN user.name, follower.name
+</code></pre><p>Cypher &#x8BED;&#x53E5;&#x7684;&#x542B;&#x4E49;&#x975E;&#x5E38;&#x76F4;&#x89C2;&#xFF0C;&#x751A;&#x81F3;&#x5BF9;&#x4E8E;&#x4E00;&#x4E2A;&#x5B8C;&#x5168;&#x6CA1;&#x6709;&#x63A5;&#x89E6;&#x8FC7; Cypher &#x7684;&#x540C;&#x5B66;&#xFF0C;&#x57FA;&#x672C;&#x90FD;&#x53EF;&#x4EE5;&#x76F4;&#x63A5;&#x4E86;&#x89E3;&#x5230;&#x8BE5;&#x6570;&#x636E;&#x7684;&#x529F;&#x80FD;&#x3002;</p>
+<p>&#x4E0A;&#x8FF0;&#x4ECB;&#x7ECD;&#x7684;&#x51E0;&#x4E2A;&#x8BED;&#x53E5;&#x4E3B;&#x8981;&#x662F;&#x7528;&#x4E8E;&#x6570;&#x636E;&#x67E5;&#x8BE2;&#x76F8;&#x5173;&#xFF0C;&#x800C;&#x5BF9;&#x4E8E;&#x6570;&#x636E;&#x4FEE;&#x6539;&#x800C;&#x8A00;&#xFF0C;&#x5E38;&#x7528;&#x7684;&#x8BED;&#x53E5;&#x5305;&#x62EC;:</p>
+<ul>
+<li>CREATE/DELETE: &#x521B;&#x5EFA;/&#x5220;&#x9664;&#x8282;&#x70B9;&#x548C;&#x5173;&#x7CFB;&#x3002;</li>
+<li>SET/REMOVE: &#x4F7F;&#x7528;SET&#x8BBE;&#x7F6E;&#x5C5E;&#x6027;&#x503C;&#x548C;&#x6807;&#x7B7E;&#xFF0C;&#x4F7F;&#x7528;REMOVE&#x79FB;&#x9664;&#x5C5E;&#x6027;&#x503C;&#x548C;&#x6807;&#x7B7E;&#x3002;</li>
+<li>MERGE: &#x5339;&#x914D;&#x5DF2;&#x7ECF;&#x5B58;&#x5728;&#x7684;&#x6216;&#x8005;&#x521B;&#x5EFA;&#x65B0;&#x7684;&#x8282;&#x70B9;&#x548C;&#x6A21;&#x5F0F;&#xFF0C;&#x8FD9;&#x5BF9;&#x4E8E;&#x6709;&#x552F;&#x4E00;&#x6027;&#x7EA6;&#x675F;&#x7684;&#x65F6;&#x5019;&#x975E;&#x5E38;&#x6709;&#x6548;&#x3002;</li>
+</ul>
+<p>&#x5173;&#x4E8E;&#x8FD9;&#x4E9B;&#x8BED;&#x53E5;&#x7684;&#x5177;&#x4F53;&#x4F7F;&#x7528;&#xFF0C;&#x6211;&#x4EEC;&#x5C06;&#x4F1A;&#x5728; <a href="cypher_language.html">&#x4E0B;&#x4E00;&#x7BC7;&#x6587;&#x7AE0;</a> &#x4E2D;&#x8FDB;&#x884C;&#x6DF1;&#x5165;&#x7684;&#x8BB2;&#x89E3;&#x3002;</p>
+<h2 id="cypher-&#x6A21;&#x5F0F;"><a name="cypher-&#x6A21;&#x5F0F;" class="anchor-navigation-ex-anchor" href="#cypher-&#x6A21;&#x5F0F;"><i class="fa fa-link" aria-hidden="true"></i></a>Cypher &#x6A21;&#x5F0F;</h2>
+<p>Cypyer &#x67E5;&#x8BE2;&#x8BED;&#x53E5;&#x975E;&#x5E38;&#x4F9D;&#x8D56;&#x4E8E;&#x6A21;&#x5F0F;&#x3002;
+&#x6A21;&#x5F0F;&#x53EF;&#x4EE5;&#x975E;&#x5E38;&#x7B80;&#x5355;&#xFF0C;&#x4F8B;&#x5982;&#x67D0;&#x4E2A;&#x4EBA; LIVE_IN &#x67D0;&#x4E2A;&#x57CE;&#x5E02;&#xFF1B;&#x4E5F;&#x53EF;&#x4EE5;&#x975E;&#x5E38;&#x590D;&#x6742;&#xFF0C;&#x4F8B;&#x5982;&#x591A;&#x4E2A;&#x6A21;&#x5F0F;&#x53EF;&#x4EE5;&#x7EC4;&#x88C5;&#x5728;&#x4E00;&#x8D77;&#x3002;</p>
+<p>&#x800C; Cypyer &#x6700;&#x5927;&#x7684;&#x9B45;&#x529B;&#x5C31;&#x5728;&#x4E8E;&#x5176;&#x6A21;&#x5F0F;&#x7684;&#x8BED;&#x8A00;&#x8868;&#x8FBE;&#x80FD;&#x529B;&#x3002;</p>
+<p>&#x5728;&#x56FE;&#x6570;&#x636E;&#x5E93;&#x4E2D;&#x5305;&#x62EC;&#x4E24;&#x79CD;&#x5BF9;&#x8C61;&#xFF0C;&#x5206;&#x522B;&#x662F; &quot;&#x8282;&#x70B9;&quot; &#x548C; &quot;&#x5173;&#x7CFB;&quot; &#x3002;</p>
+<p>&#x5176;&#x4E2D;&#xFF0C;&#x5728; Cypher &#x8BED;&#x6CD5;&#x4E2D;&#xFF0C;&#x8282;&#x70B9;&#x4F7F;&#x7528;&#x4E00;&#x5BF9;&#x5706;&#x62EC;&#x53F7;&#x6765;&#x8868;&#x793A;:</p>
+<pre class="language-"><code>()   # &#x533F;&#x540D;&#x8282;&#x70B9;
+(matrix)  # &#x547D;&#x540D;&#x8282;&#x70B9;&#xFF0C;matrix &#x53D8;&#x91CF;&#x53EF;&#x5728;&#x540E;&#x7EED;&#x8BED;&#x53E5;&#x4E2D;&#x5F15;&#x7528;
+(:Movie)  # &#x6307;&#x5B9A;&#x8282;&#x70B9;&#x6807;&#x7B7E;&#x4E3A;Movie&#x7684;&#x533F;&#x540D;&#x8282;&#x70B9;
+(matrix:Movie)   # &#x6307;&#x5B9A;&#x8282;&#x70B9;&#x6807;&#x7B7E;&#x4E3A;Movie&#x7684;&#x547D;&#x540D;&#x8282;&#x70B9;
+(matrix:Movie {title: &quot;The Matrix&quot;})   # &#x6307;&#x5B9A;&#x8282;&#x70B9;&#x6807;&#x7B7E;&#x548C;&#x5C5E;&#x6027;&#x7684;&#x547D;&#x540D;&#x8282;&#x70B9;
+(matrix:Movie {title: &quot;The Matrix&quot;, released: 1997})   # # &#x6307;&#x5B9A;&#x8282;&#x70B9;&#x6807;&#x7B7E;&#x548C;&#x591A;&#x4E2A;&#x5C5E;&#x6027;&#x7684;&#x547D;&#x540D;&#x8282;&#x70B9;
+</code></pre><p>&#x4ECE;&#x4E0A;&#x8FF0;&#x793A;&#x4F8B;&#x4E2D;&#x53EF;&#x4EE5;&#x770B;&#x51FA;&#xFF0C;&#x9664;&#x4E86;&#x7528;&#x4E00;&#x5BF9;&#x5706;&#x62EC;&#x53F7;&#x6765;&#x8868;&#x793A;&#x4E00;&#x4E2A;&#x8282;&#x70B9;&#x4E4B;&#x5916;&#xFF0C;&#x6211;&#x4EEC;&#x8FD8;&#x53EF;&#x4EE5;&#x77E5;&#x9053;:</p>
+<ul>
+<li>&#x4F7F;&#x7528; <code>:XXX</code> &#x6765;&#x6307;&#x5B9A;&#x8282;&#x70B9;&#x7C7B;&#x578B;&#x3002;</li>
+<li>&#x4F7F;&#x7528; <code>{key: value}</code> &#x6765;&#x6307;&#x5B9A;&#x8282;&#x70B9;&#x5C5E;&#x6027;&#x3002;</li>
+</ul>
+<p>&#x6B64;&#x5916;&#xFF0C;&#x5728; Cypher &#x8BED;&#x6CD5;&#x4E2D;&#xFF0C;&#x5173;&#x7CFB;&#x4F7F;&#x7528;&#x4E00;&#x5BF9;&#x77ED;&#x6A2A;&#x7EBF;&#xFF08;--&#xFF09;&#x6765;&#x8868;&#x793A;&#xFF0C;&#x6709;&#x5411;&#x5173;&#x7CFB;&#x4F7F;&#x7528;&#xFF08;--&gt;&#x6216;&lt;--&#xFF09;&#x6765;&#x8868;&#x793A;&#xFF0C;&#x793A;&#x4F8B;&#x5982;&#x4E0B;&#xFF1A;</p>
+<pre class="language-"><code>--&gt;   # &#x533F;&#x540D;&#x5173;&#x7CFB;
+-[role]-&gt;   # &#x547D;&#x540D;&#x5173;&#x7CFB;
+-[:ACTED_IN]-&gt; # &#x6307;&#x5B9A;&#x7C7B;&#x578B;&#x7684;&#x533F;&#x540D;&#x5173;&#x7CFB;
+-[role:ACTED_IN {roles: [&quot;Neo&quot;]}]-&gt; # &#x6307;&#x5B9A;&#x7C7B;&#x578B;&#x3001;&#x5C5E;&#x6027;&#x7684;&#x547D;&#x540D;&#x5173;&#x7CFB;
+</code></pre><p>Ps: &#x9700;&#x8981;&#x6CE8;&#x610F;&#x7684;&#x662F;&#xFF0C;&#x5173;&#x7CFB;&#x7684;&#x5C5E;&#x6027;&#x503C;&#x53EF;&#x4EE5;&#x662F;&#x6570;&#x7EC4;&#x3002;</p>
+<p>&#x5F53;&#x6211;&#x4EEC;&#x4E86;&#x89E3;&#x4E86;&#x5982;&#x4F55;&#x8868;&#x793A;&#x8282;&#x70B9;&#x548C;&#x5173;&#x7CFB;&#x540E;&#xFF0C;&#x6211;&#x4EEC;&#x5C31;&#x53EF;&#x4EE5;&#x7EC4;&#x5408;&#x5B83;&#x4EEC;&#x6765;&#x5B9E;&#x73B0;&#x4E00;&#x4E9B;&#x6A21;&#x5F0F;&#x4E86;&#xFF0C;&#x4F8B;&#x5982;:</p>
+<pre class="language-"><code>(tom:Person:Actor {name:&quot;Tom&quot;})-[role:ACTED_IN {roles:[&quot;Neo&quot;]}]-&gt;(matrix:Movie {title: &quot;The Matrix&quot;})
+</code></pre><p>&#x6B64;&#x5916;&#xFF0C;&#x6211;&#x4EEC;&#x8FD8;&#x53EF;&#x4EE5;&#x5C06;&#x4E00;&#x4E2A;&#x6A21;&#x5F0F;&#x8D4B;&#x503C;&#x7ED9;&#x4E00;&#x4E2A;&#x53D8;&#x91CF;&#xFF0C;&#x4F8B;&#x5982;:</p>
+<pre class="language-"><code>acted_in = (:Person)-[:ACTED_IN]-&gt;(:Moive)
+</code></pre><h2 id="cypher-&#x67E5;&#x8BE2;&#x548C;&#x66F4;&#x65B0;&#x6570;&#x636E;"><a name="cypher-&#x67E5;&#x8BE2;&#x548C;&#x66F4;&#x65B0;&#x6570;&#x636E;" class="anchor-navigation-ex-anchor" href="#cypher-&#x67E5;&#x8BE2;&#x548C;&#x66F4;&#x65B0;&#x6570;&#x636E;"><i class="fa fa-link" aria-hidden="true"></i></a>Cypher &#x67E5;&#x8BE2;&#x548C;&#x66F4;&#x65B0;&#x6570;&#x636E;</h2>
+<p>&#x4E86;&#x89E3;&#x4E86; Cypher &#x7684;&#x6A21;&#x5F0F;&#x4E4B;&#x540E;&#xFF0C;&#x6211;&#x4EEC;&#x518D;&#x6765;&#x770B;&#x4E00;&#x4E0B;&#x5982;&#x4F55;&#x4F7F;&#x7528; Cypher &#x6765;&#x67E5;&#x8BE2;&#x548C;&#x66F4;&#x65B0;&#x6570;&#x636E;&#x3002;</p>
+<h3 id="&#x67E5;&#x8BE2;&#x6570;&#x636E;"><a name="&#x67E5;&#x8BE2;&#x6570;&#x636E;" class="anchor-navigation-ex-anchor" href="#&#x67E5;&#x8BE2;&#x6570;&#x636E;"><i class="fa fa-link" aria-hidden="true"></i></a>&#x67E5;&#x8BE2;&#x6570;&#x636E;</h3>
+<p>Cypher &#x67E5;&#x8BE2;&#x6570;&#x636E;&#x975E;&#x5E38;&#x7B80;&#x5355;&#xFF0C;&#x53EA;&#x9700;&#x8981;&#x4F7F;&#x7528; MATCH &#x8BED;&#x53E5;&#x7ED3;&#x5408;&#x4E0A;&#x8FF0;&#x7684;&#x6A21;&#x5F0F;&#x8868;&#x8FBE;&#x5F0F;&#x5373;&#x53EF;&#xFF0C;&#x4F8B;&#x5982;:</p>
+<pre class="language-"><code>MATCH (person:Person)-[:ACTED_IN]-&gt;(:Moive)
+RETURN person
+</code></pre><p>&#x53E6;&#x5916;&#xFF0C;&#x6211;&#x4EEC;&#x8FD8;&#x53EF;&#x4EE5;&#x7528; WITH &#x8BED;&#x53E5;&#x5C06;&#x591A;&#x4E2A;&#x67E5;&#x8BE2;&#x8BED;&#x53E5;&#x8FDE;&#x63A5;&#x5728;&#x4E00;&#x8D77;:</p>
+<pre class="language-"><code>MATCH (person:Person)-[:ACTED_IN]-&gt;(moive:Moive)
+WITH person, count(movie) AS movieCount
+WHERE movieCount &gt; 3
+RETURN person, movieCount
+</code></pre><h3 id="&#x66F4;&#x65B0;&#x6570;&#x636E;"><a name="&#x66F4;&#x65B0;&#x6570;&#x636E;" class="anchor-navigation-ex-anchor" href="#&#x66F4;&#x65B0;&#x6570;&#x636E;"><i class="fa fa-link" aria-hidden="true"></i></a>&#x66F4;&#x65B0;&#x6570;&#x636E;</h3>
+<p>&#x4F7F;&#x7528; Cypher &#x66F4;&#x65B0;&#x6570;&#x636E;&#x65F6;&#xFF0C;&#x5E38;&#x5E38;&#x7528;&#x5230; SET &#x7B49;&#x8BED;&#x53E5;&#x3002;</p>
+<pre class="language-"><code>MATCH (person:Person)-[:ACTED_IN]-&gt;(moive:Moive)
+WITH person, count(movie) AS movieCount
+SET person.movieCount = movieCount
+RETURN person, movieCount
+</code></pre><p>&#x4E0A;&#x8FF0;&#x547D;&#x4EE4;&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x5C06; Person &#x53C2;&#x6F14;&#x7684;&#x7535;&#x5F71;&#x6570;&#x91CF;&#x4F5C;&#x4E3A;&#x5C5E;&#x6027;&#x503C;&#x8BBE;&#x7F6E;&#x7ED9;&#x4E86; Person &#x8282;&#x70B9;&#x3002;</p>
+<h2 id="cypher-&#x4E8B;&#x52A1;"><a name="cypher-&#x4E8B;&#x52A1;" class="anchor-navigation-ex-anchor" href="#cypher-&#x4E8B;&#x52A1;"><i class="fa fa-link" aria-hidden="true"></i></a>Cypher &#x4E8B;&#x52A1;</h2>
+<p>Cypher &#x652F;&#x6301;&#x4E8B;&#x52A1;&#x7684;&#x529F;&#x80FD;&#xFF0C;&#x53EF;&#x4EE5;&#x4FDD;&#x8BC1;&#x4E00;&#x4E2A;&#x4E8B;&#x52A1;&#x5185;&#x7684;&#x64CD;&#x4F5C;&#x8981;&#x4E48;&#x5168;&#x90E8;&#x6210;&#x529F;&#x3001;&#x8981;&#x4E48;&#x5168;&#x90E8;&#x5931;&#x8D25;&#x3002;</p>
+<p>&#x5F53;&#x4E00;&#x4E2A; Cypher &#x8BED;&#x53E5;&#x672C;&#x8EAB;&#x6CA1;&#x6709;&#x5728;&#x4E00;&#x4E2A;&#x4E8B;&#x52A1;&#x7684;&#x4E0A;&#x4E0B;&#x6587;&#x4E2D;&#x65F6;&#xFF0C;&#x5219;&#x8BE5; Cypher &#x8BED;&#x53E5;&#x4F1A;&#x4F5C;&#x4E3A;&#x4E00;&#x4E2A;&#x72EC;&#x7ACB;&#x7684;&#x4E8B;&#x52A1;&#x6267;&#x884C;&#x3002;</p>
+<p>&#x800C;&#x5F53;&#x4E00;&#x4E2A; Cypher &#x8BED;&#x53E5;&#x5DF2;&#x7ECF;&#x5728;&#x67D0;&#x4E2A;&#x4E0A;&#x4E0B;&#x6587;&#x4E2D;&#x65F6;&#xFF0C;&#x6574;&#x4E2A;&#x8FC7;&#x7A0B;&#x5C31;&#x4F1A;&#x57FA;&#x4E8E;&#x5DF2;&#x6709;&#x7684;&#x4E0A;&#x4E0B;&#x6587;&#x8FDB;&#x884C;&#x64CD;&#x4F5C;&#xFF0C;&#x76F4;&#x5230;&#x6574;&#x4E2A;&#x4E8B;&#x52A1;&#x6210;&#x529F;&#x63D0;&#x4EA4;&#x4E4B;&#x540E;&#xFF0C;&#x624D;&#x4F1A;&#x6301;&#x4E45;&#x5316;&#x81F3;&#x78C1;&#x76D8;&#x4E2D;&#x3002;</p>
+<h2 id="cypher-&#x7684;&#x552F;&#x4E00;&#x6027;"><a name="cypher-&#x7684;&#x552F;&#x4E00;&#x6027;" class="anchor-navigation-ex-anchor" href="#cypher-&#x7684;&#x552F;&#x4E00;&#x6027;"><i class="fa fa-link" aria-hidden="true"></i></a>Cypher &#x7684;&#x552F;&#x4E00;&#x6027;</h2>
+<p>Cypher &#x5728;&#x8FDB;&#x884C;&#x6A21;&#x5F0F;&#x5339;&#x914D;&#x65F6;&#xFF0C;&#x4F1A;&#x4FDD;&#x8BC1;&#x5355;&#x4E2A;&#x6A21;&#x5F0F;&#x4E2D;&#x4E0D;&#x4F1A;&#x591A;&#x6B21;&#x5339;&#x914D;&#x5230;&#x540C;&#x4E00;&#x4E2A;&#x56FE;&#x5BF9;&#x8C61;&#x3002;</p>
+<p>&#x4EE5;&#x4E00;&#x4E2A;&#x793A;&#x4F8B;&#x4E3A;&#x4F8B;:</p>
+<pre class="language-"><code>MATCH (a:Person)-[:friend]-()-[:Friend]-(b:Person)
+RETURN a, b
+</code></pre><p>&#x4E0A;&#x8FF0;&#x662F;&#x4E00;&#x4E2A;&#x65E0;&#x65B9;&#x5411;&#x7684;&#x6A21;&#x5F0F;&#xFF0C;&#x4E5F;&#x5C31;&#x662F;&#x8BF4;&#xFF0C;a &#x7684;&#x670B;&#x53CB;&#x7684;&#x670B;&#x53CB;&#x7406;&#x8BBA;&#x4E0A;&#x5E94;&#x8BE5;&#x6709;&#x53EF;&#x80FD;&#x662F;&#x81EA;&#x5DF1;&#x3002;</p>
+<p>&#x4F46;&#x662F;&#x5728; Cypher &#x7684;&#x552F;&#x4E00;&#x6027;&#x7EA6;&#x675F;&#x4E0B;&#xFF0C;&#x540C;&#x4E00;&#x4E2A;&#x6A21;&#x5F0F;&#x4E2D;&#xFF0C;&#x4E0D;&#x4F1A;&#x591A;&#x6B21;&#x5339;&#x914D;&#x5230;&#x540C;&#x4E00;&#x4E2A;&#x5BF9;&#x8C61;&#xFF0C;&#x56E0;&#x6B64;&#xFF0C;&#x6B64;&#x65F6;&#x4E0D;&#x4F1A;&#x5C06;a&#x548C;b&#x5339;&#x914D;&#x5230;&#x540C;&#x4E00;&#x4E2A;&#x4EBA;&#x4E0A;&#x3002;</p>
+<p>&#x90A3;&#x5982;&#x679C;&#x6211;&#x4EEC;&#x7684;&#x786E;&#x6709;&#x8FD9;&#x79CD;&#x9700;&#x6C42;&#x65F6;&#xFF0C;&#x5E94;&#x8BE5;&#x600E;&#x4E48;&#x529E;&#x5462;&#xFF1F;&#x4E5F;&#x975E;&#x5E38;&#x7B80;&#x5355;&#xFF0C;&#x76F4;&#x63A5;&#x628A;&#x5B83;&#x4EEC;&#x62C6;&#x5206;&#x5230;&#x591A;&#x4E2A;&#x6A21;&#x5F0F;&#x4E2D;&#x5373;&#x53EF;&#xFF0C;&#x4F8B;&#x5982;:</p>
+<pre class="language-"><code>MATCH (a:Person)-[:friend]-(friend)
+MATCH (friend)-[:Friend]-(b:Person)
+RETURN a, b
+</code></pre><p>&#x6B64;&#x65F6;&#xFF0C;&#x7531;&#x4E8E;a&#x548C;b&#x5DF2;&#x7ECF;&#x4E0D;&#x5728;&#x540C;&#x4E00;&#x4E2A;&#x6A21;&#x5F0F;&#x4E2D;&#xFF0C;&#x56E0;&#x6B64;&#xFF0C;&#x4E8C;&#x8005;&#x53EF;&#x80FD;&#x4F1A;&#x8868;&#x793A;&#x540C;&#x4E00;&#x4E2A;&#x8282;&#x70B9;&#x3002;</p>
+<h2 id="cypher-&#x57FA;&#x672C;&#x8BED;&#x6CD5;"><a name="cypher-&#x57FA;&#x672C;&#x8BED;&#x6CD5;" class="anchor-navigation-ex-anchor" href="#cypher-&#x57FA;&#x672C;&#x8BED;&#x6CD5;"><i class="fa fa-link" aria-hidden="true"></i></a>Cypher &#x57FA;&#x672C;&#x8BED;&#x6CD5;</h2>
+<h3 id="cypher-&#x7C7B;&#x578B;"><a name="cypher-&#x7C7B;&#x578B;" class="anchor-navigation-ex-anchor" href="#cypher-&#x7C7B;&#x578B;"><i class="fa fa-link" aria-hidden="true"></i></a>Cypher &#x7C7B;&#x578B;</h3>
+<p>Cypher &#x4E2D;&#x6240;&#x6709;&#x5904;&#x7406;&#x7684;&#x503C;&#x90FD;&#x5C5E;&#x4E8E;&#x4E00;&#x4E2A;&#x7279;&#x5B9A;&#x7684;&#x7C7B;&#x578B;&#xFF0C;Cypher &#x652F;&#x6301;&#x7684;&#x7C7B;&#x578B;&#x5305;&#x62EC;:</p>
+<ul>
+<li>&#x6570;&#x503C;&#x578B;</li>
+<li>&#x5B57;&#x7B26;&#x4E32;&#x578B;</li>
+<li>&#x5E03;&#x5C14;&#x578B;</li>
+<li>&#x8282;&#x70B9;</li>
+<li>&#x5173;&#x7CFB;</li>
+<li>&#x8DEF;&#x5F84;</li>
+<li>MAP</li>
+<li>LIST</li>
+</ul>
+<h3 id="cypher-&#x8868;&#x8FBE;&#x5F0F;"><a name="cypher-&#x8868;&#x8FBE;&#x5F0F;" class="anchor-navigation-ex-anchor" href="#cypher-&#x8868;&#x8FBE;&#x5F0F;"><i class="fa fa-link" aria-hidden="true"></i></a>Cypher &#x8868;&#x8FBE;&#x5F0F;</h3>
+<p>&#x5728; Cypher &#x4E2D;&#xFF0C;&#x5305;&#x542B;&#x7684;&#x8868;&#x8FBE;&#x5F0F;&#x6709;:</p>
+<ul>
+<li>&#x5341;&#x8FDB;&#x5236;&#x6570;&#x5B57;: 13&#xFF0C;3.14</li>
+<li>&#x5341;&#x516D;&#x8FDB;&#x5236;&#x6570;&#x5B57;: 0x12</li>
+<li>&#x516B;&#x8FDB;&#x5236;&#x6570;&#x5B57;: 013</li>
+<li>&#x5B57;&#x7B26;&#x4E32;: &quot;Hi&quot;, &apos;Hello&apos;</li>
+<li>&#x5E03;&#x5C14;&#x503C;: true, false, TRUE, FALSE</li>
+<li>&#x53D8;&#x91CF;: x, name</li>
+<li>&#x5C5E;&#x6027;: x.name</li>
+<li>&#x52A8;&#x6001;&#x5C5E;&#x6027;: x[&quot;name&quot;]</li>
+<li>&#x53C2;&#x6570;: $param, $0</li>
+<li>&#x5217;&#x8868;: [&apos;a&apos;, &apos;b&apos;]</li>
+<li>&#x51FD;&#x6570;&#x8C03;&#x7528;: length(p)</li>
+<li>&#x805A;&#x5408;&#x51FD;&#x6570;: avg(x.prop), count(*)</li>
+<li>&#x6A21;&#x5F0F;: (a)--&gt;(b)</li>
+<li>&#x8BA1;&#x7B97;&#x5F0F;: 1 + 2 and 3 &lt; 4</li>
+<li>&#x65AD;&#x8A00;&#x8868;&#x8FBE;&#x5F0F;: a.prop = &quot;hello&quot; &#x6216; exists(a.name)</li>
+<li>&#x6B63;&#x5219;&#x8868;&#x8FBE;&#x5F0F;: a.name =~ &apos;Tob.*&apos;</li>
+<li>&#x5B57;&#x7B26;&#x4E32;&#x5339;&#x914D;: a.username STARTS WITH &apos;wang&apos;</li>
+<li>CASE &#x8868;&#x8FBE;&#x5F0F;</li>
+</ul>
+<p>&#x5176;&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x6765;&#x7B80;&#x5355;&#x804A;&#x4E00;&#x4E0B; CASE &#x8868;&#x8FBE;&#x5F0F;&#xFF0C;CASE &#x8868;&#x8FBE;&#x5F0F;&#x7ED9; Cypher &#x63D0;&#x4F9B;&#x4E86;&#x4E00;&#x79CD;&#x903B;&#x8F91;&#x5224;&#x65AD;&#x7684;&#x80FD;&#x529B;&#xFF0C;&#x4F7F;&#x7528;&#x6548;&#x679C;&#x548C;&#x901A;&#x5E38;&#x7F16;&#x7A0B;&#x8BED;&#x8A00;&#x4E2D;&#x7684; if-else &#x7C7B;&#x4F3C;&#x3002;</p>
+<p>&#x4F8B;&#x5982;:</p>
+<pre class="language-"><code>CASE a.name
+WHEN &quot;wangzhe&quot; THEN &quot;admin&quot;
+WHEN &quot;rongsong&quot; THEN &quot;user&quot;
+ELSE &quot;invalid&quot;
+END
+</code></pre><p>&#x4E5F;&#x53EF;&#x4EE5;&#x6269;&#x5C55;&#x4E3A;&#x5982;&#x4E0B;&#x683C;&#x5F0F;:</p>
+<pre class="language-"><code>WHEN a.name = &quot;wangzhe&quot; THEN &quot;admin&quot;
+WHEN a.name = &quot;rongsong&quot; THEN &quot;user&quot;
+ELSE &quot;invalid&quot;
+END
+</code></pre><p>&#x8BE5;&#x65B9;&#x5F0F;&#x663E;&#x5F97;&#x66F4;&#x52A0;&#x7075;&#x6D3B;&#xFF0C;&#x4E5F;&#x4E0E; if &#x8BED;&#x6CD5;&#x66F4;&#x52A0;&#x7C7B;&#x4F3C;&#x3002;</p>
+<p>&#x4E00;&#x4E2A;&#x5B8C;&#x6574;&#x662F;&#x793A;&#x4F8B;&#x5982;&#x4E0B;:</p>
+<pre class="language-"><code>MATCH (n)
+RETURN
+    WHEN n.eyes = &quot;blue&quot; THEN 1
+    WHEN n.eyes = &quot;brown&quot; THEN 2
+    ELSE 3
+    END
+AS result
+</code></pre><h3 id="cypher-&#x53D8;&#x91CF;"><a name="cypher-&#x53D8;&#x91CF;" class="anchor-navigation-ex-anchor" href="#cypher-&#x53D8;&#x91CF;"><i class="fa fa-link" aria-hidden="true"></i></a>Cypher &#x53D8;&#x91CF;</h3>
+<p>&#x5728; Cypher &#x4E2D;&#x7684;&#x53D8;&#x91CF;&#x662F;&#x533A;&#x5206;&#x5927;&#x5C0F;&#x5199;&#x7684;&#xFF0C;&#x53EF;&#x4EE5;&#x5305;&#x542B;&#x5B57;&#x6BCD;&#x3001;&#x6570;&#x5B57;&#x3001;&#x4E0B;&#x5212;&#x7EBF;&#xFF0C;&#x4F46;&#x5FC5;&#x987B;&#x662F;&#x5B57;&#x6BCD;&#x5F00;&#x5934;&#x3002;</p>
+<h3 id="cypher-&#x53C2;&#x6570;"><a name="cypher-&#x53C2;&#x6570;" class="anchor-navigation-ex-anchor" href="#cypher-&#x53C2;&#x6570;"><i class="fa fa-link" aria-hidden="true"></i></a>Cypher &#x53C2;&#x6570;</h3>
+<p>Cypher &#x652F;&#x6301;&#x5E26;&#x53C2;&#x6570;&#x7684;&#x67E5;&#x8BE2;&#xFF0C;&#x4E5F;&#x5C31;&#x610F;&#x5473;&#x7740;&#x5F00;&#x53D1;&#x4EFB;&#x52A1;&#x65E0;&#x9700;&#x62FC;&#x63A5;&#x5B57;&#x7B26;&#x4E32;&#x6765;&#x67E5;&#x8BE2;&#xFF0C;&#x4E5F;&#x53EF;&#x4EE5;&#x4F7F;&#x540E;&#x7EED;&#x8BB2;&#x7684;&#x6267;&#x884C;&#x8BA1;&#x5212;&#x66F4;&#x5BB9;&#x6613;&#x7F13;&#x5B58;&#x3002;</p>
+<p>&#x9700;&#x8981;&#x6CE8;&#x610F;&#x7684;&#x662F;&#xFF0C;&#x53C2;&#x6570;&#x4E0D;&#x80FD;&#x7528;&#x4E8E;&#x5C5E;&#x6027;&#x540D;&#xFF0C;&#x5173;&#x7CFB;&#x7C7B;&#x578B;&#x548C;&#x6807;&#x7B7E;&#x3002;</p>
+<p>&#x53C2;&#x6570;&#x540D;&#x79F0;&#x662F;&#x5B57;&#x6BCD;&#x548C;&#x6570;&#x5B57;&#x7684;&#x7EC4;&#x5408;&#x3002;</p>
+<p>&#x53C2;&#x6570;:</p>
+<pre class="language-"><code class="lang-json"><span class="token punctuation">{</span>
+  <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;John&quot;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>&#x67E5;&#x8BE2;&#x8BED;&#x53E5;:</p>
+<pre class="language-"><code>MATCH (n {name: $name})
+RETURN n
+</code></pre><p>&#x521B;&#x5EFA;&#x5E26;&#x6709;&#x5C5E;&#x6027;&#x7684;&#x8282;&#x70B9;:</p>
+<p>&#x53C2;&#x6570;:</p>
+<pre class="language-"><code class="lang-json"><span class="token punctuation">{</span>
+  <span class="token property">&quot;props&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Wangzhe&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;age&quot;</span><span class="token operator">:</span> <span class="token number">30</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>&#x8BED;&#x53E5;&#xFF1A;</p>
+<pre class="language-"><code>CREATE (n:Person)
+SET n = $props
+RETURN n
+</code></pre><h3 id="cypher-&#x8FD0;&#x7B97;&#x7B26;"><a name="cypher-&#x8FD0;&#x7B97;&#x7B26;" class="anchor-navigation-ex-anchor" href="#cypher-&#x8FD0;&#x7B97;&#x7B26;"><i class="fa fa-link" aria-hidden="true"></i></a>Cypher &#x8FD0;&#x7B97;&#x7B26;</h3>
+<p>Cypher &#x652F;&#x6301;&#x7684;&#x8FD0;&#x7B97;&#x7B26;&#x5305;&#x62EC;:</p>
+<ul>
+<li>&#x6570;&#x5B66;&#x8FD0;&#x7B97;&#x7B26;: +, -, *, /, %, ^</li>
+<li>&#x6BD4;&#x8F83;&#x8FD0;&#x7B97;&#x7B26;: =, &lt;&gt;, &gt;, &lt;, &lt;=, &gt;=, IS NULL, IS NOT NULL</li>
+<li>&#x5E03;&#x5C14;&#x8FD0;&#x7B97;&#x7B26;: AND, OR, XOR, NOT</li>
+<li>&#x5B57;&#x7B26;&#x4E32;&#x8FD0;&#x7B97;&#x7B26;: +, =~</li>
+<li>&#x5217;&#x8868;&#x8FD0;&#x7B97;&#x7B26;: +, IN</li>
+</ul>
+<h3 id="cypher-&#x6CE8;&#x91CA;"><a name="cypher-&#x6CE8;&#x91CA;" class="anchor-navigation-ex-anchor" href="#cypher-&#x6CE8;&#x91CA;"><i class="fa fa-link" aria-hidden="true"></i></a>Cypher &#x6CE8;&#x91CA;</h3>
+<p>&#x5728; Cypher &#x4E2D;&#xFF0C;&#x4F7F;&#x7528; // &#x8FDB;&#x884C;&#x300E;&#x884C;&#x300F;&#x6CE8;&#x91CA;&#x3002;</p>
+<h3 id="&#x6A21;&#x5F0F;"><a name="&#x6A21;&#x5F0F;" class="anchor-navigation-ex-anchor" href="#&#x6A21;&#x5F0F;"><i class="fa fa-link" aria-hidden="true"></i></a>&#x6A21;&#x5F0F;</h3>
+<p>&#x5728;&#x4E0A;&#x9762;&#x7684;&#x5185;&#x5BB9;&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x5DF2;&#x7ECF;&#x63D0;&#x5230;&#x4E86;&#xFF0C;&#x5728; Cypher &#x4E2D;&#xFF0C;&#x8282;&#x70B9;&#x7528; () &#x6765;&#x8868;&#x793A;&#xFF0C;&#x5173;&#x7CFB;&#x6709; -- &#x6765;&#x8868;&#x793A;&#x3002;</p>
+<p>&#x6B64;&#x5904;&#xFF0C;&#x5173;&#x4E8E;&#x5173;&#x7CFB;&#x7684;&#x63CF;&#x8FF0;&#xFF0C;&#x6211;&#x4EEC;&#x518D;&#x8FDB;&#x884C;&#x4E00;&#x4E9B;&#x8865;&#x5145;:</p>
+<pre class="language-"><code>(a)-[r:TYPE1|TYPE2]-&gt;(b)
+</code></pre><p>&#x5F53;&#x6211;&#x4EEC;&#x60F3;&#x8981;&#x652F;&#x6301;&#x591A;&#x79CD;&#x5173;&#x7CFB;&#x7C7B;&#x578B;&#x4EFB;&#x610F;&#x67E5;&#x8BE2;&#x65F6;&#xFF0C;&#x53EF;&#x4EE5;&#x4F7F;&#x7528; | &#x6765;&#x5206;&#x9694;&#x5173;&#x7CFB;&#x7C7B;&#x578B;&#x3002;</p>
+<pre class="language-"><code>(a)-[*3..5]-&gt;(b)
+</code></pre><p>&#x5F53;&#x6211;&#x4EEC;&#x60F3;&#x8981;&#x67E5;&#x8BE2;&#x4E0D;&#x5B9A;&#x957F;&#x5173;&#x7CFB;&#x65F6;&#xFF0C;&#x53EF;&#x4EE5;&#x5728;[]&#x4E2D;&#x6DFB;&#x52A0; *min..max &#x6765;&#x8868;&#x793A;&#xFF0C;&#x5176;&#x4E2D;&#xFF0C;min&#x548C;max&#x540E;&#x53EF;&#x4EE5;&#x7701;&#x7565;&#xFF0C;&#x4F8B;&#x5982;:</p>
+<pre class="language-"><code>(a)-[:upstream*]-&gt;(b)
+</code></pre><p>&#x8868;&#x793A; b &#x662F; a &#x7684;&#x4EFB;&#x610F;&#x5173;&#x8054;&#x7684;&#x4E0A;&#x6E38;&#x3002;</p>
+<h3 id="cypher-list-&#x4E0E;-map-&#x8BF4;&#x660E;"><a name="cypher-list-&#x4E0E;-map-&#x8BF4;&#x660E;" class="anchor-navigation-ex-anchor" href="#cypher-list-&#x4E0E;-map-&#x8BF4;&#x660E;"><i class="fa fa-link" aria-hidden="true"></i></a>Cypher List &#x4E0E; Map &#x8BF4;&#x660E;</h3>
+<p>Cypher &#x5BF9; List &#x6709;&#x5F88;&#x597D;&#x7684;&#x652F;&#x6301;&#x3002;</p>
+<p>Cypher &#x4E2D; List &#x7684;&#x8868;&#x8FBE;&#x65B9;&#x5F0F;&#x4E0E; Python &#x4E00;&#x81F4;&#xFF0C;&#x7528;&#x65B9;&#x62EC;&#x53F7;&#x5305;&#x62EC;&#x4E00;&#x7EC4;&#x4EE5;&#x9017;&#x53F7;&#x5206;&#x9694;&#x7684;&#x5143;&#x7D20;&#x6765;&#x8868;&#x793A;&#x4E00;&#x4E2A;&#x5217;&#x8868;&#x3002;</p>
+<p>&#x4F8B;&#x5982;:</p>
+<pre class="language-"><code>RETURN [0, 1, 2, 3, 4] AS list
+</code></pre><p>&#x548C; Python &#x7C7B;&#x4F3C;&#xFF0C;Cypher &#x4E5F;&#x53EF;&#x4EE5;&#x7528; range &#x51FD;&#x6570;&#x6765;&#x751F;&#x6210;&#x4E00;&#x4E2A;&#x6570;&#x7EC4;&#xFF0C;&#x4E0E; Python &#x4E0D;&#x4E00;&#x6837;&#x7684;&#x662F;&#xFF0C;&#x5728; Cypher &#x4E2D; range &#x51FD;&#x6570;&#x751F;&#x6210;&#x7684; list &#x662F;&#x5305;&#x542B;&#x6536;&#x5C3E;&#x5143;&#x7D20;&#x7684;&#x3002;</p>
+<pre class="language-"><code>RETURN range(1, 10)
+</code></pre><p>&#x5BF9;&#x4E8E;&#x4E00;&#x4E2A; list &#x800C;&#x8A00;&#xFF0C;&#x652F;&#x6301;&#x901A;&#x8FC7; [index] &#x6765;&#x8BBF;&#x95EE;&#x5143;&#x7D20;&#xFF0C;&#x4F8B;&#x5982;:</p>
+<pre class="language-"><code>RETURN range(1, 10)[4]
+</code></pre><p>&#x5176;&#x4E2D;&#xFF0C;&#x7D22;&#x5F15;&#x4E5F;&#x53EF;&#x4EE5;&#x662F;&#x8D1F;&#x6570;&#xFF0C;&#x5373;&#x4ECE;&#x672B;&#x5C3E;&#x5143;&#x7D20;&#x5012;&#x6570;&#x3002;</p>
+<pre class="language-"><code>RETURN range(1, 10)[-1]
+</code></pre><p>&#x6B64;&#x5916;&#xFF0C;&#x6570;&#x7EC4;&#x4E5F;&#x652F;&#x6301;&#x5206;&#x7247;&#x7684;&#x65B9;&#x5F0F;&#x622A;&#x53D6;&#x5B50;&#x6570;&#x7EC4;:</p>
+<pre class="language-"><code>RETURN range(1, 10)[2..-1]
+</code></pre><p>&#x5176;&#x4E2D;&#xFF0C;&#x5206;&#x7247;&#x622A;&#x53D6;&#x65F6;&#xFF0C;&#x5305;&#x542B;&#x7D22;&#x5F15;&#x5934;&#x5143;&#x7D20;&#xFF0C;&#x4E0D;&#x5305;&#x542B;&#x7D22;&#x5F15;&#x5C3E;&#x5143;&#x7D20;&#x3002;</p>
+<p>Cypher &#x4E2D;&#x63D0;&#x4F9B;&#x4E86;&#x4E00;&#x4E2A; size() &#x51FD;&#x6570;&#x53EF;&#x4EE5;&#x7528;&#x4E8E;&#x8BA1;&#x7B97;&#x6570;&#x7EC4;&#x7684;&#x957F;&#x5EA6;:</p>
+<pre class="language-"><code>RETURN size(range(1, 10))
+</code></pre><p>&#x5728; Cypher &#x4E2D;&#xFF0C;&#x8FD8;&#x652F;&#x6301;&#x4E86; List &#x63A8;&#x5BFC;&#x5F0F;&#xFF1A;</p>
+<pre class="language-"><code>RETURN [x IN range(1,10) WHERE x % 2 = 0 | x^3] AS result
+</code></pre><p>&#x4E0A;&#x8FF0;&#x8868;&#x8FBE;&#x5F0F;&#x7684;&#x542B;&#x4E49;&#x662F;&#x5C06; 1-10 &#x7684;&#x5217;&#x8868;&#x4E2D;&#xFF0C;&#x627E;&#x51FA; % 2 &#x4E3A; 0 &#x7684;&#x5143;&#x7D20;&#xFF0C;&#x5E76;&#x5BF9;&#x6BCF;&#x4E2A;&#x5143;&#x7D20;&#x8BA1;&#x7B97;&#x4E09;&#x6B21;&#x65B9;&#x5E76;&#x8FD4;&#x56DE;&#x3002;</p>
+<p>&#x5176;&#x4E2D;&#xFF0C;WHERE &#x6761;&#x4EF6;&#x8FC7;&#x6EE4;&#x548C; <code>|</code> &#x8FC7;&#x6EE4;&#x8BA1;&#x7B97;&#x90FD;&#x662F;&#x53EF;&#x9009;&#x7684;&#x3002;</p>
+<p>&#x5C06;&#x5217;&#x8868;&#x63A8;&#x5BFC;&#x5F0F;&#x5E94;&#x7528;&#x5230;&#x6A21;&#x5F0F;&#x4E2D;&#xFF0C;&#x53EF;&#x4EE5;&#x4EA7;&#x751F;&#x6709;&#x610F;&#x601D;&#x7684;&#x6548;&#x679C;:</p>
+<pre class="language-"><code>MATCH (a:Person {name:&quot;Wangzhe&quot;})
+RETURN [(a)--&gt;(b) WHERE b:Movie | b.year]
+AS years
+</code></pre><p>&#x5176;&#x4E2D;&#xFF0C;&#x8FD4;&#x56DE;&#x7684; years &#x662F;&#x4E00;&#x4E2A;&#x5217;&#x8868;&#xFF0C;&#x5B83;&#x8868;&#x793A;&#x7684;&#x662F;&#x4E0E; Wangzhe &#x6709;&#x5173;&#x7684;&#x6240;&#x6709;&#x7684;&#x7535;&#x5F71;&#x4E0A;&#x6620;&#x65F6;&#x95F4;&#x3002;</p>
+<p>&#x9664;&#x4E86; LIST &#x4E4B;&#x5916;&#xFF0C; Cepher &#x8FD8;&#x652F;&#x6301;&#x4E86; MAP &#x7C7B;&#x578B;&#x3002;</p>
+<p>&#x793A;&#x4F8B;&#x5982;&#x4E0B;:</p>
+<pre class="language-"><code>RETURN {key: &quot;Value&quot;, listKey: [{inner: &quot;Map1&quot;}, {inner: &quot;Map2&quot;}]}
+</code></pre><p>&#x6B64;&#x5916;&#xFF0C;&#x57FA;&#x4E8E; MAP &#x7C7B;&#x578B;&#xFF0C;Cypher &#x8FD8;&#x652F;&#x6301;&#x4E86; map &#x6620;&#x5C04;&#x7684;&#x529F;&#x80FD;&#xFF1A;</p>
+<p>&#x4F8B;&#x5982;:</p>
+<pre class="language-"><code>MATCH (actor:Person {name: &quot;Wangzhe&quot;})--&gt;(movie:Movie)
+RETURN actor { .name, .realName, movies: collect(movie { .title, .year })}
+</code></pre><p>&#x4E0A;&#x8FF0; Cypher &#x8BED;&#x6CD5;&#x7684;&#x542B;&#x4E49;&#x662F;&#x6307;&#xFF1A;</p>
+<p>&#x627E;&#x51FA; Wangzhe &#x6240;&#x6709;&#x5173;&#x8054;&#x7684;&#x7535;&#x5F71;&#xFF0C;&#x5E76;&#x6309;&#x7167;&#x4EBA;&#x5458;&#x7C92;&#x5EA6;&#x8FDB;&#x884C;&#x805A;&#x5408;&#xFF0C;&#x5E76;&#x8FD4;&#x56DE;&#x4EBA;&#x5458;&#x7684; name, realName &#x5B57;&#x6BB5;&#x4EE5;&#x53CA;&#x6240;&#x6709;&#x7684;&#x5173;&#x8054;&#x7684;&#x7535;&#x5F71;&#x4E2D;&#x7684; title &#x548C; year &#x5B57;&#x6BB5;&#x3002;</p>
+<p>&#x5728;&#x8FD9;&#x4E2A; map &#x6620;&#x5C04;&#x4E2D;&#xFF0C;&#x9664;&#x4E86;&#x4E0A;&#x8FF0;&#x6211;&#x4EEC;&#x4ECB;&#x7ECD;&#x5230;&#x7684;&#x53EF;&#x4EE5;&#x4F7F;&#x7528; .key &#x6765;&#x8868;&#x793A;&#x8FD4;&#x56DE;&#x5B57;&#x5178;&#x4E2D;&#x7684;&#x6307;&#x5B9A;&#x5B57;&#x6BB5;&#x5916;&#xFF0C;&#x8FD8;&#x53EF;&#x4EE5;:</p>
+<ul>
+<li>variable_name: &#x8868;&#x793A;key&#x662F;&#x53D8;&#x91CF;&#x540D;&#xFF0C;value&#x662F;&#x53D8;&#x91CF;&#x5BF9;&#x5E94;&#x7684;&#x503C;&#xFF0C;key&#x5BF9;&#x5E94;&#x7684;&#x53D8;&#x91CF;&#x4E0D;&#x5B58;&#x5728;&#x65F6;&#xFF0C;&#x8BBE;&#x7F6E;&#x7684;&#x5C5E;&#x6027;&#x4E3A; null&#x3002;</li>
+<li>*&#xFF1A; &#x8868;&#x793A;&#x5F53;&#x524D;&#x5BF9;&#x8C61;&#x7684;&#x5168;&#x90E8;&#x5C5E;&#x6027;&#x3002;</li>
+</ul>
+<h3 id="cypher-null-&#x8BF4;&#x660E;"><a name="cypher-null-&#x8BF4;&#x660E;" class="anchor-navigation-ex-anchor" href="#cypher-null-&#x8BF4;&#x660E;"><i class="fa fa-link" aria-hidden="true"></i></a>Cypher NULL &#x8BF4;&#x660E;</h3>
+<p>&#x5728; Cypher &#x4E2D;&#xFF0C;NULL &#x662F;&#x4E00;&#x4E2A;&#x6BD4;&#x8F83;&#x7279;&#x6B8A;&#x7684;&#x503C;&#xFF0C;&#x9700;&#x8981;&#x6CE8;&#x610F;&#x5982;&#x4E0B;:</p>
+<ul>
+<li>null = null &#x8FD4;&#x56DE;&#x7684;&#x662F; null &#xFF0C;&#x4E0D;&#x662F; true</li>
+<li>null &#x53C2;&#x6570;&#x7684;&#x903B;&#x8F91;&#x8FD0;&#x7B97;&#x8FD4;&#x56DE;&#x5747;&#x4E3A; null</li>
+<li>&#x7D22;&#x5F15;&#x8D8A;&#x754C;&#x7684; LIST &#x65F6;&#x8FD4;&#x56DE;&#x7684;&#x662F; null</li>
+<li>&#x5305;&#x542B; null &#x7684;&#x7B97;&#x672F;&#x8FD0;&#x7B97;&#x7ED3;&#x679C;&#x5747;&#x4E3A; null</li>
+<li>&#x5305;&#x542B; null &#x7684;&#x51FD;&#x6570;&#x8C03;&#x7528;&#x7ED3;&#x679C;&#x5747;&#x4E3A; null</li>
+<li>&#x8BBF;&#x95EE;&#x4E0D;&#x5B58;&#x5728;&#x7684;&#x5173;&#x7CFB;&#x6216;&#x5C5E;&#x6027;&#x65F6;&#xFF0C;&#x5F97;&#x5230;&#x7684;&#x7ED3;&#x679C;&#x4E3A; null</li>
+</ul>
+<p><footer class="page-footer-ex"> <span class="page-footer-ex-copyright"> By <a href="https://github.com/wangzhe0912" target="_blank">wangzhe0912</a>&#xFF0C;&#x4F7F;&#x7528;<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">&#x77E5;&#x8BC6;&#x5171;&#x4EAB; &#x7F72;&#x540D;-&#x76F8;&#x540C;&#x65B9;&#x5F0F;&#x5171;&#x4EAB; 4.0&#x534F;&#x8BAE;</a>&#x53D1;&#x5E03; </span> &#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0; <span class="page-footer-ex-footer-update"> &#x6B64;&#x9875;&#x9762;&#x4FEE;&#x8BA2;&#x4E8E;&#xFF1A; 2021-08-16 10:12:32 </span> </footer><hr><div id="vcomments"></div><script src="//unpkg.com/valine/dist/Valine.min.js"></script><script>new Valine({el: "#vcomments",appId: '3tCbXut5BLzJCjGpdz0D3vPL-gzGzoHsz',appKey: 'DxRzz6qzatHku9sgCAgW73pe',placeholder: 'Just go go',avatar: '',meta: undefined,pageSize: 10,lang: 'zh-CN',recordIP: false})</script></p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="python_driver_py2neo.html" class="navigation navigation-prev " aria-label="Previous page: 使用Python操作Neo4j数据库 - py2neo">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="cypher_language.html" class="navigation navigation-next " aria-label="Next page: cypher语句">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"cypher概述及基本语法","level":"7.5.5","depth":2,"next":{"title":"cypher语句","level":"7.5.6","depth":2,"path":"databases/neo4j/cypher_language.md","ref":"./databases/neo4j/cypher_language.md","articles":[]},"previous":{"title":"使用Python操作Neo4j数据库 - py2neo","level":"7.5.4","depth":2,"path":"databases/neo4j/python_driver_py2neo.md","ref":"./databases/neo4j/python_driver_py2neo.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-lunr","-search","search-pro","-sharing","github-buttons","editlink","ga","-highlight","prism","bibtex-indexed-cite","anchor-navigation-ex","page-footer-ex","splitter","copy-code-button","expandable-chapters-small","valine","donate","katex"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"prism":{"ignore":["mermaid","eval-js"],"css":["prismjs/themes/prism-solarizedlight.css"]},"editlink":{"label":"Edit","multilingual":false,"base":"https://github.com/wangzhe0912/qa-book/blob/master"},"page-footer-ex":{"copyright":"By [wangzhe0912](https://github.com/wangzhe0912)，使用[知识共享 署名-相同方式共享 4.0协议](https://creativecommons.org/licenses/by-sa/4.0/)发布","markdown":true,"update_format":"YYYY-MM-DD HH:mm:ss","update_label":"此页面修订于："},"splitter":{},"search-pro":{"cutWordLib":"nodejieba","defineWord":["Gitbook Use"]},"donate":{"alipay":"https://wangzhe0912.github.io/helm3-book/alipay.jpg","alipayText":"支付宝打赏","button":"赏","title":"","wechat":"https://wangzhe0912.github.io/helm3-book/wechat.jpg","wechatText":"微信打赏"},"katex":{},"fontsettings":{"theme":"white","family":"sans","size":2},"anchor-navigation-ex":{"associatedWithSummary":true,"float":{"floatIcon":"fa fa-navicon","level1Icon":"","level2Icon":"","level3Icon":"","showLevelIcon":false},"mode":"float","multipleH1":true,"pageTop":{"level1Icon":"","level2Icon":"","level3Icon":"","showLevelIcon":false},"printLog":false,"showGoTop":true,"showLevel":false},"bibtex-indexed-cite":{"path":"/"},"github-buttons":{"buttons":[{"user":"wangzhe0912","repo":"qa-book","type":"star","size":"small","count":true}]},"expandable-chapters-small":{},"copy-code-button":{},"ga":{"configuration":"auto","token":"UA-131910384-3"},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"valine":{"avatar":"","lang":"zh-CN","pageSize":10,"placeholder":"Just go go","recordIP":false,"appId":"3tCbXut5BLzJCjGpdz0D3vPL-gzGzoHsz","appKey":"DxRzz6qzatHku9sgCAgW73pe"}},"theme":"default","author":"","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"bibCount":0,"variables":{},"title":"title","bib":[],"gitbook":"*"},"file":{"path":"databases/neo4j/cypher_basic.md","mtime":"2021-08-16T10:12:32.917Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2021-08-16T10:13:22.784Z"},"basePath":"../..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../../gitbook/gitbook.js"></script>
+    <script src="../../gitbook/theme.js"></script>
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search-pro/jquery.mark.min.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search-pro/search.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-github-buttons/plugin.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-editlink/plugin.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-ga/plugin.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-splitter/splitter.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-copy-code-button/toggle.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-expandable-chapters-small/expandable-chapters-small.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-donate/plugin.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+
